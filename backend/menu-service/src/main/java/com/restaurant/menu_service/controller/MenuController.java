@@ -32,4 +32,8 @@ public class MenuController {
     public List<MenuItemResponse> getMenu() {
         return menuService.getAllMenuItems();
     }
+    @GetMapping("/{id}")
+    public MenuItemResponse getMenuById(@PathVariable Long id){
+        return menuService.getMenuItemById(id);
+    }
 }
