@@ -1,10 +1,13 @@
 package com.restaurant.reservation_service.controller;
 
+import com.restaurant.reservation_service.dto.HallAvailabilityResponse;
 import com.restaurant.reservation_service.service.EventBookingService;
 import com.restaurant.reservation_service.dto.EventBookingResponse;
 import com.restaurant.reservation_service.dto.EventBookingRequest;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/events")
@@ -26,4 +29,15 @@ public class EventBookingController {
     public void cancelEvent(@PathVariable Long id) {
         service.cancelEvent(id);
     }
+
+    @GetMapping("/availability/halls")
+    public List<HallAvailabilityResponse> getHallAvailability(
+            @RequestParam String date,
+            @RequestParam String startTime,
+            @RequestParam String endTime,
+            @RequestParam int guests
+    ) {
+        return service.getHallAvailability(date, startTime, endTime, guests);
+    }
+
 }

@@ -3,6 +3,7 @@ package com.restaurant.reservation_service.service;
 import com.restaurant.reservation_service.dto.ReservationRequest;
 import com.restaurant.reservation_service.dto.ReservationResponse;
 import com.restaurant.reservation_service.dto.SmartReservationRequest;
+import com.restaurant.reservation_service.dto.TableAvailabilityResponse;
 import com.restaurant.reservation_service.exception.InvalidReservationException;
 import com.restaurant.reservation_service.exception.ResourceNotFoundException;
 import com.restaurant.reservation_service.exception.TableAlreadyBookedException;
@@ -14,6 +15,7 @@ import com.restaurant.reservation_service.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -160,4 +162,41 @@ public class ReservationServiceImpl implements ReservationService {
                 r.getStatus()
         );
     }
+
+    @Override
+    public List<TableAvailabilityResponse> getTableAvailability(
+            String date,
+            String startTime,
+            String endTime,
+            int numberOfPeople
+    ) {
+
+        LocalDate localDate = LocalDate.parse(date);
+        LocalTime start = LocalTime.parse(startTime);
+        LocalTime end = LocalTime.parse(endTime);
+
+        List<DiningTable> tables =
+                tableRepository.findByCapacityGreaterThanEqualAndActiveTrue(
+                        numberOfPeople
+                );
+
+        return tables.stream()
+                .map(table -> {
+                    boolean hasConflict = !reservationRepository
+                            .findOverlappingReservations(
+                                    table.getId(),
+                                    localDate,
+                                    start,
+                                    end
+                            ).isEmpty();
+
+                    return new TableAvailabilityResponse(
+                            table.getTableNumber(),
+                            table.getCapacity(),
+                            !hasConflict
+                    );
+                })
+                .toList();
+    }
+
 }
