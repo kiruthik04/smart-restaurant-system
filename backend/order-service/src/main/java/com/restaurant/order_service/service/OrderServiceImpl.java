@@ -3,6 +3,7 @@ package com.restaurant.order_service.service;
 import com.restaurant.order_service.dto.OrderRequest;
 import com.restaurant.order_service.dto.OrderResponse;
 import com.restaurant.order_service.dto.MenuItemResponse;
+import com.restaurant.order_service.dto.KitchenOrderRequest;
 import com.restaurant.order_service.exception.ResourceNotFoundException;
 import com.restaurant.order_service.model.Order;
 import com.restaurant.order_service.repository.OrderRepository;
@@ -46,6 +47,17 @@ public class OrderServiceImpl implements OrderService {
         );
 
         Order savedOrder = orderRepository.save(order);
+
+        String kitchenServiceUrl = "http://localhost:8083/api/kitchen/start";
+
+        KitchenOrderRequest kitchenRequest =
+                new KitchenOrderRequest(savedOrder.getId());
+
+        restTemplate.postForObject(
+                kitchenServiceUrl,
+                kitchenRequest,
+                Void.class
+        );
 
         return mapToResponse(savedOrder);
     }
