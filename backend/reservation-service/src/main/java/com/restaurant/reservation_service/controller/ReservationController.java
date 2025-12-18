@@ -29,4 +29,10 @@ public class ReservationController {
             @PathVariable String date) {
         return service.getReservationsByDate(date);
     }
+
+    @PutMapping("/{id}/cancel")
+    public void cancelReservation(@PathVariable Long id) {
+        service.cancelReservation(id);
+    }
+
 }

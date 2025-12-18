@@ -92,4 +92,8 @@ public class Reservation {
     public void cancel() {
         this.status = "CANCELLED";
     }
+
+    public boolean isCancelled() {
+        return "CANCELLED".equals(this.status);
+    }
 }
