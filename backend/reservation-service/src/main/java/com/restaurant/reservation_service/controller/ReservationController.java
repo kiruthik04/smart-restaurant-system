@@ -2,6 +2,7 @@ package com.restaurant.reservation_service.controller;
 
 import com.restaurant.reservation_service.dto.ReservationRequest;
 import com.restaurant.reservation_service.dto.ReservationResponse;
+import com.restaurant.reservation_service.dto.SmartReservationRequest;
 import com.restaurant.reservation_service.dto.TableAvailabilityResponse;
 import com.restaurant.reservation_service.service.ReservationService;
 import jakarta.validation.Valid;
@@ -30,7 +31,11 @@ public class ReservationController {
             @PathVariable String date) {
         return service.getReservationsByDate(date);
     }
-
+    @PostMapping("/smart")
+    public ReservationResponse createSmartReservation(
+            @RequestBody @Valid SmartReservationRequest request) {
+        return service.createSmartReservation(request);
+    }
     @PutMapping("/{id}/cancel")
     public void cancelReservation(@PathVariable Long id) {
         service.cancelReservation(id);
