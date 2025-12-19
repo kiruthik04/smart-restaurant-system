@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:8084", // Reservation Service
+  baseURL: process.env.REACT_APP_RESERVATION_API,
 });
 
 export default api;

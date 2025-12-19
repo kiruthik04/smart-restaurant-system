@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const menuApi = axios.create({
-    baseURL: "http://localhost:8081",
+    baseURL: process.env.REACT_APP_MENU_API,
 });
 
 export const getAvailableMenuItems = () => {

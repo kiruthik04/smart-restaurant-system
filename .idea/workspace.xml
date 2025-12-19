@@ -5,16 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="81fe4e17-19a1-4f45-88a9-2831659ca86c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/backend/reservation-service/src/main/java/com/restaurant/reservation_service/controller/DiningTableController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/reservation-service/src/main/java/com/restaurant/reservation_service/dto/DiningTableRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/reservation-service/src/main/java/com/restaurant/reservation_service/dto/DiningTableResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/reservation-service/src/main/java/com/restaurant/reservation_service/model/DiningTable.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/reservation-service/src/main/java/com/restaurant/reservation_service/model/Reservation.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/reservation-service/src/main/java/com/restaurant/reservation_service/repository/DiningTableRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/reservation-service/src/main/java/com/restaurant/reservation_service/repository/ReservationRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/reservation-service/src/main/java/com/restaurant/reservation_service/service/DiningTableService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/backend/reservation-service/src/main/java/com/restaurant/reservation_service/service/DiningTableServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/reservation-service/src/main/java/com/restaurant/reservation_service/config/WebConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/reservation-service/src/main/java/com/restaurant/reservation_service/controller/ReservationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/reservation-service/src/main/java/com/restaurant/reservation_service/controller/ReservationController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
