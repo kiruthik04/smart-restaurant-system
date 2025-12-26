@@ -1,9 +1,11 @@
 package com.restaurant.reservation_service.repository;
 
 import com.restaurant.reservation_service.model.DiningTable;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DiningTableRepository
         extends JpaRepository<DiningTable, Long> {
@@ -11,4 +13,7 @@ public interface DiningTableRepository
     boolean existsByTableNumber(int tableNumber);
 
     List<DiningTable> findByCapacityGreaterThanEqualAndActiveTrue(int capacity);
+
+    Optional<DiningTable> findByTableNumber(Integer tableNumber);
+
 }

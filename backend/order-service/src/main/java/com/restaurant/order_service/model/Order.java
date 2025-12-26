@@ -2,6 +2,8 @@ package com.restaurant.order_service.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -11,53 +13,73 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long menuItemId;
-    private int quantity;
-    private double totalPrice;
+    @Column(name = "table_id")
+    private Long tableId;
 
-    private String status; // CREATED, COOKING, READY
+    @Column(name = "total_amount")
+    private double totalAmount;
 
+    private String status;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    public Order() {}
+    @OneToMany(
+            mappedBy = "order",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<OrderItem> items = new ArrayList<>();
 
-    public Order(Long menuItemId, int quantity, double totalPrice, String status) {
-        this.menuItemId = menuItemId;
-        this.quantity = quantity;
-        this.totalPrice = totalPrice;
-        this.status = status;
-        this.createdAt = LocalDateTime.now();
-    }
+    // -------- GETTERS --------
 
-    // getters & setters
-    public Long getId(){
+    public Long getId() {
         return id;
     }
-    public void setId(Long id){
-        this.id = id;
+
+    public Long getTableId() {
+        return tableId;
     }
-    public Long getMenuItemId(){
-        return menuItemId;
+
+    public double getTotalAmount() {
+        return totalAmount;
     }
-    public void setMenuItemId(Long menuItemId){
-        this.menuItemId = menuItemId;
-    }
-    public int getQuantity(){
-        return quantity;
-    }
-    public void setQuantity(int quantity){
-        this.quantity = quantity;
-    }
-    public double getTotalPrice(){
-        return totalPrice;
-    }
-    public void setTotalPrice(double totalPrice){
-        this.totalPrice = totalPrice;
-    }
-    public String getStatus(){
+
+    public String getStatus() {
         return status;
     }
-    public void setStatus(String status){
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public List<OrderItem> getItems() {
+        return items;
+    }
+
+    // -------- SETTERS --------
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setTableId(Long tableId) {
+        this.tableId = tableId;
+    }
+
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
+    }
+
+    public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setItems(List<OrderItem> items) {
+        this.items = items;
     }
 }

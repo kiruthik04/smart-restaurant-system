@@ -2,6 +2,9 @@ package com.restaurant.reservation_service.controller;
 
 import com.restaurant.reservation_service.dto.DiningTableRequest;
 import com.restaurant.reservation_service.dto.DiningTableResponse;
+import com.restaurant.reservation_service.exception.ResourceNotFoundException;
+import com.restaurant.reservation_service.model.DiningTable;
+import com.restaurant.reservation_service.repository.DiningTableRepository;
 import com.restaurant.reservation_service.service.DiningTableService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -28,4 +31,19 @@ public class DiningTableController {
     public List<DiningTableResponse> getAllTables() {
         return service.getAllTables();
     }
+
+    @GetMapping("/by-number/{tableNumber}")
+    public DiningTableResponse getByTableNumber(
+            @PathVariable Integer tableNumber) {
+
+        DiningTable table = service.getEntityByTableNumber(tableNumber);
+
+        return new DiningTableResponse(
+                table.getId(),
+                table.getTableNumber(),
+                table.getCapacity(),
+                table.isActive()
+        );
+    }
+
 }

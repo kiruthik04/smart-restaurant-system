@@ -1,28 +1,25 @@
 package com.restaurant.order_service.dto;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import org.springframework.web.bind.annotation.PostMapping;
+import java.util.List;
 
-public class OrderRequest{
+public class OrderRequest {
 
-    @NotNull(message = "Menu item id is required")
-    private Long menuItemId;
-    @Positive(message = "Quantity must be greater than zero")
-    private int quantity;
+    private int tableNumber;
+    private List<OrderItemRequest> items;
 
-    public OrderRequest(){
+    public int getTableNumber() {
+        return tableNumber;
     }
-    public Long getMenuItemId(){
-        return menuItemId;
+
+    public void setTableNumber(int tableNumber) {
+        this.tableNumber = tableNumber;
     }
-    public void setMenuItemId(Long menuItemId){
-        this.menuItemId = menuItemId;
+
+    public List<OrderItemRequest> getItems() {
+        return items;
     }
-    public int getQuantity(){
-        return quantity;
-    }
-    public void setQuantity(){
-        this.quantity = quantity;
+
+    public void setItems(List<OrderItemRequest> items) {
+        this.items = items;
     }
 }

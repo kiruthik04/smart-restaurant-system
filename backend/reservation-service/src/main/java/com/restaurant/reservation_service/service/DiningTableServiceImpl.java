@@ -2,6 +2,7 @@ package com.restaurant.reservation_service.service;
 
 import com.restaurant.reservation_service.dto.DiningTableRequest;
 import com.restaurant.reservation_service.dto.DiningTableResponse;
+import com.restaurant.reservation_service.exception.ResourceNotFoundException;
 import com.restaurant.reservation_service.model.DiningTable;
 import com.restaurant.reservation_service.repository.DiningTableRepository;
 import org.springframework.stereotype.Service;
@@ -49,5 +50,14 @@ public class DiningTableServiceImpl implements DiningTableService {
                 table.getCapacity(),
                 table.isActive()
         );
+    }
+
+    // ✅ FIXED METHOD (ONLY THIS PART CHANGED)
+    @Override
+    public DiningTable getEntityByTableNumber(Integer tableNumber) {
+        return repository
+                .findByTableNumber(tableNumber)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Table not found"));
     }
 }

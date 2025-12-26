@@ -1,39 +1,36 @@
 package com.restaurant.order_service.dto;
 
+import java.util.List;
+
 public class OrderResponse {
-
-    private Long id;
-    private Long menuItemId;
-    private int quantity;
-    private double totalPrice;
+    private Long orderId;
+    private double totalAmount;
     private String status;
+    private List<OrderItemResponse> items;
 
-    // Constructor used by service layer
-    public OrderResponse(Long id, Long menuItemId, int quantity, double totalPrice, String status) {
-        this.id = id;
-        this.menuItemId = menuItemId;
-        this.quantity = quantity;
-        this.totalPrice = totalPrice;
+    public Long getOrderId(){
+        return orderId;
+    }
+    public double getTotalAmount(){
+        return totalAmount;
+    }
+    public String getStatus(){
+        return status;
+    }
+    public List<OrderItemResponse> getItems(){
+        return items;
+    }
+
+    public void setOrderId(Long orderId){
+        this.orderId = orderId;
+    }
+    public void setTotalAmount(double totalAmount){
+        this.totalAmount = totalAmount;
+    }
+    public void setStatus(String status){
         this.status = status;
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Long getMenuItemId() {
-        return menuItemId;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public double getTotalPrice() {
-        return totalPrice;
-    }
-
-    public String getStatus() {
-        return status;
+    public void setItems(List<OrderItemResponse> items){
+        this.items = items;
     }
 }

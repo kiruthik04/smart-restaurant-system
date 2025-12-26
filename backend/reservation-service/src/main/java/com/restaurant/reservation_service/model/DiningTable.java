@@ -19,6 +19,9 @@ public class DiningTable {
     @Column(nullable = false)
     private boolean active = true;
 
+    @Column(name = "current_session_id")
+    private String currentSessionId;
+
     public DiningTable() {
     }
 
@@ -43,6 +46,15 @@ public class DiningTable {
     public boolean isActive() {
         return active;
     }
+
+    public String getCurrentSessionId() {
+        return currentSessionId;
+    }
+
+    public void setCurrentSessionId(String currentSessionId) {
+        this.currentSessionId = currentSessionId;
+    }
+
 
     public void setActive(boolean active) {
         this.active = active;
