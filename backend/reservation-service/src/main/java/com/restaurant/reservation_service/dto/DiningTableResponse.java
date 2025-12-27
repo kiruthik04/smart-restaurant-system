@@ -7,11 +7,14 @@ public class DiningTableResponse {
     private int capacity;
     private boolean active;
 
-    public DiningTableResponse(Long id, int tableNumber, int capacity, boolean active) {
+    private String currentSessionId;
+
+    public DiningTableResponse(Long id, int tableNumber, int capacity, boolean active, String currentSessionId) {
         this.id = id;
         this.tableNumber = tableNumber;
         this.capacity = capacity;
         this.active = active;
+        this.currentSessionId = currentSessionId;
     }
 
     public Long getId() {
@@ -28,5 +31,9 @@ public class DiningTableResponse {
 
     public boolean isActive() {
         return active;
+    }
+
+    public String getCurrentSessionId(){
+        return currentSessionId;
     }
 }

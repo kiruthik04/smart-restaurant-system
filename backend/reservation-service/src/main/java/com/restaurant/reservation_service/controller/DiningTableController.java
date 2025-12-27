@@ -1,5 +1,6 @@
 package com.restaurant.reservation_service.controller;
 
+import com.restaurant.reservation_service.dto.ClaimTableRequest;
 import com.restaurant.reservation_service.dto.DiningTableRequest;
 import com.restaurant.reservation_service.dto.DiningTableResponse;
 import com.restaurant.reservation_service.exception.ResourceNotFoundException;
@@ -42,8 +43,19 @@ public class DiningTableController {
                 table.getId(),
                 table.getTableNumber(),
                 table.getCapacity(),
-                table.isActive()
+                table.isActive(),
+                table.getCurrentSessionId()
         );
     }
+    @PutMapping("/claim")
+    public void claimTable(@RequestBody ClaimTableRequest request) {
+        service.claimTable(request.getTableId(), request.getOrderSessionId());
+    }
+
+    @PutMapping("/release/{tableId}")
+    public void releaseTable(@PathVariable Long tableId) {
+        service.releaseTable(tableId);
+    }
+
 
 }

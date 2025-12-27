@@ -13,4 +13,8 @@ public interface DiningTableService {
     List<DiningTableResponse> getAllTables();
 
     DiningTable getEntityByTableNumber(Integer tableNumber);
+
+    void claimTable(Long tableId, String orderSessionId);
+
+    void releaseTable(Long tableId);
 }

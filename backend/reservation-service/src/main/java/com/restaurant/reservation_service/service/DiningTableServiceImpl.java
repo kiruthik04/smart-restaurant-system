@@ -6,6 +6,7 @@ import com.restaurant.reservation_service.exception.ResourceNotFoundException;
 import com.restaurant.reservation_service.model.DiningTable;
 import com.restaurant.reservation_service.repository.DiningTableRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -48,7 +49,8 @@ public class DiningTableServiceImpl implements DiningTableService {
                 table.getId(),
                 table.getTableNumber(),
                 table.getCapacity(),
-                table.isActive()
+                table.isActive(),
+                table.getCurrentSessionId()
         );
     }
 
@@ -60,4 +62,42 @@ public class DiningTableServiceImpl implements DiningTableService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Table not found"));
     }
+
+    @Override
+    @Transactional
+    public void claimTable(Long tableId, String orderSessionId) {
+
+        DiningTable table = repository.findById(tableId)
+                .orElseThrow(() -> new ResourceNotFoundException("Table not found"));
+
+        // 🟢 CASE 1: Table is FREE
+        if (table.getCurrentSessionId() == null) {
+            table.setCurrentSessionId(orderSessionId);
+            table.setActive(true); // BOOKED
+            repository.save(table);
+            return;
+        }
+
+        // 🟡 CASE 2: Same session (idempotent)
+        if (table.getCurrentSessionId().equals(orderSessionId)) {
+            return; // already owned by same session
+        }
+
+        // 🔴 CASE 3: Different session
+        throw new IllegalStateException("Table already claimed by another session");
+    }
+
+    @Override
+    @Transactional
+    public void releaseTable(Long tableId) {
+
+        DiningTable table = repository.findById(tableId)
+                .orElseThrow(() -> new ResourceNotFoundException("Table not found"));
+
+        table.setCurrentSessionId(null);  // 🔓 FREE the table
+        table.setActive(false);           // optional, based on your meaning
+        repository.save(table);
+    }
+
+
 }

@@ -6,6 +6,7 @@ public class OrderRequest {
 
     private int tableNumber;
     private List<OrderItemRequest> items;
+    private String orderSessionId;
 
     public int getTableNumber() {
         return tableNumber;
@@ -22,4 +23,13 @@ public class OrderRequest {
     public void setItems(List<OrderItemRequest> items) {
         this.items = items;
     }
+
+    public String getOrderSessionId() {
+        return orderSessionId;
+    }
+
+    public void setOrderSessionId(String orderSessionId) {
+        this.orderSessionId = orderSessionId;
+    }
+
 }

@@ -6,9 +6,11 @@ import com.restaurant.order_service.model.OrderItem;
 import com.restaurant.order_service.repository.OrderRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -61,8 +63,11 @@ public class OrderServiceImpl implements OrderService {
             // 1️⃣ Validate table
             TableResponse table = getTable(request.getTableNumber());
 
-            if (!table.isActive()) {
-                throw new IllegalStateException("Table is not active");
+            String incomingSession = request.getOrderSessionId();
+            String currentOwner = table.getCurrentSessionId();
+
+            if (currentOwner != null && !currentOwner.equals(incomingSession)) {
+                throw new IllegalStateException("Table is currently in use");
             }
 
             // 2️⃣ Create Order (DO NOT SAVE YET)
@@ -104,6 +109,12 @@ public class OrderServiceImpl implements OrderService {
             // 5️⃣ SAVE ONCE (cascade saves items)
             Order savedOrder = orderRepository.save(order);
 
+            // 6️⃣ CLAIM TABLE (ONLY IF FIRST TIME)
+            if (currentOwner == null) {
+                claimTable(table.getId(), incomingSession);
+            }
+
+
             System.out.println("Saved order id: " + savedOrder.getId());
             System.out.println("Saved items count: " + savedOrder.getItems().size());
 
@@ -118,6 +129,22 @@ public class OrderServiceImpl implements OrderService {
         } catch (Exception e) {
             e.printStackTrace();
             throw e;
+        }
+    }
+    private void claimTable(Long tableId, String orderSessionId) {
+
+        Map<String, Object> payload = Map.of(
+                "tableId", tableId,
+                "orderSessionId", orderSessionId
+        );
+
+        try {
+            restTemplate.put(
+                    "http://localhost:8084/api/tables/claim",
+                    payload
+            );
+        } catch (HttpClientErrorException.Conflict e) {
+            throw new IllegalStateException("Table is currently in use");
         }
     }
 
