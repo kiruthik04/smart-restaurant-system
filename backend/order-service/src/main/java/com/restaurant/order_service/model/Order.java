@@ -21,8 +21,13 @@ public class Order {
 
     private String status;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 
     @OneToMany(
             mappedBy = "order",
@@ -73,10 +78,6 @@ public class Order {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 
     public void setItems(List<OrderItem> items) {

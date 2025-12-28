@@ -1,5 +1,6 @@
 package com.restaurant.reservation_service.service;
 
+import com.restaurant.reservation_service.dto.AdminTableResponse;
 import com.restaurant.reservation_service.dto.DiningTableRequest;
 import com.restaurant.reservation_service.dto.DiningTableResponse;
 import com.restaurant.reservation_service.exception.ResourceNotFoundException;
@@ -99,5 +100,24 @@ public class DiningTableServiceImpl implements DiningTableService {
         repository.save(table);
     }
 
+    @Override
+    public List<AdminTableResponse> getAllTablesForAdmin() {
+        return repository.findAll()
+                .stream()
+                .map(table -> new AdminTableResponse(
+                        table.getId(),
+                        table.getTableNumber(),
+                        table.getCapacity(),
+                        table.getCurrentSessionId() != null,
+                        table.getCurrentSessionId()
+                ))
+                .toList();
+    }
+
+    @Override
+    @Transactional
+    public void forceReleaseTable(Long tableId) {
+        releaseTable(tableId); // reuse existing logic
+    }
 
 }

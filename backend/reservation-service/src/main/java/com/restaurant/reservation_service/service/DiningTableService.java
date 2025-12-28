@@ -1,5 +1,6 @@
 package com.restaurant.reservation_service.service;
 
+import com.restaurant.reservation_service.dto.AdminTableResponse;
 import com.restaurant.reservation_service.dto.DiningTableRequest;
 import com.restaurant.reservation_service.dto.DiningTableResponse;
 import com.restaurant.reservation_service.model.DiningTable;
@@ -17,4 +18,8 @@ public interface DiningTableService {
     void claimTable(Long tableId, String orderSessionId);
 
     void releaseTable(Long tableId);
+
+    List<AdminTableResponse> getAllTablesForAdmin();
+    void forceReleaseTable(Long tableId);
+
 }
