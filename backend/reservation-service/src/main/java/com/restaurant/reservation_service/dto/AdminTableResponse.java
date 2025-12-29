@@ -7,19 +7,22 @@ public class AdminTableResponse {
     private int capacity;
     private boolean inUse;
     private String currentSessionId;
+    private boolean enabled;
 
     public AdminTableResponse(
             Long id,
             int tableNumber,
             int capacity,
             boolean inUse,
-            String currentSessionId
+            String currentSessionId,
+            boolean enabled
     ) {
         this.id = id;
         this.tableNumber = tableNumber;
         this.capacity = capacity;
         this.inUse = inUse;
         this.currentSessionId = currentSessionId;
+        this.enabled = enabled;
     }
 
     public Long getId() {
@@ -40,5 +43,9 @@ public class AdminTableResponse {
 
     public String getCurrentSessionId() {
         return currentSessionId;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 }

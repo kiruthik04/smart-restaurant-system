@@ -22,6 +22,9 @@ public class DiningTable {
     @Column(name = "current_session_id")
     private String currentSessionId;
 
+    @Column(nullable = false)
+    private boolean enabled = true;
+
     public DiningTable() {
     }
 
@@ -55,6 +58,13 @@ public class DiningTable {
         this.currentSessionId = currentSessionId;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
     public void setActive(boolean active) {
         this.active = active;

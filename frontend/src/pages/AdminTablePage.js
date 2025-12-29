@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { getAllTables, forceReleaseTable, createTable } from "../api/adminTableApi";
+import {
+    getAllTables,
+    forceReleaseTable,
+    createTable,
+    disableTable,
+    enableTable
+} from "../api/adminTableApi";
 
 function AdminTablePage() {
 
@@ -30,6 +36,30 @@ function AdminTablePage() {
             setMessage(err.response?.data?.message || "Failed to add table");
         }
     };
+    const handleDisable = async (tableId) => {
+        const confirm = window.confirm(
+            "Disable this table? It will not be available for customers."
+        );
+        if (!confirm) return;
+
+        try {
+            await disableTable(tableId);
+            setMessage("Table disabled successfully");
+            fetchTables();
+        } catch (err) {
+            setMessage(err.response?.data?.message || "Failed to disable table");
+        }
+    };
+
+    const handleEnable = async (tableId) => {
+        try {
+            await enableTable(tableId);
+            setMessage("Table enabled successfully");
+            fetchTables();
+        } catch (err) {
+            setMessage(err.response?.data?.message || "Failed to enable table");
+        }
+    };
 
     const fetchTables = () => {
         setLoading(true);
@@ -40,14 +70,9 @@ function AdminTablePage() {
     };
 
     useEffect(() => {
-        fetchTables(); // initial load
-
-        const interval = setInterval(() => {
-            fetchTables();
-        }, 5000); // 5 seconds
-
-        return () => clearInterval(interval); // cleanup
+        fetchTables();
     }, []);
+
 
 
     const handleRelease = async (tableId) => {
@@ -102,12 +127,15 @@ function AdminTablePage() {
                 style={{ width: "100%", marginTop: "10px" }}
             >
                 <thead>
+
                     <tr>
                         <th>Table</th>
                         <th>Capacity</th>
                         <th>Status</th>
-                        <th>Action</th>
+                        <th>Enabled</th>
+                        <th>Actions</th>
                     </tr>
+
                 </thead>
 
                 <tbody>
@@ -116,39 +144,79 @@ function AdminTablePage() {
                             <td>{table.tableNumber}</td>
                             <td>{table.capacity}</td>
 
+                            {/* Status */}
                             <td>
-                                {table.inUse ? (
+                                {!table.enabled && (
+                                    <span style={{ color: "gray", fontWeight: "bold" }}>
+                                        DISABLED
+                                    </span>
+                                )}
+
+                                {table.enabled && table.inUse && (
                                     <span style={{ color: "red", fontWeight: "bold" }}>
                                         IN USE
                                     </span>
-                                ) : (
+                                )}
+
+                                {table.enabled && !table.inUse && (
                                     <span style={{ color: "green", fontWeight: "bold" }}>
                                         FREE
                                     </span>
                                 )}
                             </td>
 
+                            {/* Enabled Flag */}
                             <td>
-                                {table.inUse ? (
+                                {table.enabled ? "YES" : "NO"}
+                            </td>
+
+                            {/* Actions */}
+                            <td>
+                                {/* Force Release */}
+                                {table.inUse && (
                                     <button
                                         onClick={() => handleRelease(table.id)}
+                                        style={{ marginRight: "6px" }}
+                                    >
+                                        Release
+                                    </button>
+                                )}
+
+                                {/* Disable */}
+                                {table.enabled && !table.inUse && (
+                                    <button
+                                        onClick={() => handleDisable(table.id)}
                                         style={{
-                                            backgroundColor: "#d9534f",
+                                            backgroundColor: "#f0ad4e",
                                             color: "white",
                                             border: "none",
-                                            padding: "6px 10px",
-                                            cursor: "pointer"
+                                            padding: "4px 8px",
+                                            marginRight: "6px"
                                         }}
                                     >
-                                        Force Release
+                                        Disable
                                     </button>
-                                ) : (
-                                    "—"
+                                )}
+
+                                {/* Enable */}
+                                {!table.enabled && (
+                                    <button
+                                        onClick={() => handleEnable(table.id)}
+                                        style={{
+                                            backgroundColor: "#5cb85c",
+                                            color: "white",
+                                            border: "none",
+                                            padding: "4px 8px"
+                                        }}
+                                    >
+                                        Enable
+                                    </button>
                                 )}
                             </td>
                         </tr>
                     ))}
                 </tbody>
+
             </table>
         </div>
     );

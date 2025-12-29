@@ -16,3 +16,10 @@ export const createTable = (data) => {
   return adminTableApi.post("/api/admin/tables", data);
 };
 
+export const disableTable = (tableId) => {
+  return adminTableApi.put(`/api/admin/tables/${tableId}/disable`);
+};
+
+export const enableTable = (tableId) => {
+  return adminTableApi.put(`/api/admin/tables/${tableId}/enable`);
+};

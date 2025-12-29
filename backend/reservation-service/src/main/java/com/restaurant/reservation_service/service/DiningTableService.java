@@ -22,4 +22,6 @@ public interface DiningTableService {
     List<AdminTableResponse> getAllTablesForAdmin();
     void forceReleaseTable(Long tableId);
 
+    void disableTable(Long tableId);
+    void enableTable(Long tableId);
 }

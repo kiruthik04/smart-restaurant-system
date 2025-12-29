@@ -36,14 +36,9 @@ function AdminOrderPage() {
 
 
     useEffect(() => {
-        fetchOrders(); // initial load
-
-        const interval = setInterval(() => {
-            fetchOrders();
-        }, 5000); // 5 seconds
-
-        return () => clearInterval(interval); // cleanup
+        fetchOrders();
     }, []);
+
 
 
     const viewOrder = (orderId) => {

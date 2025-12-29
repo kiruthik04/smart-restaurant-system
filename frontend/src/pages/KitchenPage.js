@@ -21,10 +21,6 @@ function KitchenPage() {
 
     useEffect(() => {
         fetchOrders();
-
-        // optional polling every 5 seconds
-        const interval = setInterval(fetchOrders, 5000);
-        return () => clearInterval(interval);
     }, []);
 
     const handleStart = async (orderId) => {

@@ -71,6 +71,10 @@ public class DiningTableServiceImpl implements DiningTableService {
         DiningTable table = repository.findById(tableId)
                 .orElseThrow(() -> new ResourceNotFoundException("Table not found"));
 
+        if (!table.isEnabled()) {
+            throw new IllegalStateException("Table is currently disabled");
+        }
+
         // 🟢 CASE 1: Table is FREE
         if (table.getCurrentSessionId() == null) {
             table.setCurrentSessionId(orderSessionId);
@@ -109,7 +113,8 @@ public class DiningTableServiceImpl implements DiningTableService {
                         table.getTableNumber(),
                         table.getCapacity(),
                         table.getCurrentSessionId() != null,
-                        table.getCurrentSessionId()
+                        table.getCurrentSessionId(),
+                        table.isEnabled()
                 ))
                 .toList();
     }
@@ -119,5 +124,32 @@ public class DiningTableServiceImpl implements DiningTableService {
     public void forceReleaseTable(Long tableId) {
         releaseTable(tableId); // reuse existing logic
     }
+
+    @Override
+    @Transactional
+    public void disableTable(Long tableId) {
+
+        DiningTable table = repository.findById(tableId)
+                .orElseThrow(() -> new ResourceNotFoundException("Table not found"));
+
+        if (table.getCurrentSessionId() != null) {
+            throw new IllegalStateException("Cannot disable table while in use");
+        }
+
+        table.setEnabled(false);
+        repository.save(table);
+    }
+
+    @Override
+    @Transactional
+    public void enableTable(Long tableId) {
+
+        DiningTable table = repository.findById(tableId)
+                .orElseThrow(() -> new ResourceNotFoundException("Table not found"));
+
+        table.setEnabled(true);
+        repository.save(table);
+    }
+
 
 }

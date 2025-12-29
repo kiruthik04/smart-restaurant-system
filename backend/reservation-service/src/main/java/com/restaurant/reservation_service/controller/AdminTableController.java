@@ -33,4 +33,15 @@ public class AdminTableController {
     public void forceRelease(@PathVariable Long tableId) {
         service.forceReleaseTable(tableId);
     }
+
+    @PutMapping("/{tableId}/disable")
+    public void disableTable(@PathVariable Long tableId) {
+        service.disableTable(tableId);
+    }
+
+    @PutMapping("/{tableId}/enable")
+    public void enableTable(@PathVariable Long tableId) {
+        service.enableTable(tableId);
+    }
+
 }
