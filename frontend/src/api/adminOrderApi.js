@@ -1,8 +1,7 @@
-import axios from "axios";
+import api from "./axiosConfig";
 
-const adminOrderApi = axios.create({
-    baseURL: "http://localhost:8085"
-});
+const adminOrderApi = api;
+adminOrderApi.defaults.baseURL = "http://localhost:8085";
 
 export const getAllOrders = () => {
     return adminOrderApi.get("/api/admin/orders");

@@ -1,10 +1,14 @@
-import api from "./axios";
+import api from "./axiosConfig";
+
+const reservationApi = api;
+reservationApi.defaults.baseURL = "http://localhost:8084";
 
 export const getTableAvailability = (params) => {
-    return api.get("/api/reservations/availability/tables", {
+    return reservationApi.get("/api/reservations/availability/tables", {
         params,
     });
 };
+
 export const createSmartReservation = (data) => {
-    return api.post("/api/reservations/smart", data);
+    return reservationApi.post("/api/reservations/smart", data);
 };

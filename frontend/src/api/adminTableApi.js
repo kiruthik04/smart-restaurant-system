@@ -1,8 +1,7 @@
-import axios from "axios";
+import api from "./axiosConfig";
 
-const adminTableApi = axios.create({
-  baseURL: "http://localhost:8084"
-});
+const adminTableApi = api;
+adminTableApi.defaults.baseURL = "http://localhost:8084";
 
 export const getAllTables = () => {
   return adminTableApi.get("/api/admin/tables");
