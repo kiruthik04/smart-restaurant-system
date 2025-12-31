@@ -1,8 +1,16 @@
 import axios from "axios";
 import { getToken, logout } from "../utils/auth";
 
+/**
+ * Base axios instance WITHOUT baseURL
+ * Each service API will create its own instance
+ */
 const api = axios.create();
 
+/**
+ * Request interceptor
+ * Adds JWT token if available
+ */
 api.interceptors.request.use(
   (config) => {
     const token = getToken();
@@ -14,6 +22,10 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+/**
+ * Response interceptor
+ * Handles expired / invalid token globally
+ */
 api.interceptors.response.use(
   (response) => response,
   (error) => {
