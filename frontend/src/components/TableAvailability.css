@@ -1,0 +1,72 @@
+.availability-container {
+  padding: 12px 0;
+}
+
+/* Loading / error */
+.availability-message {
+  font-size: 15px;
+  color: #555;
+}
+
+.availability-error {
+  color: #dc3545;
+  font-weight: 500;
+}
+
+/* List */
+.availability-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Each table row */
+.availability-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+}
+
+/* Table number */
+.table-number {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Status badge */
+.table-status {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Available */
+.status-available {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+/* Booked */
+.status-booked {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .availability-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .table-status {
+    align-self: flex-end;
+  }
+}

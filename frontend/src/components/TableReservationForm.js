@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createSmartReservation } from "../api/reservationApi";
+import "./TableReservationForm.css";
 
 function TableReservationForm() {
   const [form, setForm] = useState({
@@ -41,10 +42,13 @@ function TableReservationForm() {
   };
 
   return (
-    <div>
+    <div className="reservation-container">
       <h2>Book a Table</h2>
 
-      <form onSubmit={handleSubmit}>
+      <form
+        className="reservation-form"
+        onSubmit={handleSubmit}
+      >
         <input
           name="customerName"
           placeholder="Customer Name"
@@ -52,7 +56,6 @@ function TableReservationForm() {
           onChange={handleChange}
           required
         />
-        <br />
 
         <input
           name="customerPhone"
@@ -61,7 +64,6 @@ function TableReservationForm() {
           onChange={handleChange}
           required
         />
-        <br />
 
         <input
           type="date"
@@ -70,7 +72,6 @@ function TableReservationForm() {
           onChange={handleChange}
           required
         />
-        <br />
 
         <input
           type="time"
@@ -79,7 +80,6 @@ function TableReservationForm() {
           onChange={handleChange}
           required
         />
-        <br />
 
         <input
           type="time"
@@ -88,7 +88,6 @@ function TableReservationForm() {
           onChange={handleChange}
           required
         />
-        <br />
 
         <input
           type="number"
@@ -98,20 +97,24 @@ function TableReservationForm() {
           min="1"
           required
         />
-        <br />
 
-        <button type="submit" disabled={loading}>
+        <button
+          className="reservation-btn"
+          type="submit"
+          disabled={loading}
+        >
           {loading ? "Booking..." : "Book Table"}
         </button>
-
       </form>
 
       {message && (
-        <p className={message.startsWith("❌") ? "error" : "success"}>
+        <p
+          className={`reservation-message ${message.startsWith("❌") ? "error" : "success"
+            }`}
+        >
           {message}
         </p>
       )}
-
     </div>
   );
 }

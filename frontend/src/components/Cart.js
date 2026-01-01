@@ -1,13 +1,20 @@
+import "./Cart.css";
+
 function Cart({ cart, updateQuantity }) {
   return (
-    <div>
+    <div className="cart-container">
       <h3>Cart</h3>
-      {cart.length === 0 && <p>No items selected</p>}
+
+      {cart.length === 0 && (
+        <p className="cart-empty">No items selected</p>
+      )}
 
       {cart.map(item => (
-        <div key={item.id}>
+        <div key={item.id} className="cart-item">
           <span>{item.name}</span>
+
           <input
+            className="cart-qty"
             type="number"
             value={item.quantity}
             min="0"

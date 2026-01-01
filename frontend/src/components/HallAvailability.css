@@ -1,0 +1,95 @@
+/* Container */
+.hall-availability-container {
+    padding: 8px 0;
+}
+
+/* Loading / error messages */
+.hall-message {
+    font-size: 15px;
+    color: #555;
+    padding: 8px 0;
+}
+
+.hall-error {
+    font-size: 15px;
+    color: #dc2626;
+    padding: 8px 0;
+    font-weight: 500;
+}
+
+/* List */
+.hall-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Card item */
+.hall-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    /* ✅ consistent inner spacing */
+    margin-bottom: 12px;
+    /* ✅ even vertical spacing */
+    border-radius: 10px;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+}
+
+/* Left info */
+.hall-info {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Hall name */
+.hall-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* Capacity */
+.hall-capacity {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+/* Status badge */
+.hall-status {
+    padding: 6px 14px;
+    /* ✅ matches other badges */
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Available */
+.hall-available {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+/* Booked */
+.hall-booked {
+    background-color: #fee2e2;
+    color: #7f1d1d;
+}
+
+/* 📱 Mobile */
+@media (max-width: 640px) {
+    .hall-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 14px 14px;
+    }
+
+    .hall-status {
+        align-self: flex-end;
+    }
+}

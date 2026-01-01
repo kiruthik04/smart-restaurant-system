@@ -1,0 +1,136 @@
+/* Page container */
+.admin-table-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Page title */
+.admin-table-page h2 {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #1f2937;
+}
+
+/* Section title */
+.admin-table-page h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #374151;
+}
+
+/* Message */
+.admin-message {
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+/* Add table form */
+.add-table-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.add-table-form input {
+    padding: 8px 10px;
+    font-size: 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    width: 160px;
+}
+
+.add-table-form button {
+    padding: 8px 14px;
+    font-size: 14px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.add-table-form button:hover {
+    background-color: #1d4ed8;
+}
+
+/* Table wrapper (scroll on mobile) */
+.table-wrapper {
+    overflow-x: auto;
+}
+
+/* Table */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    text-align: center;
+}
+
+.admin-table th {
+    background-color: #f3f4f6;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* Status labels */
+.status-disabled {
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.status-inuse {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.status-free {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+/* Action buttons */
+.action-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    margin-right: 6px;
+}
+
+.btn-release {
+    background-color: #ef4444;
+    color: white;
+}
+
+.btn-disable {
+    background-color: #f59e0b;
+    color: white;
+}
+
+.btn-enable {
+    background-color: #22c55e;
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .add-table-form input {
+        width: 100%;
+    }
+
+    .add-table-form {
+        flex-direction: column;
+    }
+}

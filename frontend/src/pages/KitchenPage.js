@@ -4,6 +4,7 @@ import {
     startOrder,
     completeOrder
 } from "../api/kitchenOrderApi";
+import "./KitchenPage.css";
 
 function KitchenPage() {
 
@@ -42,28 +43,41 @@ function KitchenPage() {
     };
 
     return (
-        <div style={{ padding: "20px" }}>
+        <div className="kitchen-page">
             <h2>Kitchen – Orders Queue</h2>
 
-            {message && <p>{message}</p>}
-            {loading && <p>Loading orders...</p>}
+            {message && (
+                <p className="kitchen-message">{message}</p>
+            )}
 
-            {orders.length === 0 && <p>No pending orders 🎉</p>}
+            {loading && (
+                <p className="kitchen-loading">Loading orders...</p>
+            )}
+
+            {orders.length === 0 && !loading && (
+                <p className="kitchen-empty">No pending orders 🎉</p>
+            )}
 
             {orders.map(order => (
-                <div
-                    key={order.orderId}
-                    style={{
-                        border: "1px solid #ccc",
-                        padding: "15px",
-                        marginBottom: "10px"
-                    }}
-                >
+                <div key={order.orderId} className="order-card">
                     <h3>Order #{order.orderId}</h3>
-                    <p><b>Table:</b> {order.tableNumber}</p>
-                    <p><b>Status:</b> {order.status}</p>
 
-                    <ul>
+                    <div className="order-meta">
+                        <p><b>Table:</b> {order.tableNumber}</p>
+                        <p>
+                            <b>Status:</b>{" "}
+                            <span
+                                className={`order-status ${order.status === "CREATED"
+                                    ? "status-created"
+                                    : "status-progress"
+                                    }`}
+                            >
+                                {order.status}
+                            </span>
+                        </p>
+                    </div>
+
+                    <ul className="order-items">
                         {order.items.map((item, idx) => (
                             <li key={idx}>
                                 {item.name} × {item.quantity}
@@ -73,14 +87,8 @@ function KitchenPage() {
 
                     {order.status === "CREATED" && (
                         <button
+                            className="kitchen-btn start"
                             onClick={() => handleStart(order.orderId)}
-                            style={{
-                                backgroundColor: "#0275d8",
-                                color: "white",
-                                border: "none",
-                                padding: "8px 12px",
-                                cursor: "pointer"
-                            }}
                         >
                             Start Cooking
                         </button>
@@ -88,14 +96,8 @@ function KitchenPage() {
 
                     {order.status === "IN_PROGRESS" && (
                         <button
+                            className="kitchen-btn ready"
                             onClick={() => handleComplete(order.orderId)}
-                            style={{
-                                backgroundColor: "#5cb85c",
-                                color: "white",
-                                border: "none",
-                                padding: "8px 12px",
-                                cursor: "pointer"
-                            }}
                         >
                             Mark Ready
                         </button>

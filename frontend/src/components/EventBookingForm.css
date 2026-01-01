@@ -1,0 +1,123 @@
+/* Container */
+.event-booking-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Heading */
+.event-booking-container h2 {
+    margin-bottom: 18px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* Form layout */
+.event-booking-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Inputs */
+.event-booking-form input[type="text"],
+.event-booking-form input[type="date"],
+.event-booking-form input[type="time"],
+.event-booking-form input[type="number"] {
+    padding: 10px 12px;
+    font-size: 15px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+}
+
+.event-booking-form input:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+/* Menu section */
+.menu-section {
+    margin-top: 10px;
+}
+
+.menu-section h4 {
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* ✅ FIXED CHECKBOX GRID */
+.menu-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px 16px;
+}
+
+/* Checkbox item */
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #111827;
+    padding: 6px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Checkbox */
+.menu-item input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #2563eb;
+    cursor: pointer;
+}
+
+/* Hover effect */
+.menu-item:hover {
+    background-color: #f3f4f6;
+}
+
+/* Submit button */
+.event-booking-btn {
+    margin-top: 14px;
+    padding: 12px;
+    font-size: 15px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.event-booking-btn:hover {
+    background-color: #1d4ed8;
+}
+
+.event-booking-btn:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* Messages */
+.event-booking-message {
+    margin-top: 14px;
+    font-weight: 500;
+}
+
+.event-booking-message.success {
+    color: #16a34a;
+}
+
+.event-booking-message.error {
+    color: #dc2626;
+}
+
+/* 📱 Mobile */
+@media (max-width: 640px) {
+    .menu-list {
+        grid-template-columns: 1fr;
+    }
+}

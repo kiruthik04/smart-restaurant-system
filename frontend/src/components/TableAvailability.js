@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getTableAvailability } from "../api/reservationApi";
+import "./TableAvailability.css";
 
 function TableAvailability() {
   const [tables, setTables] = useState([]);
@@ -24,14 +25,22 @@ function TableAvailability() {
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
-
-    <div>
-      <h2>Table Availability</h2>
-      <ul>
+    <div className="availability-container">
+      <ul className="availability-list">
         {tables.map((table, index) => (
-          <li key={index}>
-            Table {table.tableNumber} –{" "}
-            {table.available ? "Available" : "Booked"}
+          <li key={index} className="availability-item">
+            <span className="table-number">
+              Table {table.tableNumber}
+            </span>
+
+            <span
+              className={`table-status ${table.available
+                ? "status-available"
+                : "status-booked"
+                }`}
+            >
+              {table.available ? "Available" : "Booked"}
+            </span>
           </li>
         ))}
       </ul>

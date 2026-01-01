@@ -7,59 +7,27 @@ import OrderPage from "./pages/OrderPage";
 import AdminTablePage from "./pages/AdminTablePage";
 import AdminOrderPage from "./pages/AdminOrderPage";
 import KitchenPage from "./pages/KitchenPage";
-import LoginPage from "./pages/LoginPage";
-import ProtectedRoute from "./components/ProtectedRoute";
+import "./styles/global.css";
 
 function App() {
   return (
     <BrowserRouter>
       <Navbar />
 
-      <div className="max-w-6xl mx-auto px-4 py-6">
+      <div className="page-wrapper">
         <Routes>
           {/* PUBLIC */}
-          <Route path="/login" element={<LoginPage />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/tables" element={<TablePage />} />
           <Route path="/events" element={<EventPage />} />
+          <Route path="/order" element={<OrderPage />} />
 
-          {/* CUSTOMER */}
-          <Route
-            path="/order"
-            element={
-              <ProtectedRoute role="CUSTOMER">
-                <OrderPage />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* ADMIN */}
-          <Route
-            path="/admin/tables"
-            element={
-              <ProtectedRoute role="ADMIN">
-                <AdminTablePage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/admin/orders"
-            element={
-              <ProtectedRoute role="ADMIN">
-                <AdminOrderPage />
-              </ProtectedRoute>
-            }
-          />
+          {/* ADMIN (no auth for now) */}
+          <Route path="/admin/tables" element={<AdminTablePage />} />
+          <Route path="/admin/orders" element={<AdminOrderPage />} />
 
           {/* KITCHEN */}
-          <Route
-            path="/kitchen"
-            element={
-              <ProtectedRoute role="KITCHEN">
-                <KitchenPage />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/kitchen" element={<KitchenPage />} />
         </Routes>
       </div>
     </BrowserRouter>

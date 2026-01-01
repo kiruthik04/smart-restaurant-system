@@ -1,7 +1,8 @@
 import api from "./axiosConfig";
 
-const adminOrderApi = api;
-adminOrderApi.defaults.baseURL = "http://localhost:8085";
+const adminOrderApi = api.create({
+    baseURL: "http://localhost:8085"
+});
 
 export const getAllOrders = () => {
     return adminOrderApi.get("/api/admin/orders");

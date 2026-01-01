@@ -1,0 +1,105 @@
+.kitchen-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.kitchen-page h2 {
+  margin-bottom: 16px;
+  color: #222;
+}
+
+/* Info messages */
+.kitchen-message {
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.kitchen-loading {
+  color: #555;
+}
+
+/* Order card */
+.order-card {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.order-card h3 {
+  margin-top: 0;
+  margin-bottom: 6px;
+}
+
+.order-meta {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.order-status {
+  font-weight: 600;
+}
+
+.status-created {
+  color: #0275d8;
+}
+
+.status-progress {
+  color: #f0ad4e;
+}
+
+/* Items list */
+.order-items {
+  padding-left: 20px;
+  margin-bottom: 12px;
+}
+
+.order-items li {
+  margin-bottom: 4px;
+}
+
+/* Buttons */
+.kitchen-btn {
+  padding: 8px 14px;
+  font-size: 14px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+
+.kitchen-btn.start {
+  background-color: #0275d8;
+}
+
+.kitchen-btn.start:hover {
+  background-color: #025aa5;
+}
+
+.kitchen-btn.ready {
+  background-color: #5cb85c;
+}
+
+.kitchen-btn.ready:hover {
+  background-color: #449d44;
+}
+
+/* Empty state */
+.kitchen-empty {
+  color: #666;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .order-card {
+    padding: 12px;
+  }
+
+  .kitchen-btn {
+    width: 100%;
+  }
+}

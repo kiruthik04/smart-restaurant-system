@@ -1,7 +1,8 @@
 import api from "./axiosConfig";
 
-const kitchenApi = api;
-kitchenApi.defaults.baseURL = "http://localhost:8085";
+const kitchenApi = api.create({
+  baseURL: "http://localhost:8085"
+});
 
 export const getKitchenOrders = () => {
   return kitchenApi.get("/api/kitchen/orders");

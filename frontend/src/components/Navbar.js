@@ -1,37 +1,35 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import "./Navbar.css";
 
 function Navbar() {
-  return (
-    <nav className="bg-blue-600 px-6 py-4 shadow-md">
-      <div className="max-w-6xl mx-auto flex justify-between items-center">
-        <h1 className="text-white text-xl font-bold">
-          Smart Restaurant
-        </h1>
+  const [open, setOpen] = useState(false);
 
-        <div className="space-x-6">
-          <Link
-            to="/"
-            className="text-white hover:text-gray-200 font-medium"
-          >
+  return (
+    <nav className="navbar">
+      <div className="navbar-container">
+        <Link to="/" className="navbar-brand">
+          Smart Restaurant
+        </Link>
+
+        <button
+          className="menu-toggle"
+          onClick={() => setOpen(!open)}
+        >
+          ☰
+        </button>
+
+        <div className={`navbar-links ${open ? "open" : ""}`}>
+          <Link to="/" onClick={() => setOpen(false)}>
             Home
           </Link>
-          <Link
-            to="/order"
-            className="text-white hover:text-gray-200 font-medium"
-          >
+          <Link to="/order" onClick={() => setOpen(false)}>
             Order Food
           </Link>
-
-          <Link
-            to="/tables"
-            className="text-white hover:text-gray-200 font-medium"
-          >
+          <Link to="/tables" onClick={() => setOpen(false)}>
             Tables
           </Link>
-          <Link
-            to="/events"
-            className="text-white hover:text-gray-200 font-medium"
-          >
+          <Link to="/events" onClick={() => setOpen(false)}>
             Events
           </Link>
         </div>

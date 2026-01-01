@@ -7,6 +7,7 @@ import { createOrder } from "../api/orderApi";
 import { getOrderSessionId } from "../utils/session";
 import { releaseTable } from "../api/tableApi";
 import { clearOrderSession } from "../utils/session";
+import "./OrderPage.css";
 
 
 function OrderPage() {
@@ -114,9 +115,8 @@ function OrderPage() {
             setReleasing(false);
         }
     };
-
     return (
-        <div>
+        <div className="order-page">
             <h2>Order Food</h2>
 
             <input
@@ -124,34 +124,42 @@ function OrderPage() {
                 placeholder="Table Number"
                 value={tableNumber}
                 onChange={e => setTableNumber(e.target.value)}
+                className="table-input"
             />
 
-            <MenuList menu={menu} addToCart={addToCart} />
-            <Cart cart={cart} updateQuantity={updateQuantity} />
-            <OrderSummary cart={cart} placeOrder={placeOrder} />
+            <div className="section">
+                <MenuList menu={menu} addToCart={addToCart} />
+            </div>
 
-            {message && <p>{message}</p>}
+            <div className="section">
+                <Cart cart={cart} updateQuantity={updateQuantity} />
+            </div>
+
+            <div className="section">
+                <OrderSummary cart={cart} placeOrder={placeOrder} />
+            </div>
+
+            {message && (
+                <p
+                    className={`order-message ${message.toLowerCase().includes("success") ? "success" : "error"
+                        }`}
+                >
+                    {message}
+                </p>
+            )}
+
             {tableActive && (
                 <button
                     onClick={finishOrder}
-                    disabled={!tableActive || releasing}
-                    style={{
-                        marginTop: "10px",
-                        backgroundColor: tableActive ? "#d9534f" : "#ccc",
-                        color: "white",
-                        cursor: tableActive ? "pointer" : "not-allowed",
-                        padding: "8px 12px",
-                        border: "none",
-                        borderRadius: "4px"
-                    }}
+                    disabled={releasing}
+                    className="primary-btn finish"
                 >
                     {releasing ? "Releasing..." : "Finish & Leave Table"}
                 </button>
             )}
-
-
         </div>
     );
+
 }
 
 export default OrderPage;

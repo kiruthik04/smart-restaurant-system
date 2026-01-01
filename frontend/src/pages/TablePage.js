@@ -1,20 +1,13 @@
 import TableAvailability from "../components/TableAvailability";
 import TableReservationForm from "../components/TableReservationForm";
+import "./TablePage.css";
 
 function TablePage() {
     return (
-        <div className="space-y-8">
-            <div className="bg-white p-6 rounded-lg shadow">
-                <h2 className="text-2xl font-semibold mb-4">
-                    Table Availability
-                </h2>
-                <TableAvailability />
-            </div>
+        <div className="table-page">
 
-            <div className="bg-white p-6 rounded-lg shadow">
-                <h2 className="text-2xl font-semibold mb-4">
-                    Book a Table
-                </h2>
+
+            <div className="table-section">
                 <TableReservationForm />
             </div>
         </div>

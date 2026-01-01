@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createEventBooking } from "../api/eventApi";
 import { getAvailableMenuItems } from "../api/menuApi";
+import "./EventBookingForm.css";
 
 function EventBookingForm() {
     const [form, setForm] = useState({
@@ -16,7 +17,6 @@ function EventBookingForm() {
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
 
-    // ✅ LOAD MENU ITEMS ON COMPONENT LOAD
     useEffect(() => {
         getAvailableMenuItems()
             .then((res) => {
@@ -35,7 +35,6 @@ function EventBookingForm() {
         });
     };
 
-    // ✅ TOGGLE CHECKBOX
     const toggleMenuItem = (id) => {
         setSelectedMenuIds((prev) =>
             prev.includes(id)
@@ -61,6 +60,7 @@ function EventBookingForm() {
             guestCount: Number(form.guestCount),
             menuItemIds: selectedMenuIds,
         };
+
         setLoading(true);
 
         createEventBooking(payload)
@@ -73,89 +73,118 @@ function EventBookingForm() {
                 }
             })
             .finally(() => setLoading(false));
-
     };
 
     return (
-        <div>
+        <div className="event-booking-container">
             <h2>Book an Event</h2>
 
-            <form onSubmit={handleSubmit}>
-                <input
-                    name="eventName"
-                    placeholder="Event Name"
-                    value={form.eventName}
-                    onChange={handleChange}
-                    required
-                />
-                <br />
+            <form
+                className="event-booking-form"
+                onSubmit={handleSubmit}
+            >
+                {/* Event Name */}
+                <div className="form-group">
+                    <label>Event Name</label>
+                    <input
+                        name="eventName"
+                        placeholder="Birthday Party, Wedding..."
+                        value={form.eventName}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-                <input
-                    type="date"
-                    name="eventDate"
-                    value={form.eventDate}
-                    onChange={handleChange}
-                    required
-                />
-                <br />
+                {/* Event Date */}
+                <div className="form-group">
+                    <label>Event Date</label>
+                    <input
+                        type="date"
+                        name="eventDate"
+                        value={form.eventDate}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-                <input
-                    type="time"
-                    name="startTime"
-                    value={form.startTime}
-                    onChange={handleChange}
-                    required
-                />
-                <br />
+                {/* Start Time */}
+                <div className="form-group">
+                    <label>Start Time</label>
+                    <input
+                        type="time"
+                        name="startTime"
+                        value={form.startTime}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-                <input
-                    type="time"
-                    name="endTime"
-                    value={form.endTime}
-                    onChange={handleChange}
-                    required
-                />
-                <br />
+                {/* End Time */}
+                <div className="form-group">
+                    <label>End Time</label>
+                    <input
+                        type="time"
+                        name="endTime"
+                        value={form.endTime}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
-                <input
-                    type="number"
-                    name="guestCount"
-                    value={form.guestCount}
-                    onChange={handleChange}
-                    min="1"
-                    required
-                />
-                <br />
+                {/* Guest Count */}
+                <div className="form-group">
+                    <label>Number of Guests</label>
+                    <input
+                        type="number"
+                        name="guestCount"
+                        value={form.guestCount}
+                        onChange={handleChange}
+                        min="1"
+                        required
+                    />
+                </div>
 
-                <h4>Select Menu Items</h4>
+                {/* Menu Selection */}
+                <div className="menu-section">
+                    <h4>Select Menu Items</h4>
 
-                {menuItems.map((item) => (
-                    <div key={item.id}>
-                        <label>
-                            <input
-                                type="checkbox"
-                                checked={selectedMenuIds.includes(item.id)}
-                                onChange={() => toggleMenuItem(item.id)}
-                            />
-                            {item.name}
-                        </label>
+                    <div className="menu-list">
+                        {menuItems.map((item) => (
+                            <label
+                                key={item.id}
+                                className="menu-item"
+                            >
+                                <input
+                                    type="checkbox"
+                                    checked={selectedMenuIds.includes(item.id)}
+                                    onChange={() => toggleMenuItem(item.id)}
+                                />
+                                {item.name}
+                            </label>
+                        ))}
                     </div>
-                ))}
+                </div>
 
-                <br />
-
-                <button type="submit" disabled={loading}>
+                <button
+                    className="event-booking-btn"
+                    type="submit"
+                    disabled={loading}
+                >
                     {loading ? "Booking..." : "Book Event"}
                 </button>
-
             </form>
 
+
             {message && (
-                <p className={message.startsWith("❌") ? "error" : "success"}>
+                <p
+                    className={`event-booking-message ${message.startsWith("❌")
+                        ? "error"
+                        : "success"
+                        }`}
+                >
                     {message}
                 </p>
             )}
-
         </div>
     );
 }

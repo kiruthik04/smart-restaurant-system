@@ -1,3 +1,4 @@
+import "./AdminOrderPage.css";
 import { useEffect, useState } from "react";
 import {
     getAllOrders,
@@ -61,75 +62,70 @@ function AdminOrderPage() {
         }
     };
 
+
     return (
-        <div style={{ padding: "20px" }}>
+        <div className="admin-order-page">
             <h2>Admin – Order Management</h2>
 
-            {message && <p>{message}</p>}
+            {message && <p className="admin-order-message">{message}</p>}
             {loading && <p>Loading orders...</p>}
 
             {/* Orders List */}
-            <table
-                border="1"
-                cellPadding="10"
-                cellSpacing="0"
-                style={{ width: "100%", marginTop: "10px" }}
-            >
-                <thead>
-                    <tr>
-                        <th>Order ID</th>
-                        <th>Table</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {orders.map(order => (
-                        <tr key={order.orderId}>
-                            <td>{order.orderId}</td>
-                            <td>{order.tableNumber}</td>
-                            <td>₹{order.totalAmount}</td>
-                            <td>
-                                {order.status === "CREATED" && (
-                                    <span style={{ color: "orange", fontWeight: "bold" }}>
-                                        Waiting for Kitchen
-                                    </span>
-                                )}
-
-                                {order.status === "IN_PROGRESS" && (
-                                    <span style={{ color: "#0275d8", fontWeight: "bold" }}>
-                                        Being Cooked
-                                    </span>
-                                )}
-
-                                {order.status === "COMPLETED" && (
-                                    <span style={{ color: "green", fontWeight: "bold" }}>
-                                        Done
-                                    </span>
-                                )}
-                            </td>
-
-                            <td>
-                                <button onClick={() => viewOrder(order.orderId)}>
-                                    View
-                                </button>
-                            </td>
+            <div className="order-table-wrapper">
+                <table className="admin-order-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Table</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Action</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody>
+                        {orders.map(order => (
+                            <tr key={order.orderId}>
+                                <td>{order.orderId}</td>
+                                <td>{order.tableNumber}</td>
+                                <td>₹{order.totalAmount}</td>
+                                <td>
+                                    {order.status === "CREATED" && (
+                                        <span className="status-created">
+                                            Waiting for Kitchen
+                                        </span>
+                                    )}
+
+                                    {order.status === "IN_PROGRESS" && (
+                                        <span className="status-progress">
+                                            Being Cooked
+                                        </span>
+                                    )}
+
+                                    {order.status === "COMPLETED" && (
+                                        <span className="status-completed">
+                                            Done
+                                        </span>
+                                    )}
+                                </td>
+
+                                <td>
+                                    <button
+                                        className="view-btn"
+                                        onClick={() => viewOrder(order.orderId)}
+                                    >
+                                        View
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
             {/* Order Details */}
             {selectedOrder && (
-                <div
-                    style={{
-                        marginTop: "20px",
-                        padding: "15px",
-                        border: "1px solid #ccc"
-                    }}
-                >
+                <div className="order-details">
                     <h3>Order #{selectedOrder.orderId}</h3>
                     <p><b>Table:</b> {selectedOrder.tableNumber}</p>
                     <p><b>Status:</b> {selectedOrder.status}</p>
@@ -147,14 +143,8 @@ function AdminOrderPage() {
 
                     {selectedOrder.status === "CREATED" && (
                         <button
+                            className="complete-btn"
                             onClick={() => markCompleted(selectedOrder.orderId)}
-                            style={{
-                                backgroundColor: "#5cb85c",
-                                color: "white",
-                                border: "none",
-                                padding: "8px 12px",
-                                cursor: "pointer"
-                            }}
                         >
                             Mark as Completed
                         </button>
@@ -163,6 +153,7 @@ function AdminOrderPage() {
             )}
         </div>
     );
+
 }
 
 export default AdminOrderPage;

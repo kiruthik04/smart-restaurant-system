@@ -6,6 +6,7 @@ import {
     disableTable,
     enableTable
 } from "../api/adminTableApi";
+import "./AdminTablePage.css";
 
 function AdminTablePage() {
 
@@ -91,20 +92,20 @@ function AdminTablePage() {
     };
 
     return (
-        <div style={{ padding: "20px" }}>
+        <div className="admin-table-page">
             <h2>Admin – Table Management</h2>
 
-            {message && <p>{message}</p>}
+            {message && <p className="admin-message">{message}</p>}
             {loading && <p>Loading tables...</p>}
+
             <h3>Add New Table</h3>
 
-            <div style={{ marginBottom: "15px" }}>
+            <div className="add-table-form">
                 <input
                     type="number"
                     placeholder="Table Number"
                     value={tableNumber}
                     onChange={(e) => setTableNumber(e.target.value)}
-                    style={{ marginRight: "10px" }}
                 />
 
                 <input
@@ -112,7 +113,6 @@ function AdminTablePage() {
                     placeholder="Capacity"
                     value={capacity}
                     onChange={(e) => setCapacity(e.target.value)}
-                    style={{ marginRight: "10px" }}
                 />
 
                 <button onClick={handleCreateTable}>
@@ -120,104 +120,71 @@ function AdminTablePage() {
                 </button>
             </div>
 
-            <table
-                border="1"
-                cellPadding="10"
-                cellSpacing="0"
-                style={{ width: "100%", marginTop: "10px" }}
-            >
-                <thead>
-
-                    <tr>
-                        <th>Table</th>
-                        <th>Capacity</th>
-                        <th>Status</th>
-                        <th>Enabled</th>
-                        <th>Actions</th>
-                    </tr>
-
-                </thead>
-
-                <tbody>
-                    {tables.map(table => (
-                        <tr key={table.id}>
-                            <td>{table.tableNumber}</td>
-                            <td>{table.capacity}</td>
-
-                            {/* Status */}
-                            <td>
-                                {!table.enabled && (
-                                    <span style={{ color: "gray", fontWeight: "bold" }}>
-                                        DISABLED
-                                    </span>
-                                )}
-
-                                {table.enabled && table.inUse && (
-                                    <span style={{ color: "red", fontWeight: "bold" }}>
-                                        IN USE
-                                    </span>
-                                )}
-
-                                {table.enabled && !table.inUse && (
-                                    <span style={{ color: "green", fontWeight: "bold" }}>
-                                        FREE
-                                    </span>
-                                )}
-                            </td>
-
-                            {/* Enabled Flag */}
-                            <td>
-                                {table.enabled ? "YES" : "NO"}
-                            </td>
-
-                            {/* Actions */}
-                            <td>
-                                {/* Force Release */}
-                                {table.inUse && (
-                                    <button
-                                        onClick={() => handleRelease(table.id)}
-                                        style={{ marginRight: "6px" }}
-                                    >
-                                        Release
-                                    </button>
-                                )}
-
-                                {/* Disable */}
-                                {table.enabled && !table.inUse && (
-                                    <button
-                                        onClick={() => handleDisable(table.id)}
-                                        style={{
-                                            backgroundColor: "#f0ad4e",
-                                            color: "white",
-                                            border: "none",
-                                            padding: "4px 8px",
-                                            marginRight: "6px"
-                                        }}
-                                    >
-                                        Disable
-                                    </button>
-                                )}
-
-                                {/* Enable */}
-                                {!table.enabled && (
-                                    <button
-                                        onClick={() => handleEnable(table.id)}
-                                        style={{
-                                            backgroundColor: "#5cb85c",
-                                            color: "white",
-                                            border: "none",
-                                            padding: "4px 8px"
-                                        }}
-                                    >
-                                        Enable
-                                    </button>
-                                )}
-                            </td>
+            <div className="table-wrapper">
+                <table className="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Table</th>
+                            <th>Capacity</th>
+                            <th>Status</th>
+                            <th>Enabled</th>
+                            <th>Actions</th>
                         </tr>
-                    ))}
-                </tbody>
+                    </thead>
 
-            </table>
+                    <tbody>
+                        {tables.map(table => (
+                            <tr key={table.id}>
+                                <td>{table.tableNumber}</td>
+                                <td>{table.capacity}</td>
+
+                                <td>
+                                    {!table.enabled && (
+                                        <span className="status-disabled">DISABLED</span>
+                                    )}
+                                    {table.enabled && table.inUse && (
+                                        <span className="status-inuse">IN USE</span>
+                                    )}
+                                    {table.enabled && !table.inUse && (
+                                        <span className="status-free">FREE</span>
+                                    )}
+                                </td>
+
+                                <td>{table.enabled ? "YES" : "NO"}</td>
+
+                                <td>
+                                    {table.inUse && (
+                                        <button
+                                            className="action-btn btn-release"
+                                            onClick={() => handleRelease(table.id)}
+                                        >
+                                            Release
+                                        </button>
+                                    )}
+
+                                    {table.enabled && !table.inUse && (
+                                        <button
+                                            className="action-btn btn-disable"
+                                            onClick={() => handleDisable(table.id)}
+                                        >
+                                            Disable
+                                        </button>
+                                    )}
+
+                                    {!table.enabled && (
+                                        <button
+                                            className="action-btn btn-enable"
+                                            onClick={() => handleEnable(table.id)}
+                                        >
+                                            Enable
+                                        </button>
+                                    )}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 }

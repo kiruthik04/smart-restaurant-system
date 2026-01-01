@@ -1,0 +1,82 @@
+/* Page container */
+.order-page {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Heading */
+.order-page h2 {
+    font-size: 24px;
+    margin-bottom: 16px;
+    color: #333;
+}
+
+/* Table number input */
+.table-input {
+    width: 200px;
+    padding: 8px 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.table-input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* Message text */
+.order-message {
+    margin-top: 12px;
+    font-weight: 500;
+}
+
+.order-message.success {
+    color: #28a745;
+}
+
+.order-message.error {
+    color: #dc3545;
+}
+
+/* Action buttons */
+.primary-btn {
+    margin-top: 12px;
+    padding: 10px 16px;
+    font-size: 15px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/* Place order button (handled in OrderSummary usually) */
+.primary-btn.place {
+    background-color: #007bff;
+    color: white;
+}
+
+.primary-btn.place:hover {
+    background-color: #0056b3;
+}
+
+/* Finish / release button */
+.primary-btn.finish {
+    background-color: #d9534f;
+    color: white;
+}
+
+.primary-btn.finish:hover {
+    background-color: #c9302c;
+}
+
+.primary-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Section spacing */
+.section {
+    margin-bottom: 24px;
+}

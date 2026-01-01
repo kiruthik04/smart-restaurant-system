@@ -1,8 +1,8 @@
 import api from "./axiosConfig";
 
-const reservationApi = api;
-reservationApi.defaults.baseURL = "http://localhost:8084";
-
+const reservationApi = api.create({
+  baseURL: "http://localhost:8084"
+});
 export const getTableAvailability = (params) => {
     return reservationApi.get("/api/reservations/availability/tables", {
         params,

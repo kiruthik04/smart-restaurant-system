@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getHallAvailability } from "../api/eventApi";
+import "./HallAvailability.css";
 
 function HallAvailability() {
   const [halls, setHalls] = useState([]);
@@ -21,18 +22,43 @@ function HallAvailability() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p>Loading halls...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (loading)
+    return (
+      <p className="hall-message">
+        Loading halls...
+      </p>
+    );
+
+  if (error)
+    return (
+      <p className="hall-error">
+        {error}
+      </p>
+    );
 
   return (
-    <div>
-      <h2>Event Hall Availability</h2>
-
-      <ul>
+    <div className="hall-availability-container">
+      <ul className="hall-list">
         {halls.map((hall, index) => (
-          <li key={index}>
-            {hall.hallName} (Capacity: {hall.capacity}) –{" "}
-            {hall.available ? "Available" : "Booked"}
+          <li key={index} className="hall-item">
+            <div className="hall-info">
+              <span className="hall-name">
+                {hall.hallName}
+              </span>
+              <span className="hall-capacity">
+                Capacity: {hall.capacity}
+              </span>
+            </div>
+
+            <span
+              className={`hall-status ${
+                hall.available
+                  ? "hall-available"
+                  : "hall-booked"
+              }`}
+            >
+              {hall.available ? "Available" : "Booked"}
+            </span>
           </li>
         ))}
       </ul>

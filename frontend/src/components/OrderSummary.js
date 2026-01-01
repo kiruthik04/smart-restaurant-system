@@ -5,10 +5,18 @@ function OrderSummary({ cart, placeOrder }) {
   );
 
   return (
-    <div>
+    <div className="summary-container">
       <h3>Summary</h3>
-      <p>Total: ₹{total}</p>
-      <button onClick={placeOrder}>
+
+      <p className="summary-total">
+        Total: ₹{total}
+      </p>
+
+      <button
+        className="place-order-btn"
+        onClick={placeOrder}
+        disabled={total === 0}
+      >
         Place Order
       </button>
     </div>
