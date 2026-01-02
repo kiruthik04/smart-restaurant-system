@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import TablePage from "./pages/TablePage";
 import EventPage from "./pages/EventPage";
 import OrderPage from "./pages/OrderPage";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
 import AdminTablePage from "./pages/AdminTablePage";
 import AdminOrderPage from "./pages/AdminOrderPage";
 import KitchenPage from "./pages/KitchenPage";
@@ -25,6 +26,7 @@ function App() {
           {/* ADMIN (no auth for now) */}
           <Route path="/admin/tables" element={<AdminTablePage />} />
           <Route path="/admin/orders" element={<AdminOrderPage />} />
+          <Route path="/admin" element={<AdminDashboardPage />} />
 
           {/* KITCHEN */}
           <Route path="/kitchen" element={<KitchenPage />} />

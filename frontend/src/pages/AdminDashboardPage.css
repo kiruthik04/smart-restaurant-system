@@ -1,0 +1,87 @@
+.admin-dashboard {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.admin-dashboard h2 {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #1f2937;
+}
+
+/* Stats cards */
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  padding: 18px;
+  border-radius: 10px;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  text-align: center;
+}
+
+.stat-card h3 {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+
+.stat-card p {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* Variants */
+.stat-card.warning {
+  background-color: #fff7ed;
+  border-color: #fed7aa;
+}
+
+.stat-card.info {
+  background-color: #eff6ff;
+  border-color: #bfdbfe;
+}
+
+.stat-card.success {
+  background-color: #ecfdf5;
+  border-color: #a7f3d0;
+}
+
+/* Actions */
+.dashboard-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.action-card {
+  padding: 18px;
+  border-radius: 10px;
+  background-color: #2563eb;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.action-card:hover {
+  background-color: #1d4ed8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-actions {
+    grid-template-columns: 1fr;
+  }
+}
