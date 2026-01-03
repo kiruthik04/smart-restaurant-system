@@ -36,6 +36,34 @@
   font-size: 14px;
   color: #6b7280;
 }
+/* Charts section */
+.dashboard-charts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.chart-card {
+  background-color: #ffffff;
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.chart-card h3 {
+  margin-bottom: 14px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard-charts {
+    grid-template-columns: 1fr;
+  }
+}
 
 /* Variants */
 .stat-card.warning {

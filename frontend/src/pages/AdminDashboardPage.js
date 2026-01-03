@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { getAllTables } from "../api/adminTableApi";
 import { getAllOrders } from "../api/adminOrderApi";
 import "./AdminDashboardPage.css";
+import AdminDashboardCharts from "../components/AdminDashboardCharts";
+
 
 function AdminDashboardPage() {
   const [stats, setStats] = useState({
@@ -11,6 +13,9 @@ function AdminDashboardPage() {
     activeOrders: 0,
     completedOrders: 0,
   });
+  const [tables, setTables] = useState([]);
+  const [orders, setOrders] = useState([]);
+
 
   useEffect(() => {
     Promise.all([getAllTables(), getAllOrders()])
@@ -41,6 +46,7 @@ function AdminDashboardPage() {
           <p>Total Tables</p>
         </div>
 
+
         <div className="stat-card warning">
           <h3>{stats.tablesInUse}</h3>
           <p>Tables In Use</p>
@@ -56,6 +62,10 @@ function AdminDashboardPage() {
           <p>Completed Orders</p>
         </div>
       </div>
+      <AdminDashboardCharts
+        tables={tables}
+        orders={orders}
+      />
 
       {/* Quick Actions */}
       <div className="dashboard-actions">
