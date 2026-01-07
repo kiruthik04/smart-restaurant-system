@@ -1,0 +1,20 @@
+.public-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.public-content {
+    flex: 1;
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Mobile spacing */
+@media (max-width: 768px) {
+    .public-content {
+        padding: 16px;
+    }
+}

@@ -1,131 +1,367 @@
-/* Page container */
+/* AdminOrderPage.css - Modernized UI */
+
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --success: #10b981;
+  --success-hover: #059669;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --bg-slate: #f8fafc;
+  --card-bg: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
 .admin-order-page {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 20px;
+  padding: 40px 24px;
+  background-color: var(--bg-slate);
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  color: var(--text-dark);
 }
 
-/* Page title */
 .admin-order-page h2 {
-  font-size: 26px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  color: #1f2937;
+  font-size: 1.875rem;
+  font-weight: 800;
+  margin-bottom: 32px;
+  letter-spacing: -0.025em;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-/* Message */
+.admin-order-page h2::before {
+  content: '';
+  width: 6px;
+  height: 32px;
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+/* Success/Error Message */
 .admin-order-message {
-  margin-bottom: 12px;
-  font-weight: 500;
+  padding: 16px 20px;
+  background: white;
+  border-left: 5px solid var(--primary);
+  border-radius: 12px;
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-sm);
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  animation: slideIn 0.4s ease-out;
 }
 
-/* Table wrapper for mobile scroll */
+/* Table Management */
 .order-table-wrapper {
-  overflow-x: auto;
+  background: var(--card-bg);
+  border-radius: 20px;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  margin-bottom: 40px;
 }
 
-/* Orders table */
 .admin-order-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
-}
-
-.admin-order-table th,
-.admin-order-table td {
-  padding: 12px;
-  border: 1px solid #e5e7eb;
-  text-align: center;
 }
 
 .admin-order-table th {
-  background-color: #f3f4f6;
-  font-weight: 600;
-  color: #374151;
+  background-color: #f1f5f9;
+  padding: 20px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  font-weight: 700;
+  text-align: left;
+  border-bottom: 2px solid var(--border-color);
 }
 
-/* Status labels */
+.admin-order-table td {
+  padding: 20px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.95rem;
+}
+
+.admin-order-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-order-table tr:hover td {
+  background-color: #fbfcfe;
+}
+
+/* Enhanced Status Badges */
+.status-created,
+.status-in_progress,
+.status-completed {
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
 .status-created {
-  color: #f59e0b;
-  font-weight: 600;
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
 }
 
-.status-progress {
-  color: #2563eb;
-  font-weight: 600;
+.status-in_progress {
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
 }
 
 .status-completed {
-  color: #16a34a;
-  font-weight: 600;
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
 }
 
-/* Action buttons */
+/* Action Buttons */
 .view-btn {
-  padding: 6px 12px;
-  font-size: 13px;
-  background-color: #2563eb;
-  color: white;
-  border: none;
-  border-radius: 4px;
+  background: white;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  padding: 8px 18px;
+  border-radius: 10px;
   cursor: pointer;
+  font-weight: 700;
+  font-size: 0.85rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .view-btn:hover {
-  background-color: #1d4ed8;
+  background: var(--primary);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
-/* Order details panel */
-.order-details {
+/* Modal Overlay & Transitions */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  padding: 20px;
+}
+
+.order-details-modal {
+  background: white;
+  width: 100%;
+  max-width: 550px;
+  border-radius: 24px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: modalEnter 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.modal-header {
+  padding: 24px 32px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8fafc;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.close-modal {
+  background: #f1f5f9;
+  border: none;
+  font-size: 24px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+
+.close-modal:hover {
+  background: #e2e8f0;
+  color: var(--danger);
+}
+
+.modal-body {
+  padding: 32px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.status-badge {
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: #f1f5f9;
+}
+
+.modal-items-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.modal-items-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.item-info {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.item-price {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.modal-total {
   margin-top: 24px;
-  padding: 18px;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  background-color: #fafafa;
+  padding: 20px;
+  background: #f0f9ff;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
 }
 
-.order-details h3 {
-  margin-bottom: 10px;
-  font-size: 18px;
-  font-weight: 600;
+.modal-footer {
+  padding: 24px 32px;
+  background: #f8fafc;
+  display: flex;
+  gap: 12px;
+  border-top: 1px solid var(--border-color);
 }
 
-.order-details h4 {
-  margin-top: 12px;
-  margin-bottom: 6px;
-  font-size: 15px;
-  font-weight: 600;
-}
-
-/* Items list */
-.order-details ul {
-  padding-left: 18px;
-  margin-bottom: 10px;
-}
-
-/* Complete button */
 .complete-btn {
-  margin-top: 10px;
-  padding: 8px 14px;
-  background-color: #22c55e;
+  background: var(--success);
   color: white;
   border: none;
-  border-radius: 6px;
-  font-size: 14px;
+  flex: 2;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 700;
   cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
 }
 
 .complete-btn:hover {
-  background-color: #16a34a;
+  background: var(--success-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.35);
 }
 
-/* Mobile */
+.secondary-btn {
+  background: #e2e8f0;
+  color: #475569;
+  border: none;
+  flex: 1;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.secondary-btn:hover {
+  background: #cbd5e1;
+}
+
+/* Animations */
+@keyframes modalEnter {
+  from {
+    transform: scale(0.9) translateY(20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-10px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Mobile Responsive Scaling */
 @media (max-width: 768px) {
   .admin-order-page {
-    padding: 12px;
+    padding: 24px 16px;
   }
 
   .admin-order-page h2 {
-    font-size: 22px;
+    font-size: 1.5rem;
+  }
+
+  /* Hide Total column on very small screens to maintain layout */
+  .admin-order-table th:nth-child(3),
+  .admin-order-table td:nth-child(3) {
+    display: none;
+  }
+
+  .admin-order-table td,
+  .admin-order-table th {
+    padding: 14px;
+    font-size: 0.85rem;
+  }
+
+  .order-details-modal {
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    position: fixed;
+    bottom: 0;
   }
 }

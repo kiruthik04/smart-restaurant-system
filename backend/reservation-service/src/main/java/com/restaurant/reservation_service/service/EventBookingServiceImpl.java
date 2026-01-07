@@ -46,50 +46,53 @@ public class EventBookingServiceImpl implements EventBookingService {
             throw new InvalidReservationException("Invalid time range");
         }
 
-        List<EventHall> halls =
-                hallRepository.findByCapacityGreaterThanEqualAndActiveTrue(
-                        request.getGuestCount()
-                );
+        EventHall hall = hallRepository.findById(request.getHallId())
+                .orElseThrow(() -> new ResourceNotFoundException("Hall not found"));
 
-        for (EventHall hall : halls) {
-
-            boolean conflict = !bookingRepository
-                    .findOverlappingEvents(
-                            hall.getId(),
-                            request.getEventDate(),
-                            request.getStartTime(),
-                            request.getEndTime()
-                    ).isEmpty();
-
-            if (!conflict) {
-                EventBooking booking = new EventBooking(
-                        request.getEventName(),
-                        hall,
+        // 🔹 Overlap check (global for now)
+        boolean conflict = !bookingRepository
+                .findOverlappingEvents(
                         request.getEventDate(),
                         request.getStartTime(),
-                        request.getEndTime(),
-                        request.getGuestCount(),
-                        request.getMenuItemIds()
-                );
+                        request.getEndTime()
+                ).isEmpty();
 
-                EventBooking saved = bookingRepository.save(booking);
-
-                return new EventBookingResponse(
-                        saved.getId(),
-                        hall.getName(),
-                        saved.getEventDate(),
-                        saved.getStartTime(),
-                        saved.getEndTime(),
-                        saved.getStatus(),
-                        request.getMenuItemIds()
-                );
-            }
+        if (conflict) {
+            throw new TableAlreadyBookedException(
+                    "Event already booked for the selected time slot"
+            );
         }
 
-        throw new TableAlreadyBookedException(
-                "No halls available for the selected time slot"
+        // 🔹 Create booking (NO constructor, setters only)
+        EventBooking booking = new EventBooking();
+        booking.setEventName(request.getEventName());
+        booking.setEventDate(request.getEventDate());
+        booking.setStartTime(request.getStartTime());
+        booking.setEndTime(request.getEndTime());
+        booking.setGuestCount(request.getGuestCount());
+        booking.setStatus("BOOKED");
+
+        // store menu item names/ids as strings
+        booking.setMenuItems(
+                request.getMenuItemIds()
+                        .stream()
+                        .map(String::valueOf)
+                        .toList()
+        );
+
+        EventBooking saved = bookingRepository.save(booking);
+
+        return new EventBookingResponse(
+                saved.getId(),
+                "AUTO-ASSIGNED",
+                saved.getEventDate(),
+                saved.getStartTime(),
+                saved.getEndTime(),
+                saved.getStatus(),
+                request.getMenuItemIds()
         );
     }
+
 
     private void validateMenuItems(List<Long> menuItemIds) {
 
@@ -158,13 +161,13 @@ public class EventBookingServiceImpl implements EventBookingService {
                 .map(hall -> {
                     boolean hasConflict = !bookingRepository
                             .findOverlappingEvents(
-                                    hall.getId(),
                                     localDate,
                                     start,
                                     end
                             ).isEmpty();
 
                     return new HallAvailabilityResponse(
+                            hall.getId(),
                             hall.getName(),
                             hall.getCapacity(),
                             !hasConflict

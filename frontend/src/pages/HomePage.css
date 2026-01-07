@@ -1,0 +1,339 @@
+/* HomePage.css */
+:root {
+    --primary-red: #ff4757;
+    --dark-navy: #2f3542;
+    --bg-light: #f4f7f6;
+    --success: #2ed573;
+    --white: #ffffff;
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* 1. Layout Structure */
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+.home-full-wrapper {
+    background-color: var(--bg-light);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* 2. Promo Slider - CHANGED TO FLEX/RATIO */
+.promo-slider {
+    width: 100%;
+    /* Use aspect-ratio instead of fixed height to ensure content is never hidden */
+    aspect-ratio: 16 / 7;
+    min-height: 300px;
+    max-height: 600px;
+    position: relative;
+    background: #000;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    /* Flex container */
+}
+
+.poster-slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    display: flex;
+    /* Flex children */
+}
+
+.poster-slide.active {
+    opacity: 1;
+}
+
+.poster-img {
+    width: 100%;
+    height: 100%;
+    /* 'cover' ensures the image fills the flex container while maintaining ratio */
+    object-fit: cover;
+    filter: brightness(0.65);
+    flex: 1;
+}
+
+.poster-overlay {
+    position: absolute;
+    bottom: 10%;
+    /* Percent-based positioning for better scaling */
+    left: 8%;
+    right: 8%;
+    color: white;
+    z-index: 5;
+    animation: fadeInSlide 1s ease-out;
+}
+
+.poster-overlay h2 {
+    font-size: clamp(1.5rem, 4vw, 3.5rem);
+    /* Responsive font sizing */
+    margin: 0 0 10px 0;
+    font-weight: 800;
+    text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.poster-overlay p {
+    font-size: clamp(0.8rem, 1.5vw, 1.3rem);
+    font-weight: 400;
+    text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* 3. Content Grid */
+.content-container {
+    flex: 1 0 auto;
+    max-width: 1200px;
+    width: 92%;
+    margin: 40px auto;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 30px;
+    align-items: start;
+}
+
+.live-status-card,
+.real-bill-card {
+    background: var(--white);
+    padding: 2.5rem;
+    border-radius: 24px;
+    box-shadow: var(--shadow-soft);
+}
+
+/* 4. Live Status Section */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f1f2f6;
+    padding-bottom: 15px;
+}
+
+.section-header h3 {
+    margin: 0;
+    color: var(--dark-navy);
+    font-size: 1.5rem;
+}
+
+.order-id {
+    background: #f1f2f6;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-weight: 700;
+    color: var(--primary-red);
+}
+
+.status-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.progress-container {
+    height: 18px;
+    background: #e9ecef;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-red), #ff7675);
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 5. Bill Summary Section */
+.bill-table {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.bill-item-row {
+    display: flex;
+    justify-content: space-between;
+    color: #57606f;
+    font-weight: 500;
+}
+
+.bill-divider {
+    height: 1px;
+    background: #f1f2f6;
+    margin: 8px 0;
+}
+
+.grand-total {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--primary-red);
+    padding-top: 15px;
+    border-top: 2px dashed #ced4da;
+    margin-top: 10px;
+}
+
+.specials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.special-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    transition: transform 0.3s ease;
+}
+
+.special-card:hover {
+    transform: translateY(-5px);
+}
+
+.special-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.special-info {
+    padding: 15px;
+    text-align: center;
+}
+
+.service-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+.service-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 12px;
+    border: 2px solid var(--primary-red);
+    background: transparent;
+    color: var(--dark-navy);
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.service-btn:hover {
+    background: var(--primary-red);
+    color: white;
+}
+
+/* 6. Empty State */
+.empty-state {
+    text-align: center;
+    padding: 40px 0;
+}
+
+.order-now-btn {
+    background: var(--dark-navy);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 15px;
+}
+
+.order-now-btn:hover {
+    background: var(--primary-red);
+    transform: translateY(-3px);
+}
+
+/* 7. Footer */
+.restaurant-footer {
+    background: var(--dark-navy);
+    color: white;
+    padding: 60px 5%;
+    flex-shrink: 0;
+    margin-top: auto;
+}
+
+.footer-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+}
+
+/* 8. Responsive Design - Unified */
+
+@media (max-width: 1024px) {
+    .content-container {
+        grid-template-columns: 1fr;
+    }
+
+    .promo-slider {
+        aspect-ratio: 16 / 9;
+        /* Squarer ratio for tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    .promo-slider {
+        aspect-ratio: 4 / 3;
+        /* More vertical for mobile to prevent content hiding */
+        min-height: 250px;
+    }
+
+    .poster-img {
+        object-fit: cover;
+    }
+
+    .poster-overlay {
+        bottom: 15px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        padding: 0 15px;
+    }
+
+    .content-container {
+        width: 95%;
+        margin: 20px auto;
+        gap: 20px;
+    }
+
+    .live-status-card,
+    .real-bill-card {
+        padding: 1.5rem;
+        border-radius: 18px;
+    }
+
+    .order-now-btn {
+        width: 100%;
+    }
+
+    .footer-grid {
+        text-align: center;
+        grid-template-columns: 1fr;
+    }
+}
+
+@keyframes fadeInSlide {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -25,7 +25,6 @@ function TableReservationForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setMessage("");
-
     setLoading(true);
 
     createSmartReservation(form)
@@ -38,65 +37,79 @@ function TableReservationForm() {
         }
       })
       .finally(() => setLoading(false));
-
   };
 
   return (
     <div className="reservation-container">
       <h2>Book a Table</h2>
 
-      <form
-        className="reservation-form"
-        onSubmit={handleSubmit}
-      >
-        <input
-          name="customerName"
-          placeholder="Customer Name"
-          value={form.customerName}
-          onChange={handleChange}
-          required
-        />
+      <form className="reservation-form" onSubmit={handleSubmit}>
+        <div className="input-group full-width">
+          <label>Customer Name</label>
+          <input
+            name="customerName"
+            placeholder="Enter your name"
+            value={form.customerName}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-        <input
-          name="customerPhone"
-          placeholder="Phone Number"
-          value={form.customerPhone}
-          onChange={handleChange}
-          required
-        />
+        <div className="input-group full-width">
+          <label>Phone Number</label>
+          <input
+            name="customerPhone"
+            placeholder="Enter phone number"
+            value={form.customerPhone}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-        <input
-          type="date"
-          name="reservationDate"
-          value={form.reservationDate}
-          onChange={handleChange}
-          required
-        />
+        <div className="input-group full-width">
+          <label>Reservation Date</label>
+          <input
+            type="date"
+            name="reservationDate"
+            value={form.reservationDate}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-        <input
-          type="time"
-          name="startTime"
-          value={form.startTime}
-          onChange={handleChange}
-          required
-        />
+        <div className="input-group">
+          <label>Start Time</label>
+          <input
+            type="time"
+            name="startTime"
+            value={form.startTime}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-        <input
-          type="time"
-          name="endTime"
-          value={form.endTime}
-          onChange={handleChange}
-          required
-        />
+        <div className="input-group">
+          <label>End Time</label>
+          <input
+            type="time"
+            name="endTime"
+            value={form.endTime}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-        <input
-          type="number"
-          name="numberOfPeople"
-          value={form.numberOfPeople}
-          onChange={handleChange}
-          min="1"
-          required
-        />
+        <div className="input-group full-width">
+          <label>Number of Guests</label>
+          <input
+            type="number"
+            name="numberOfPeople"
+            value={form.numberOfPeople}
+            onChange={handleChange}
+            min="1"
+            required
+          />
+        </div>
 
         <button
           className="reservation-btn"
@@ -108,10 +121,7 @@ function TableReservationForm() {
       </form>
 
       {message && (
-        <p
-          className={`reservation-message ${message.startsWith("❌") ? "error" : "success"
-            }`}
-        >
+        <p className={`reservation-message ${message.startsWith("❌") ? "error" : "success"}`}>
           {message}
         </p>
       )}

@@ -1,66 +1,100 @@
-.menu-container {
-    margin-top: 20px;
+/* MenuList.css */
+:root {
+    --primary-red: #ff4757;
+    --dark-navy: #2f3542;
+    --glass-white: rgba(255, 255, 255, 0.9);
+    --shadow-premium: 0 10px 20px rgba(0, 0, 0, 0.05);
 }
 
-/* Heading */
 .menu-container h3 {
-    margin-bottom: 14px;
-    font-size: 22px;
-    font-weight: 600;
-    color: #1f2937;
+    font-size: 2rem;
+    color: var(--dark-navy);
+    margin-bottom: 1.5rem;
+    font-weight: 800;
+    border-left: 6px solid var(--primary-red);
+    padding-left: 15px;
 }
 
-/* Menu item card */
-.menu-item {
+.menu-grid {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.menu-row {
+    display: grid;
+    /* Column 1: Flexible Name | Column 2: Centered Price | Column 3: Fixed Width Button */
+    grid-template-columns: 1fr 100px 100px;
     align-items: center;
-    padding: 12px 14px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    background-color: #f9fafb;
-    border: 1px solid #e5e7eb;
+    background: white;
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow-premium);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.02);
 }
 
-/* Item text */
-.menu-item span {
-    font-size: 15px;
-    color: #111827;
+.menu-row:hover {
+    transform: scale(1.01);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    border-color: rgba(255, 71, 87, 0.3);
 }
 
-/* Price */
+.menu-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--dark-navy);
+    text-align: left;
+}
+
 .menu-price {
-    color: #6b7280;
-    font-size: 14px;
-    margin-left: 4px;
+    font-weight: 700;
+    color: var(--primary-red);
+    text-align: center;
+    font-size: 1.05rem;
 }
 
-/* Add button */
+.menu-action {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .menu-add-btn {
-    background-color: #2563eb;
-    color: #ffffff;
+    background: var(--dark-navy);
+    color: white;
     border: none;
-    padding: 6px 14px;
-    font-size: 14px;
-    border-radius: 6px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 700;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
+    width: 80px;
 }
 
 .menu-add-btn:hover {
-    background-color: #1d4ed8;
+    background: var(--primary-red);
+    box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+    transform: translateY(-2px);
 }
 
-/* Responsive */
-@media (max-width: 640px) {
-    .menu-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
+/* Responsive Handling */
+@media (max-width: 600px) {
+    .menu-row {
+        grid-template-columns: 1fr 80px 80px;
+        padding: 0.8rem 1rem;
+    }
+
+    .menu-name {
+        font-size: 1rem;
+    }
+
+    .menu-price {
+        font-size: 0.9rem;
     }
 
     .menu-add-btn {
-        align-self: flex-end;
-        padding: 6px 18px;
+        padding: 8px 12px;
+        width: 70px;
+        font-size: 0.8rem;
     }
 }

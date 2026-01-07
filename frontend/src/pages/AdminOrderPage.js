@@ -70,7 +70,6 @@ function AdminOrderPage() {
             {message && <p className="admin-order-message">{message}</p>}
             {loading && <p>Loading orders...</p>}
 
-            {/* Orders List */}
             <div className="order-table-wrapper">
                 <table className="admin-order-table">
                     <thead>
@@ -82,7 +81,6 @@ function AdminOrderPage() {
                             <th>Action</th>
                         </tr>
                     </thead>
-
                     <tbody>
                         {orders.map(order => (
                             <tr key={order.orderId}>
@@ -90,30 +88,13 @@ function AdminOrderPage() {
                                 <td>{order.tableNumber}</td>
                                 <td>₹{order.totalAmount}</td>
                                 <td>
-                                    {order.status === "CREATED" && (
-                                        <span className="status-created">
-                                            Waiting for Kitchen
-                                        </span>
-                                    )}
-
-                                    {order.status === "IN_PROGRESS" && (
-                                        <span className="status-progress">
-                                            Being Cooked
-                                        </span>
-                                    )}
-
-                                    {order.status === "COMPLETED" && (
-                                        <span className="status-completed">
-                                            Done
-                                        </span>
-                                    )}
+                                    <span className={`status-${order.status.toLowerCase()}`}>
+                                        {order.status === "CREATED" ? "Waiting for Kitchen" :
+                                            order.status === "IN_PROGRESS" ? "Being Cooked" : "Done"}
+                                    </span>
                                 </td>
-
                                 <td>
-                                    <button
-                                        className="view-btn"
-                                        onClick={() => viewOrder(order.orderId)}
-                                    >
+                                    <button className="view-btn" onClick={() => viewOrder(order.orderId)}>
                                         View
                                     </button>
                                 </td>
@@ -123,37 +104,50 @@ function AdminOrderPage() {
                 </table>
             </div>
 
-            {/* Order Details */}
+            {/* MODAL POPUP */}
             {selectedOrder && (
-                <div className="order-details">
-                    <h3>Order #{selectedOrder.orderId}</h3>
-                    <p><b>Table:</b> {selectedOrder.tableNumber}</p>
-                    <p><b>Status:</b> {selectedOrder.status}</p>
+                <div className="modal-overlay" onClick={() => setSelectedOrder(null)}>
+                    <div className="order-details-modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3>Order Details #{selectedOrder.orderId}</h3>
+                            <button className="close-modal" onClick={() => setSelectedOrder(null)}>&times;</button>
+                        </div>
 
-                    <h4>Items</h4>
-                    <ul>
-                        {selectedOrder.items.map((item, idx) => (
-                            <li key={idx}>
-                                {item.name} × {item.quantity} — ₹{item.subtotal}
-                            </li>
-                        ))}
-                    </ul>
+                        <div className="modal-body">
+                            <div className="detail-row">
+                                <span><b>Table:</b> {selectedOrder.tableNumber}</span>
+                                <span className={`status-badge ${selectedOrder.status.toLowerCase()}`}>{selectedOrder.status}</span>
+                            </div>
 
-                    <p><b>Total:</b> ₹{selectedOrder.totalAmount}</p>
+                            <h4>Items Ordered</h4>
+                            <ul className="modal-items-list">
+                                {selectedOrder.items.map((item, idx) => (
+                                    <li key={idx}>
+                                        <span className="item-info">{item.name} × {item.quantity}</span>
+                                        <span className="item-price">₹{item.subtotal}</span>
+                                    </li>
+                                ))}
+                            </ul>
 
-                    {selectedOrder.status === "CREATED" && (
-                        <button
-                            className="complete-btn"
-                            onClick={() => markCompleted(selectedOrder.orderId)}
-                        >
-                            Mark as Completed
-                        </button>
-                    )}
+                            <div className="modal-total">
+                                <span>Total Amount</span>
+                                <span>₹{selectedOrder.totalAmount}</span>
+                            </div>
+                        </div>
+
+                        <div className="modal-footer">
+                            {selectedOrder.status === "CREATED" && (
+                                <button className="complete-btn" onClick={() => markCompleted(selectedOrder.orderId)}>
+                                    Mark as Completed
+                                </button>
+                            )}
+                            <button className="secondary-btn" onClick={() => setSelectedOrder(null)}>Close</button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
     );
-
 }
 
 export default AdminOrderPage;

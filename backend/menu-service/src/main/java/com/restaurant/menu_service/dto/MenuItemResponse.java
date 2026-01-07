@@ -7,7 +7,7 @@ public class MenuItemResponse{
     private double price;
     private boolean available;
 
-    public MenuItemResponse(Long id, String name, String description, double price, boolean available) {
+    public MenuItemResponse(Long id, String name, String category, String description, double price, boolean available) {
         this.id = id;
         this.name = name;
         this.description = description;

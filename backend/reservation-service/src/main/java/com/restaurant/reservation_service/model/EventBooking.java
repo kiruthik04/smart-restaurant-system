@@ -14,12 +14,7 @@ public class EventBooking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String eventName;
-
-    @ManyToOne
-    @JoinColumn(name = "hall_id", nullable = false)
-    private EventHall hall;
 
     @Column(nullable = false)
     private LocalDate eventDate;
@@ -30,70 +25,110 @@ public class EventBooking {
     @Column(nullable = false)
     private LocalTime endTime;
 
-    @Column(nullable = false)
     private int guestCount;
+
+    private String status;
 
     @ElementCollection
     @CollectionTable(
             name = "event_menu_items",
-            joinColumns = @JoinColumn(name = "event_booking_id")
+            joinColumns = @JoinColumn(name = "event_id")
     )
-    @Column(name = "menu_item_id")
-    private List<Long> menuItemIds;
+    @Column(name = "menu_item_name")
+    private List<String> menuItems;
 
-    @Column(nullable = false)
-    private String status; // BOOKED, CANCELLED
+    /* ===== Business Methods ===== */
 
+    // ✅ REQUIRED BY JPA
     public EventBooking() {}
 
+    // ✅ FIXED CONSTRUCTOR
     public EventBooking(
             String eventName,
-            EventHall hall,
             LocalDate eventDate,
             LocalTime startTime,
             LocalTime endTime,
             int guestCount,
-            List<Long> menuItemIds
+            List<String> menuItems
     ) {
         this.eventName = eventName;
-        this.hall = hall;
         this.eventDate = eventDate;
         this.startTime = startTime;
         this.endTime = endTime;
         this.guestCount = guestCount;
-        this.menuItemIds = menuItemIds;
-        this.status = "BOOKED";
+        this.menuItems = menuItems;
+        this.status = "PENDING";
     }
+
+    // ✅ REQUIRED METHOD
+    public void cancel() {
+        this.status = "CANCELLED";
+    }
+
+    /* ===== GETTERS & SETTERS ===== */
 
     public Long getId() {
         return id;
     }
 
-    public EventHall getHall() {
-        return hall;
+    public void setId(Long id){
+        this.id = id;
+    }
+
+    public String getEventName() {
+        return eventName;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
     }
 
     public LocalDate getEventDate() {
         return eventDate;
     }
 
+    public void setEventDate(LocalDate eventDate) {
+        this.eventDate = eventDate;
+    }
+
     public LocalTime getStartTime() {
         return startTime;
+    }
+
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
     }
 
     public LocalTime getEndTime() {
         return endTime;
     }
 
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
+    }
+
     public int getGuestCount() {
         return guestCount;
+    }
+
+    public void setGuestCount(int guestCount) {
+        this.guestCount = guestCount;
     }
 
     public String getStatus() {
         return status;
     }
 
-    public void cancel() {
-        this.status = "CANCELLED";
+    public void setStatus(String status) {
+        this.status = status;
     }
+
+    public List<String> getMenuItems() {
+        return menuItems;
+    }
+
+    public void setMenuItems(List<String> menuItems) {
+        this.menuItems = menuItems;
+    }
+
 }

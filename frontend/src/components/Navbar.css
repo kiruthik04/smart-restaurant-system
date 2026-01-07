@@ -1,84 +1,138 @@
-/* Navbar container */
-.navbar {
-  background-color: #2563eb; /* modern blue */
-  padding: 14px 20px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+/* Navbar.css */
+:root {
+  --primary-red: #ff4757;
+  --dark-navy: #2f3542;
+  --shadow-premium: 0 4px 20px rgba(0, 0, 0, 0.1);
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Inner layout */
+.navbar {
+  background: var(--dark-navy);
+  /* Use padding for the side gaps instead of max-width margins */
+  padding: 0.8rem 5%;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: var(--shadow-premium);
+}
+
 .navbar-container {
-  max-width: 1100px;
-  margin: 0 auto;
+  width: 100%;
   display: flex;
+  /* This pushes the brand to the left and the toggle/links to the right */
   justify-content: space-between;
+  align-items: center;
+  margin: 0;
+}
+
+.navbar-brand {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: white;
+  text-decoration: none;
+  letter-spacing: -1px;
+  transition: var(--transition-smooth);
+}
+
+.navbar-brand:hover {
+  color: var(--primary-red);
+}
+
+/* Links Container */
+.navbar-links {
+  display: flex;
+  gap: 2rem;
   align-items: center;
 }
 
-/* Brand */
-.navbar-brand {
-  font-size: 22px;
-  font-weight: 700;
-  color: #ffffff;
-  text-decoration: none;
-}
-
-/* Links */
-.navbar-links {
-  display: flex;
-  gap: 20px;
-}
-
 .navbar-links a {
-  color: #ffffff;
+  color: #ced6e0;
   text-decoration: none;
-  font-size: 15px;
-  font-weight: 500;
-  padding: 6px 10px;
-  border-radius: 4px;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: var(--transition-smooth);
+  position: relative;
+  padding: 5px 0;
 }
 
 .navbar-links a:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  color: #f9fafb;
+  color: white;
 }
 
-/* Mobile menu button */
+.navbar-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primary-red);
+  transition: var(--transition-smooth);
+}
+
+.navbar-links a:hover::after {
+  width: 100%;
+}
+
+/* Mobile Toggle Button - Forced to the far right */
 .menu-toggle {
   display: none;
-  font-size: 24px;
-  color: white;
   background: none;
   border: none;
+  color: white;
+  font-size: 2rem;
   cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  /* Added margin-left to ensure it stays right if the container flexes */
+  margin-left: auto;
 }
 
-/* Responsive */
+/* Responsive Tablet/Mobile View */
 @media (max-width: 768px) {
+  .navbar {
+    padding: 0.8rem 5%;
+    /* Maintains the gap from the screen edge */
+  }
+
   .menu-toggle {
     display: block;
   }
 
   .navbar-links {
     position: absolute;
-    top: 64px;
+    top: 100%;
     left: 0;
     width: 100%;
-    background-color: #2563eb;
+    background: var(--dark-navy);
     flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    padding: 16px 0;
-    display: none;
+    gap: 0;
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease-in-out;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .navbar-links.open {
-    display: flex;
+    max-height: 400px;
+    padding-bottom: 1rem;
   }
 
   .navbar-links a {
-    font-size: 16px;
     width: 100%;
     text-align: center;
+    padding: 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .navbar-links a:hover {
+    background: rgba(255, 71, 87, 0.1);
+    color: var(--primary-red);
+  }
+
+  .navbar-links a::after {
+    display: none;
   }
 }

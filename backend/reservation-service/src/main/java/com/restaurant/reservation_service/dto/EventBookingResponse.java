@@ -55,7 +55,9 @@ public class EventBookingResponse {
     public String getStatus() {
         return status;
     }
-
+    public void setStatus(String status){
+        this.status = status;
+    }
     public List<Long> getMenuItemIds() {
         return menuItemIds;
     }

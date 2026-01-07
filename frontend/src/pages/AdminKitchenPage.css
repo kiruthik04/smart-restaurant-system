@@ -1,0 +1,239 @@
+/* AdminKitchenPage.css - Premium Kitchen Dashboard */
+
+:root {
+    --primary: #2563eb;
+    --bg-main: #f8fafc;
+    --card-bg: #ffffff;
+    --text-bold: #0f172a;
+    --text-soft: #64748b;
+    --border: #e2e8f0;
+    --waiting: #f59e0b;
+    /* Amber for Waiting */
+    --cooking: #10b981;
+    /* Emerald for Progress */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    --radius: 16px;
+}
+
+.admin-kitchen-page {
+    padding: 40px 24px;
+    background-color: var(--bg-main);
+    min-height: 100vh;
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.admin-kitchen-page h2 {
+    font-size: 1.875rem;
+    font-weight: 800;
+    color: var(--text-bold);
+    margin-bottom: 32px;
+    letter-spacing: -0.025em;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-kitchen-page h2::before {
+    content: '';
+    width: 6px;
+    height: 32px;
+    background: var(--primary);
+    border-radius: 4px;
+}
+
+/* Message Banner */
+.kitchen-message-banner {
+    padding: 16px 20px;
+    background: var(--primary);
+    color: white;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    text-align: center;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--shadow-md);
+    animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Grid Layout */
+.kitchen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    align-items: start;
+}
+
+/* Order Card */
+.order-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.order-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-md);
+}
+
+/* Card Accent Bars */
+.order-card.created {
+    border-top: 6px solid var(--waiting);
+}
+
+.order-card.in_progress {
+    border-top: 6px solid var(--cooking);
+}
+
+/* Card Header */
+.card-header {
+    padding: 20px;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-header h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-bold);
+}
+
+.table-badge {
+    background: #f1f5f9;
+    color: var(--primary);
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+/* Items List */
+.order-items-list {
+    list-style: none;
+    padding: 20px;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.kitchen-item {
+    padding: 10px 0;
+    color: var(--text-bold);
+    font-size: 1rem;
+    font-weight: 500;
+    border-bottom: 1px solid #f8fafc;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.kitchen-item::before {
+    content: '•';
+    color: var(--primary);
+    font-weight: bold;
+}
+
+.kitchen-item:last-child {
+    border-bottom: none;
+}
+
+/* Status Footer */
+.card-footer-status {
+    padding: 16px 20px;
+    background: #f8fafc;
+    border-top: 1px solid #f1f5f9;
+}
+
+.status-text {
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Dynamic Status Colors */
+.status-text.created {
+    background-color: #fffbeb;
+    color: #92400e;
+}
+
+.status-text.in_progress {
+    background-color: #ecfdf5;
+    color: #065f46;
+}
+
+/* Pulse animation for 'In Progress' orders */
+.order-card.in_progress {
+    animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.1);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+/* Empty State & Loading */
+.kitchen-empty,
+.kitchen-loading {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px;
+    color: var(--text-soft);
+    font-size: 1.25rem;
+    background: white;
+    border-radius: var(--radius);
+    border: 2px dashed var(--border);
+}
+
+/* Responsive Scaling */
+@media (max-width: 768px) {
+    .admin-kitchen-page {
+        padding: 24px 16px;
+    }
+
+    .kitchen-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-kitchen-page h2 {
+        font-size: 1.5rem;
+    }
+}

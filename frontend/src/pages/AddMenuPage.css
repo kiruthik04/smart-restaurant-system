@@ -1,0 +1,138 @@
+/* Container & Page */
+.add-menu-page {
+    padding: 2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: #333;
+}
+
+.add-menu-page h2 {
+    margin-bottom: 1.8rem;
+    font-size: 1.8rem;
+    color: #2c3e50;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+/* Form Card */
+.menu-form {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 2rem;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.08);
+    animation: fadeIn 0.25s ease-out;
+}
+
+/* Inputs */
+.menu-form input,
+.menu-form select,
+.menu-form textarea {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    margin-bottom: 1.2rem;
+    border-radius: 8px;
+    border: 1px solid #dcdfe3;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    background-color: #fff;
+}
+
+.menu-form textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.menu-form input:focus,
+.menu-form select:focus,
+.menu-form textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
+}
+
+/* Checkbox */
+.checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+}
+
+.checkbox input {
+    width: auto;
+    margin: 0;
+    accent-color: #27ae60;
+}
+
+/* Buttons */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.8rem;
+    margin-top: 1.2rem;
+}
+
+.form-actions button {
+    padding: 0.65rem 1.4rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Primary Save Button */
+.form-actions button[type="submit"] {
+    background-color: #27ae60;
+    color: #fff;
+}
+
+.form-actions button[type="submit"]:hover {
+    background-color: #219150;
+}
+
+/* Secondary Cancel Button */
+.form-actions button[type="button"] {
+    background-color: #95a5a6;
+    color: #fff;
+}
+
+.form-actions button[type="button"]:hover {
+    background-color: #7f8c8d;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .add-menu-page {
+        padding: 1.2rem;
+    }
+
+    .menu-form {
+        padding: 1.5rem;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions button {
+        width: 100%;
+    }
+}

@@ -1,0 +1,223 @@
+/* AdminMenuPage.css - Premium Management UI */
+
+:root {
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --success: #10b981;
+    --success-bg: #ecfdf5;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --danger-bg: #fef2f2;
+    --bg-main: #f8fafc;
+    --card-bg: #ffffff;
+    --text-bold: #0f172a;
+    --text-soft: #64748b;
+    --border: #e2e8f0;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --radius: 12px;
+}
+
+.admin-menu-page {
+    padding: 40px 24px;
+    max-width: 1400px;
+    margin: auto;
+    background-color: var(--bg-main);
+    min-height: 100vh;
+}
+
+.admin-menu-page h2 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 800;
+    color: var(--text-bold);
+    margin-bottom: 32px;
+    letter-spacing: -0.03em;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.admin-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-btn {
+    padding: 8px 14px;
+    background: #22c55e;
+    color: white;
+    border: none;
+    border-radius: 6px;
+}
+
+.admin-menu-page h2::before {
+    content: '';
+    width: 6px;
+    height: 32px;
+    background: var(--primary);
+    border-radius: 4px;
+}
+
+/* TABLE CONTAINER - Card Style */
+.menu-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    overflow: hidden;
+    /* Ensures corners are rounded */
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border);
+}
+
+.menu-table th {
+    background-color: #f1f5f9;
+    padding: 18px 24px;
+    text-align: left;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    color: var(--text-soft);
+    border-bottom: 1px solid var(--border);
+}
+
+.menu-table td {
+    padding: 20px 24px;
+    font-size: 15px;
+    color: var(--text-bold);
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s ease;
+}
+
+.menu-table tr:last-child td {
+    border-bottom: none;
+}
+
+.menu-table tr:hover td {
+    background-color: #f8fafc;
+}
+
+/* STATUS BADGES */
+.status-active,
+.status-inactive {
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.status-active {
+    background-color: var(--success-bg);
+    color: var(--success);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.status-inactive {
+    background-color: var(--danger-bg);
+    color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* BUTTON ACTIONS */
+.actions {
+    display: flex;
+    gap: 12px;
+}
+
+.actions button {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--text-bold);
+}
+
+.actions button:hover {
+    background: var(--bg-main);
+    border-color: var(--text-soft);
+    transform: translateY(-1px);
+}
+
+.actions button.danger {
+    color: var(--danger);
+}
+
+.actions button.danger:hover {
+    background: var(--danger);
+    color: white;
+    border-color: var(--danger);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+/* TOGGLE BUTTON SPECIAL STYLE */
+.actions button:not(.danger):hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: rgba(37, 99, 235, 0.05);
+}
+
+/* RESPONSIVE DESIGN - Mobile Friendly Table */
+@media (max-width: 992px) {
+    .menu-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-menu-page {
+        padding: 24px 16px;
+    }
+
+    .menu-table thead {
+        display: none;
+        /* Hide headers on very small screens */
+    }
+
+    .menu-table,
+    .menu-table tbody,
+    .menu-table tr,
+    .menu-table td {
+        display: block;
+        width: 100%;
+    }
+
+    .menu-table tr {
+        margin-bottom: 20px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+    }
+
+    .menu-table td {
+        text-align: right;
+        padding: 12px 20px;
+        position: relative;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .menu-table td::before {
+        content: attr(data-label);
+        /* Requires data-label in HTML */
+        position: absolute;
+        left: 20px;
+        font-weight: 700;
+        color: var(--text-soft);
+        text-transform: uppercase;
+        font-size: 12px;
+    }
+
+    .actions {
+        justify-content: flex-end;
+    }
+}

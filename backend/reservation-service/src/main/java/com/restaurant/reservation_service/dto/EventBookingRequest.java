@@ -25,6 +25,8 @@ public class EventBookingRequest {
     @Min(1)
     private int guestCount;
 
+    private Long hallId;
+
     @NotNull
     private List<Long> menuItemIds;
 
@@ -48,7 +50,12 @@ public class EventBookingRequest {
         return guestCount;
     }
 
+    public Long getHallId(){
+        return hallId;
+    }
+
     public List<Long> getMenuItemIds() {
         return menuItemIds;
     }
+
 }

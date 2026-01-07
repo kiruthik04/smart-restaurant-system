@@ -24,6 +24,7 @@ public class MenuServiceImpl implements MenuService {
 
         MenuItem item = new MenuItem(
                 request.getName(),
+                request.getCategory(),
                 request.getDescription(),
                 request.getPrice(),
                 request.isAvailable()
@@ -73,9 +74,49 @@ public class MenuServiceImpl implements MenuService {
         return new MenuItemResponse(
                 item.getId(),
                 item.getName(),
+                item.getCategory(),
                 item.getDescription(),
                 item.getPrice(),
                 item.isAvailable()
         );
     }
+
+    @Override
+    public List<MenuItem> getAll() {
+        return menuItemRepository.findAll();
+    }
+
+    @Override
+    public MenuItem create(MenuItem item) {
+        item.setId(null); // safety
+        return menuItemRepository.save(item);
+    }
+
+    @Override
+    public MenuItem update(Long id, MenuItem item) {
+        MenuItem existing = menuItemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Menu item not found"));
+
+        existing.setName(item.getName());
+        existing.setDescription(item.getDescription());
+        existing.setPrice(item.getPrice());
+        existing.setAvailable(item.isAvailable());
+
+        return menuItemRepository.save(existing);
+    }
+
+    @Override
+    public void delete(Long id) {
+        menuItemRepository.deleteById(id);
+    }
+
+    @Override
+    public void toggleAvailability(Long id) {
+        MenuItem item = menuItemRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Menu item not found"));
+
+        item.setAvailable(!item.isAvailable());
+        menuItemRepository.save(item);
+    }
+
 }

@@ -1,79 +1,154 @@
+/* TableReservationForm.css */
+:root {
+  --primary-red: #ff4757;
+  --dark-navy: #2f3542;
+  --glass-white: rgba(255, 255, 255, 0.95);
+  --shadow-premium: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --transition-smooth: all 0.3s ease;
+}
+
 .reservation-container {
-  max-width: 500px;
-  margin: 0 auto;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  background: var(--glass-white);
+  border-radius: 24px;
+  box-shadow: var(--shadow-premium);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-/* Heading */
 .reservation-container h2 {
-  margin-bottom: 16px;
-  font-size: 22px;
-  color: #222;
+  font-size: 2.2rem;
+  color: var(--dark-navy);
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 800;
+  border-bottom: 4px solid var(--primary-red);
+  display: inline-block;
+  padding-bottom: 8px;
+  width: 100%;
 }
 
-/* Form layout */
 .reservation-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* Two columns for desktop */
+  gap: 1.2rem;
 }
 
-/* Inputs */
+/* Make Name and Phone take full width */
+.reservation-form input[name="customerName"],
+.reservation-form input[name="customerPhone"],
+.reservation-btn {
+  grid-column: span 2;
+}
+
 .reservation-form input {
-  padding: 10px 12px;
-  font-size: 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 1rem 1.2rem;
+  border: 2px solid #f1f2f6;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--dark-navy);
+  background: #f9f9f9;
+  transition: var(--transition-smooth);
 }
 
 .reservation-form input:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: var(--primary-red);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.1);
 }
 
-/* Submit button */
+/* Style for Date/Time labels/placeholders */
+.reservation-form input[type="date"],
+.reservation-form input[type="time"] {
+  font-family: inherit;
+  cursor: pointer;
+}
+
 .reservation-btn {
-  margin-top: 8px;
-  padding: 10px;
-  font-size: 15px;
-  background-color: #28a745;
+  margin-top: 1rem;
+  padding: 1.2rem;
+  background: var(--dark-navy);
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: var(--transition-smooth);
 }
 
-.reservation-btn:hover {
-  background-color: #218838;
+.reservation-btn:hover:not(:disabled) {
+  background: var(--primary-red);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 71, 87, 0.3);
 }
 
 .reservation-btn:disabled {
-  background-color: #ccc;
+  background: #ced6e0;
   cursor: not-allowed;
 }
 
-/* Messages */
+/* Message Styling */
 .reservation-message {
-  margin-top: 12px;
-  font-weight: 500;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 600;
+  animation: slideUp 0.4s ease;
 }
 
 .reservation-message.success {
-  color: #28a745;
+  background: #e3fcef;
+  color: #00b894;
+  border: 1px solid #55efc4;
 }
 
 .reservation-message.error {
-  color: #dc3545;
+  background: #fff0f0;
+  color: #ff4757;
+  border: 1px solid #ff7675;
 }
 
-/* Responsive */
-@media (max-width: 600px) {
-  .reservation-container {
-    max-width: 100%;
+/* Animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
 
-  .reservation-form input,
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Tablet/Mobile View */
+@media (max-width: 600px) {
+  .reservation-container {
+    margin: 1rem;
+    padding: 1.5rem;
+    border-radius: 16px;
+  }
+
+  .reservation-form {
+    grid-template-columns: 1fr;
+    /* Single column on mobile */
+  }
+
+  .reservation-form input[name="customerName"],
+  .reservation-form input[name="customerPhone"],
   .reservation-btn {
-    width: 100%;
+    grid-column: span 1;
+  }
+
+  .reservation-container h2 {
+    font-size: 1.8rem;
   }
 }

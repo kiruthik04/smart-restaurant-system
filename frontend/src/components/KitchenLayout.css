@@ -1,0 +1,26 @@
+.kitchen-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.kitchen-header {
+    background: #111827;
+    color: white;
+    padding: 16px 24px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.kitchen-content {
+    flex: 1;
+    padding: 24px;
+    background: #f9fafb;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .kitchen-content {
+        padding: 16px;
+    }
+}

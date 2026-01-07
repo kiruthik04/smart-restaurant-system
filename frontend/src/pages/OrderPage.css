@@ -1,82 +1,166 @@
-/* Page container */
+/* OrderPage.css */
+:root {
+    --primary-red: #ff4757;
+    --dark-navy: #2f3542;
+    --glass-white: rgba(255, 255, 255, 0.95);
+    --shadow-premium: 0 12px 40px rgba(0, 0, 0, 0.12);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .order-page {
-    max-width: 900px;
-    margin: 0 auto;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2.5rem;
+    background: #f8f9fa;
+    border-radius: 30px;
+    box-shadow: var(--shadow-premium);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-/* Heading */
 .order-page h2 {
-    font-size: 24px;
-    margin-bottom: 16px;
-    color: #333;
+    font-size: 2.5rem;
+    text-align: center;
+    color: var(--dark-navy);
+    margin-bottom: 2rem;
+    font-weight: 800;
+    letter-spacing: -1px;
 }
 
-/* Table number input */
+/* Table Input Styling */
 .table-input {
-    width: 200px;
-    padding: 8px 10px;
-    margin-bottom: 20px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    display: block;
+    width: 240px;
+    margin: 0 auto 3rem;
+    padding: 1.2rem;
+    border: 2px solid #e1e4e8;
+    border-radius: 16px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-align: center;
+    background: white;
+    transition: var(--transition-smooth);
+    color: var(--primary-red);
 }
 
 .table-input:focus {
     outline: none;
-    border-color: #007bff;
+    border-color: var(--primary-red);
+    box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.15);
+    transform: translateY(-2px);
 }
 
-/* Message text */
+/* Layout Grid */
+@media (min-width: 992px) {
+    .order-page {
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 2.5rem;
+    }
+
+    .order-page h2,
+    .table-input,
+    .order-message,
+    .primary-btn.finish {
+        grid-column: 1 / -1;
+    }
+
+    /* Menu on the left, Cart/Summary on the right column */
+    .section:nth-of-type(1) {
+        grid-row: span 2;
+    }
+}
+
+.section {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transition: var(--transition-smooth);
+}
+
+.section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Order Message Styling */
 .order-message {
-    margin-top: 12px;
-    font-weight: 500;
+    padding: 1.2rem;
+    border-radius: 14px;
+    text-align: center;
+    font-weight: 700;
+    margin: 1.5rem 0;
+    animation: fadeInDown 0.4s ease-out;
 }
 
 .order-message.success {
-    color: #28a745;
+    background: #e3fcef;
+    color: #00b894;
+    border-left: 6px solid #00b894;
 }
 
 .order-message.error {
-    color: #dc3545;
+    background: #fff0f0;
+    color: #ff4757;
+    border-left: 6px solid #ff4757;
 }
 
-/* Action buttons */
-.primary-btn {
-    margin-top: 12px;
-    padding: 10px 16px;
-    font-size: 15px;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-/* Place order button (handled in OrderSummary usually) */
-.primary-btn.place {
-    background-color: #007bff;
-    color: white;
-}
-
-.primary-btn.place:hover {
-    background-color: #0056b3;
-}
-
-/* Finish / release button */
+/* Finish Button Styling */
 .primary-btn.finish {
-    background-color: #d9534f;
+    width: 100%;
+    max-width: 500px;
+    margin: 2rem auto 0;
+    padding: 1.2rem;
+    background: var(--dark-navy);
     color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: var(--transition-smooth);
 }
 
-.primary-btn.finish:hover {
-    background-color: #c9302c;
+.primary-btn.finish:hover:not(:disabled) {
+    background: #1e2124;
+    transform: scale(1.02);
+    box-shadow: 0 10px 25px rgba(47, 53, 66, 0.2);
 }
 
-.primary-btn:disabled {
-    background-color: #ccc;
+.primary-btn.finish:disabled {
+    opacity: 0.5;
     cursor: not-allowed;
 }
 
-/* Section spacing */
-.section {
-    margin-bottom: 24px;
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .order-page {
+        margin: 1rem;
+        padding: 1.5rem;
+        border-radius: 20px;
+    }
+
+    .order-page h2 {
+        font-size: 1.8rem;
+    }
+
+    .table-input {
+        width: 100%;
+    }
 }

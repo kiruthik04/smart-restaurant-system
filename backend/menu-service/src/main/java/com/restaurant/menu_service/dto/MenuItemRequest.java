@@ -8,7 +8,7 @@ public class MenuItemRequest {
 
     @NotBlank(message = "Name must not be empty")
     private String name;
-
+    private String category;
     @NotBlank(message = "Description must not be empty")
     private String description;
 
@@ -27,6 +27,14 @@ public class MenuItemRequest {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCategory(){
+        return category;
+    }
+
+    public void setCategory(){
+        this.category = category;
     }
 
     public String getDescription() {

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import com.restaurant.order_service.exception.ResourceNotFoundException;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -130,6 +131,32 @@ public class OrderServiceImpl implements OrderService {
             e.printStackTrace();
             throw e;
         }
+    }
+    @Override
+    public OrderResponse getOrderBySession(String sessionId) {
+        // 1. Find the table associated with this session (from Reservation Service)
+        // Assuming your reservation service has an endpoint for this
+        TableResponse table = restTemplate.getForObject(
+                "http://localhost:8084/api/tables/session/" + sessionId,
+                TableResponse.class
+        );
+
+        if (table == null) {
+            throw new ResourceNotFoundException("No table found for this session");
+        }
+
+        // 2. Find the active order for this tableId
+        Order order = orderRepository.findByTableIdAndStatusNot(table.getId(), "COMPLETED")
+                .orElseThrow(() -> new ResourceNotFoundException("No active order for this session"));
+
+        // 3. Map to OrderResponse (Including items for the bill summary)
+        OrderResponse response = new OrderResponse();
+        response.setOrderId(order.getId());
+        response.setStatus(order.getStatus());
+        response.setTotalAmount(order.getTotalAmount());
+        // Map other fields like items, tax, etc., based on your OrderResponse DTO
+
+        return response;
     }
     private void claimTable(Long tableId, String orderSessionId) {
 

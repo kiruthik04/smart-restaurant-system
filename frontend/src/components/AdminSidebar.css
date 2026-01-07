@@ -1,0 +1,123 @@
+/* ===== Sidebar Container ===== */
+.admin-sidebar {
+    width: 240px;
+    min-height: 100vh;
+    background: #0f172a;
+    color: #e5e7eb;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s ease;
+    position: relative;
+}
+
+/* ===== Collapsed ===== */
+.admin-sidebar.collapsed {
+    width: 72px;
+    padding: 16px 8px;
+}
+
+/* ===== Toggle Button ===== */
+.sidebar-toggle {
+    background: #1e40af;
+    border: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+/* ===== Logo ===== */
+.admin-logo {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 32px;
+    padding-left: 12px;
+    color: #ffffff;
+}
+
+/* ===== Navigation ===== */
+.admin-sidebar nav {
+    display: flex;
+    flex-direction: column;
+    background-color: #0f172a;
+    gap: 6px;
+}
+
+/* ===== Links ===== */
+.admin-sidebar nav a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #cbd5e1;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.25s ease;
+    position: relative;
+}
+
+/* Icon-only center */
+.admin-sidebar.collapsed nav a {
+    justify-content: center;
+    padding: 12px;
+}
+
+/* Icon size & color */
+.nav-icon {
+    font-size: 20px;
+    color: #94a3b8;
+    transition: color 0.25s ease;
+}
+
+/* Hover icon */
+.admin-sidebar nav a:hover .nav-icon {
+    color: #ffffff;
+}
+
+/* Active icon */
+.admin-sidebar nav a.active .nav-icon {
+    color: #3b82f6;
+}
+
+/* Hover effect */
+.admin-sidebar nav a:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+/* Active (current page) */
+.admin-sidebar nav a.active {
+    background-color: rgba(59, 130, 246, 0.18);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* Left indicator bar for active */
+.admin-sidebar nav a.active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 4px;
+    background-color: #3b82f6;
+    border-radius: 2px;
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 768px) {
+    .admin-sidebar {
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+    }
+}

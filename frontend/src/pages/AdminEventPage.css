@@ -1,0 +1,275 @@
+/* Container & Global */
+.admin-event-page {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    color: #333;
+}
+
+.admin-event-page h2 {
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+    color: #2c3e50;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+/* Message Banner */
+.admin-message-banner {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+    text-align: center;
+    font-weight: 600;
+    animation: slideIn 0.3s ease-out;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Table Styling */
+.event-table-wrapper {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow-x: auto;
+    /* For responsiveness */
+}
+
+.admin-event-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+.admin-event-table th {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    padding: 1.2rem;
+    text-align: left;
+    border-bottom: 2px solid #edf2f7;
+}
+
+.admin-event-table td {
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid #edf2f7;
+    vertical-align: middle;
+}
+
+.admin-event-table tr:hover {
+    background-color: #fdfdfe;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.status-badge.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.approved {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-badge.cancelled {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.status-badge.completed {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+/* Buttons */
+button {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+.view-btn {
+    background-color: #3498db;
+    color: white;
+    padding: 0.5rem 1rem;
+}
+
+.view-btn:hover {
+    background-color: #2980b9;
+}
+
+.approve-btn {
+    background-color: #27ae60;
+    color: white;
+    padding: 0.7rem 1.2rem;
+}
+
+.approve-btn:hover {
+    background-color: #219150;
+}
+
+.cancel-btn {
+    background-color: #e74c3c;
+    color: white;
+    padding: 0.7rem 1.2rem;
+    margin-right: 0.5rem;
+}
+
+.cancel-btn:hover {
+    background-color: #c0392b;
+}
+
+.secondary-btn {
+    background-color: #95a5a6;
+    color: white;
+    padding: 0.7rem 1.2rem;
+}
+
+/* Modal Styling */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.event-modal {
+    background: #fff;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: modalAppear 0.3s ease-out;
+}
+
+@keyframes modalAppear {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #2c3e50;
+}
+
+.close-modal {
+    background: none;
+    font-size: 2rem;
+    color: #aaa;
+}
+
+.close-modal:hover {
+    color: #333;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.detail-grid p {
+    margin: 0.2rem 0;
+    font-size: 0.95rem;
+}
+
+.modal-menu-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.modal-menu-list li {
+    background: #f1f3f5;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    border: 1px solid #e9ecef;
+}
+
+.modal-footer {
+    padding: 1.2rem 1.5rem;
+    background: #f8f9fa;
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+/* Responsive Mobile Adjustments */
+@media (max-width: 768px) {
+    .admin-event-page {
+        padding: 1rem;
+    }
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-footer {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .modal-footer button {
+        width: 100%;
+        margin: 0;
+    }
+}

@@ -1,3 +1,4 @@
+import "./OrderSummary.css";
 function OrderSummary({ cart, placeOrder }) {
   const total = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,

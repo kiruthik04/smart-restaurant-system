@@ -15,6 +15,7 @@ public class MenuItem{
     private Long id;
 
     private String name;
+    private String category;
     private String description;
     private double price;
     private boolean available;
@@ -22,8 +23,9 @@ public class MenuItem{
     public MenuItem(){
 
     }
-    public MenuItem(String name, String description, double price, boolean available){
+    public MenuItem(String name, String category, String description, double price, boolean available){
         this.name = name;
+        this.category = category;
         this.description = description;
         this.price = price;
         this.available = available;
@@ -40,6 +42,14 @@ public class MenuItem{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCategory(){
+        return category;
+    }
+
+    public void setCategory(String category){
+        this.category = category;
     }
 
     public String getDescription() {

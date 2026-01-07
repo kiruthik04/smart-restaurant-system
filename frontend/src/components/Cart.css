@@ -1,49 +1,96 @@
+/* Cart.css */
+:root {
+  --primary-red: #ff4757;
+  --dark-navy: #2f3542;
+  --shadow-premium: 0 10px 20px rgba(0, 0, 0, 0.05);
+  --light-border: #f1f2f6;
+}
+
 .cart-container {
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 16px;
-  background-color: #ffffff;
+  padding: 10px;
 }
 
 .cart-container h3 {
-  margin-bottom: 10px;
-  color: #333;
+  font-size: 2rem;
+  color: var(--dark-navy);
+  margin-bottom: 1.5rem;
+  font-weight: 800;
+  border-left: 6px solid var(--primary-red);
+  padding-left: 15px;
 }
 
 .cart-empty {
-  color: #777;
+  text-align: center;
+  padding: 2rem;
+  color: #a4b0be;
   font-style: italic;
+  background: white;
+  border-radius: 16px;
+  border: 2px dashed var(--light-border);
 }
 
-/* Individual cart item */
 .cart-item {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  /* Matching the MenuList logic: Name (Left) | Spacer | Quantity (Right) */
+  grid-template-columns: 1fr auto;
   align-items: center;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
+  background: white;
+  padding: 1rem 1.5rem;
+  border-radius: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-premium);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.02);
 }
 
-.cart-item:last-child {
-  border-bottom: none;
+.cart-item:hover {
+  transform: scale(1.01);
+  border-color: rgba(255, 71, 87, 0.2);
 }
 
 .cart-item span {
-  font-size: 15px;
-  color: #444;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--dark-navy);
 }
 
-/* Quantity input */
+/* Quantity Input Styling */
 .cart-qty {
-  width: 60px;
-  padding: 4px 6px;
-  font-size: 14px;
+  width: 70px;
+  padding: 8px 12px;
+  border: 2px solid var(--light-border);
+  border-radius: 10px;
+  font-weight: 700;
+  color: var(--primary-red);
   text-align: center;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
 }
 
 .cart-qty:focus {
   outline: none;
-  border-color: #007bff;
+  border-color: var(--primary-red);
+  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
+}
+
+/* Chrome, Safari, Edge, Opera - Remove arrows if preferred, or style them */
+.cart-qty::-webkit-outer-spin-button,
+.cart-qty::-webkit-inner-spin-button {
+  opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .cart-item {
+    padding: 0.8rem 1rem;
+  }
+
+  .cart-item span {
+    font-size: 1rem;
+  }
+
+  .cart-qty {
+    width: 60px;
+    padding: 6px 8px;
+  }
 }

@@ -22,4 +22,10 @@ public class OrderController {
 
         return ResponseEntity.ok(orderService.placeOrder(request));
     }
+
+    @GetMapping("/session/{sessionId}")
+    public ResponseEntity<OrderResponse> getOrderBySession(@PathVariable String sessionId) {
+        // We will create this method in the service in Step 2
+        return ResponseEntity.ok(orderService.getOrderBySession(sessionId));
+    }
 }

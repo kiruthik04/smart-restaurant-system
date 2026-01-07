@@ -9,20 +9,22 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-public interface EventBookingRepository
-        extends JpaRepository<EventBooking, Long> {
+public interface EventBookingRepository extends JpaRepository<EventBooking, Long> {
+
+    List<EventBooking> findAll();
 
     @Query("""
         SELECT e FROM EventBooking e
-        WHERE e.hall.id = :hallId
-          AND e.eventDate = :date
-          AND e.status = 'BOOKED'
-          AND (:startTime < e.endTime AND :endTime > e.startTime)
+        WHERE e.eventDate = :date
+        AND e.status <> 'CANCELLED'
+        AND (
+            :startTime < e.endTime AND :endTime > e.startTime
+        )
     """)
     List<EventBooking> findOverlappingEvents(
-            @Param("hallId") Long hallId,
             @Param("date") LocalDate date,
             @Param("startTime") LocalTime startTime,
             @Param("endTime") LocalTime endTime
     );
 }
+
