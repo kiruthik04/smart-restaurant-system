@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 import { getOrderSessionId } from "../utils/session";
 import api from "../api/axios";
 import "./HomePage.css";
@@ -25,9 +26,16 @@ function HomePage() {
       const fetchOrder = () => {
         api.get(`/api/orders/session/${orderSessionId}`)
           .then(res => setActiveOrder(res.data))
-          .catch(err => console.error("Order fetch error", err));
+          .catch(err => {
+            if (err.response && err.response.status === 404) {
+              // No active order, this is expected for new users
+              setActiveOrder(null);
+            } else {
+              console.error("Order fetch error", err);
+            }
+          });
       };
-      
+
       fetchOrder();
       const interval = setInterval(fetchOrder, 10000);
       return () => clearInterval(interval);
@@ -61,11 +69,11 @@ function HomePage() {
             <h3>Live Order Status</h3>
             {activeOrder && <span className="order-id">ID: #{activeOrder.id}</span>}
           </div>
-          
+
           {activeOrder ? (
             <div className="status-tracker">
               {/* Step 3: Visual Order Timeline */}
-              
+
               <div className="order-timeline">
                 {orderStages.map((stage, index) => {
                   const currentStatusIndex = orderStages.indexOf(activeOrder.status);
@@ -73,9 +81,9 @@ function HomePage() {
                   const isCurrent = index === currentStatusIndex;
 
                   return (
-                    <div 
-                        key={stage} 
-                        className={`timeline-item ${isCompleted ? "active" : ""} ${isCurrent ? "pulse" : ""}`}
+                    <div
+                      key={stage}
+                      className={`timeline-item ${isCompleted ? "active" : ""} ${isCurrent ? "pulse" : ""}`}
                     >
                       <div className="step-circle">
                         {isCompleted && index < currentStatusIndex ? "✓" : index + 1}
@@ -88,14 +96,14 @@ function HomePage() {
 
               <div className="status-footer-info">
                 <p className="time-est">
-                    Est. Ready: <strong>{activeOrder.estimatedTime || "Processing..."}</strong>
+                  Est. Ready: <strong>{activeOrder.estimatedTime || "Processing..."}</strong>
                 </p>
               </div>
             </div>
           ) : (
             <div className="empty-state">
               <p>No active orders found.</p>
-              <button className="order-now-btn" onClick={() => window.location.href='/order'}>Order Food Now</button>
+              <button className="order-now-btn" onClick={() => window.location.href = '/order'}>Order Food Now</button>
             </div>
           )}
         </section>

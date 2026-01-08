@@ -1,17 +1,13 @@
 import api from "./axiosConfig";
 
-const adminOrderApi = api.create({
-    baseURL: "http://localhost:8085"
-});
-
 export const getAllOrders = () => {
-    return adminOrderApi.get("/api/admin/orders");
+    return api.get("/api/admin/orders");
 };
 
 export const getOrderById = (orderId) => {
-    return adminOrderApi.get(`/api/admin/orders/${orderId}`);
+    return api.get(`/api/admin/orders/${orderId}`);
 };
 
 export const completeOrder = (orderId) => {
-    return adminOrderApi.put(`/api/admin/orders/${orderId}/complete`);
+    return api.put(`/api/admin/orders/${orderId}/complete`);
 };

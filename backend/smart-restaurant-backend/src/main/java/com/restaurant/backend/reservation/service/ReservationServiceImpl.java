@@ -1,0 +1,186 @@
+package com.restaurant.backend.reservation.service;
+
+import com.restaurant.backend.reservation.dto.ReservationRequest;
+import com.restaurant.backend.reservation.dto.ReservationResponse;
+import com.restaurant.backend.reservation.dto.SmartReservationRequest;
+import com.restaurant.backend.reservation.dto.TableAvailabilityResponse;
+import com.restaurant.backend.reservation.exception.InvalidReservationException;
+import com.restaurant.backend.reservation.exception.ResourceNotFoundException;
+import com.restaurant.backend.reservation.exception.TableAlreadyBookedException;
+import com.restaurant.backend.reservation.exception.ReservationAlreadyCancelledException;
+import com.restaurant.backend.reservation.model.DiningTable;
+import com.restaurant.backend.reservation.model.Reservation;
+import com.restaurant.backend.reservation.repository.DiningTableRepository;
+import com.restaurant.backend.reservation.repository.ReservationRepository;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+
+@Service
+public class ReservationServiceImpl implements ReservationService {
+
+    private final ReservationRepository reservationRepository;
+    private final DiningTableRepository tableRepository;
+
+    public ReservationServiceImpl(
+            ReservationRepository reservationRepository,
+            DiningTableRepository tableRepository) {
+        this.reservationRepository = reservationRepository;
+        this.tableRepository = tableRepository;
+    }
+
+    @Override
+    public ReservationResponse createReservation(ReservationRequest request) {
+
+        DiningTable table = tableRepository.findById(request.getTableId())
+                .orElseThrow(() -> new ResourceNotFoundException("Table not found"));
+
+        if (request.getNumberOfPeople() > table.getCapacity()) {
+            throw new InvalidReservationException("Table capacity exceeded");
+        }
+
+        if (!request.getStartTime().isBefore(request.getEndTime())) {
+            throw new InvalidReservationException("Start time must be before end time");
+        }
+
+        boolean hasConflict = !reservationRepository
+                .findOverlappingReservations(
+                        table.getId(),
+                        request.getReservationDate(),
+                        request.getStartTime(),
+                        request.getEndTime())
+                .isEmpty();
+
+        if (hasConflict) {
+            throw new TableAlreadyBookedException(
+                    "Table is already booked for this time slot");
+        }
+
+        Reservation reservation = new Reservation(
+                table,
+                request.getCustomerName(),
+                request.getCustomerPhone(),
+                request.getReservationDate(),
+                request.getStartTime(),
+                request.getEndTime(),
+                request.getNumberOfPeople());
+
+        Reservation saved = reservationRepository.save(reservation);
+        return mapToResponse(saved);
+    }
+
+    @Override
+    public ReservationResponse createSmartReservation(SmartReservationRequest request) {
+
+        if (!request.getStartTime().isBefore(request.getEndTime())) {
+            throw new InvalidReservationException("Start time must be before end time");
+        }
+
+        List<DiningTable> candidateTables = tableRepository.findByCapacityGreaterThanEqualAndActiveTrue(
+                request.getNumberOfPeople());
+
+        if (candidateTables.isEmpty()) {
+            throw new ResourceNotFoundException(
+                    "No tables available for this capacity");
+        }
+
+        for (DiningTable table : candidateTables) {
+
+            boolean hasConflict = !reservationRepository
+                    .findOverlappingReservations(
+                            table.getId(),
+                            request.getReservationDate(),
+                            request.getStartTime(),
+                            request.getEndTime())
+                    .isEmpty();
+
+            if (!hasConflict) {
+                Reservation reservation = new Reservation(
+                        table,
+                        request.getCustomerName(),
+                        request.getCustomerPhone(),
+                        request.getReservationDate(),
+                        request.getStartTime(),
+                        request.getEndTime(),
+                        request.getNumberOfPeople());
+
+                Reservation saved = reservationRepository.save(reservation);
+                return mapToResponse(saved);
+            }
+        }
+
+        throw new TableAlreadyBookedException(
+                "No available tables for the selected time slot");
+    }
+
+    @Override
+    public void cancelReservation(Long reservationId) {
+
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation not found"));
+
+        if (reservation.isCancelled()) {
+            throw new ReservationAlreadyCancelledException(
+                    "Reservation is already cancelled");
+        }
+
+        reservation.cancel();
+        reservationRepository.save(reservation);
+    }
+
+    @Override
+    public List<ReservationResponse> getReservationsByDate(String date) {
+
+        LocalDate localDate = LocalDate.parse(date);
+
+        return reservationRepository.findByReservationDate(localDate)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    private ReservationResponse mapToResponse(Reservation r) {
+        return new ReservationResponse(
+                r.getId(),
+                r.getDiningTable().getTableNumber(),
+                r.getReservationDate(),
+                r.getStartTime(),
+                r.getEndTime(),
+                r.getStatus());
+    }
+
+    @Override
+    public List<TableAvailabilityResponse> getTableAvailability(
+            String date,
+            String startTime,
+            String endTime,
+            int numberOfPeople) {
+
+        LocalDate localDate = LocalDate.parse(date);
+        LocalTime start = LocalTime.parse(startTime);
+        LocalTime end = LocalTime.parse(endTime);
+
+        List<DiningTable> tables = tableRepository.findByCapacityGreaterThanEqualAndActiveTrue(
+                numberOfPeople);
+
+        return tables.stream()
+                .map(table -> {
+                    boolean hasConflict = !reservationRepository
+                            .findOverlappingReservations(
+                                    table.getId(),
+                                    localDate,
+                                    start,
+                                    end)
+                            .isEmpty();
+
+                    return new TableAvailabilityResponse(
+                            table.getTableNumber(),
+                            table.getCapacity(),
+                            !hasConflict);
+                })
+                .toList();
+    }
+
+}

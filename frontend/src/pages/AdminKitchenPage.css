@@ -235,5 +235,14 @@
 
     .admin-kitchen-page h2 {
         font-size: 1.5rem;
+        align-items: flex-start;
+        /* Align bar with top of text if wrapping */
+    }
+
+    .admin-kitchen-page h2::before {
+        height: 24px;
+        /* Match mobile font size */
+        margin-top: 4px;
+        /* Slight offset for optical center */
     }
 }

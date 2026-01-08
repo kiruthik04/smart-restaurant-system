@@ -1,4 +1,4 @@
-import api from "./axios";
+import api from "./axiosConfig";
 
 export const getHallAvailability = (params) => {
   return api.get("/api/events/availability/halls", {

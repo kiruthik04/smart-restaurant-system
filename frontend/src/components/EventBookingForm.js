@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import { createEventBooking, getAvailableHalls } from "../api/eventApi";
 import { getAvailableMenuItems } from "../api/menuApi";
 import "./EventBookingForm.css";
@@ -30,8 +32,18 @@ function EventBookingForm() {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
+    const { user } = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const handleCheckAvailability = (e) => {
         e.preventDefault();
+
+        if (!user) {
+            navigate("/login", { state: { from: location } });
+            return;
+        }
+
         setLoading(true);
         setMessage("");
 

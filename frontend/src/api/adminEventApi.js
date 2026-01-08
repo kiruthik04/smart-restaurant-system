@@ -1,6 +1,6 @@
 // adminEventApi.js
 
-import api from "./axios";
+import api from "./axiosConfig";
 
 /**
  * Fetch all events for admin management

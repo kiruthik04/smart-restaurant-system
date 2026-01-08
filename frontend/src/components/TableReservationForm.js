@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import { createSmartReservation } from "../api/reservationApi";
 import "./TableReservationForm.css";
 
@@ -22,8 +24,18 @@ function TableReservationForm() {
     });
   };
 
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!user) {
+      navigate("/login", { state: { from: location } });
+      return;
+    }
+
     setMessage("");
     setLoading(true);
 

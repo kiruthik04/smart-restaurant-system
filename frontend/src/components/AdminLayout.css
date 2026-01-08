@@ -1,14 +1,17 @@
 .admin-layout {
     display: flex;
-    min-height: 100vh;
+    height: 100vh;
     width: 100%;
     background-color: #f3f4f6;
+    overflow: hidden;
 }
 
 /* Sidebar stays fixed width */
 .admin-sidebar {
     width: 240px;
     flex-shrink: 0;
+    height: 100%;
+    overflow-y: auto;
 }
 
 /* Main admin content */
@@ -16,20 +19,87 @@
     flex: 1;
     background-color: #f8fafc;
     padding: 24px;
-    overflow-x: hidden;
+    height: 100%;
+    overflow-y: auto;
 }
 
-/* Tablet & Mobile */
-@media (max-width: 1024px) {
+/* Tablet & Mobile tweaks */
+@media (max-width: 768px) {
     .admin-layout {
         flex-direction: column;
     }
 
-    .admin-sidebar {
+    /* Mobile Header */
+    .mobile-header {
+        display: flex;
+        align-items: center;
+        /* Default is row, align-items center vertically */
+        justify-content: flex-start;
+        /* Start from left */
+        background-color: #2c3e50;
+        color: white;
+        padding: 0 16px;
+        /* Adjusted padding */
+        height: 60px;
+        position: sticky;
+        top: 0;
+        z-index: 1001;
         width: 100%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .mobile-toggle-btn {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 28px;
+        /* Slightly larger */
+        cursor: pointer;
+        padding: 0;
+        margin-right: 0;
+        /* Reset margin, we'll specific placement */
+        position: absolute;
+        /* Position it absolute to not affect centering */
+        left: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        /* Above text */
+    }
+
+    .mobile-brand {
+        font-size: 1.25rem;
+        font-weight: 800;
+        /* Bolder */
+        flex: 1;
+        text-align: center;
+        /* Center properly */
+        margin: 0;
     }
 
     .admin-content {
         padding: 16px;
+        height: calc(100vh - 60px);
+        /* Adjust for header */
+    }
+
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1002;
+    }
+}
+
+/* Hide Mobile Header on Desktop */
+@media (min-width: 769px) {
+
+    .mobile-header,
+    .sidebar-overlay {
+        display: none;
     }
 }

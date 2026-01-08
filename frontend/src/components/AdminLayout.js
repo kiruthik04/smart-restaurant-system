@@ -3,19 +3,50 @@ import AdminSidebar from "./AdminSidebar";
 import "./AdminLayout.css";
 
 function AdminLayout({ children }) {
-  // Synchronize state with Sidebar logic
   const [collapsed, setCollapsed] = useState(window.innerWidth < 768);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const handleResize = () => setCollapsed(window.innerWidth < 768);
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setMobileOpen(false); // Reset mobile state on desktop
+        setCollapsed(false);
+      } else {
+        setCollapsed(true); // Default to collapsed on mobile (though we'll hide it)
+      }
+    };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
     <div className="admin-layout">
-      {/* Pass state and setter to Sidebar */}
-      <AdminSidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+      {/* Mobile Header */}
+      <div className="mobile-header">
+        <button
+          className="mobile-toggle-btn"
+          onClick={() => setMobileOpen(!mobileOpen)}
+        >
+          ☰
+        </button>
+        <span className="mobile-brand">Smart Restro</span>
+      </div>
+
+      {/* Sidebar - Passed mobileOpen state */}
+      <AdminSidebar
+        collapsed={collapsed}
+        setCollapsed={setCollapsed}
+        mobileOpen={mobileOpen}
+        setMobileOpen={setMobileOpen}
+      />
+
+      {/* Overlay for mobile when sidebar is open */}
+      {mobileOpen && (
+        <div
+          className="sidebar-overlay"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
 
       <main className={`admin-content ${collapsed ? "collapsed" : ""}`}>
         <div className="admin-container">

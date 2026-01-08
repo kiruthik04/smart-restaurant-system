@@ -1,9 +1,5 @@
-import axios from "axios";
-
-const menuApi = axios.create({
-    baseURL: "http://localhost:8081",
-});
+import api from "./axiosConfig";
 
 export const getAvailableMenuItems = () => {
-    return menuApi.get("/api/menu");
+    return api.get("/api/menu");
 };

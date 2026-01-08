@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import MenuList from "../components/MenuList";
 import Cart from "../components/Cart";
 import OrderSummary from "../components/OrderSummary";
@@ -55,7 +57,16 @@ function OrderPage() {
         );
     };
 
+    const { user } = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const placeOrder = () => {
+        if (!user) {
+            navigate("/login", { state: { from: location } });
+            return;
+        }
+
         if (!tableNumber || cart.length === 0) {
             setMessage("Table number and items are required");
             return;
