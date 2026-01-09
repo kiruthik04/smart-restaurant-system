@@ -12,7 +12,11 @@ WORKDIR /app
 COPY --from=build /app/target/smart-restaurant-backend-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose port (Render listens on PORT env var, but Spring Boot defaults to 8080)
+# Expose port (Render listens on PORT env var, but Spring Boot defaults to 8080)
 EXPOSE 8080
+
+# Set active profile to PROD by default for Docker
+ENV SPRING_PROFILES_ACTIVE=prod
 
 # Run the jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
