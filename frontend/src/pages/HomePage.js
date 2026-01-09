@@ -119,42 +119,60 @@ function HomePage() {
           </div>
 
           {activeOrders.length > 0 ? (
-            <div className="orders-list">
-              {activeOrders.map((order) => (
-                <div key={order.orderId} className="single-order-card">
-                  <div className="order-header">
-                    <span className="order-id">Order #{order.orderId}</span>
-                    <span className={`status-badge ${order.status.toLowerCase()}`}>
-                      {order.status}
-                    </span>
-                  </div>
+            <>
+              <div className="orders-grid">
+                {activeOrders.map((order) => (
+                  <div key={order.orderId} className="modern-order-card">
+                    <div className="card-header">
+                      <span className="order-id">#{order.orderId}</span>
+                      <span className={`status-badge-modern ${order.status.toLowerCase()}`}>
+                        {order.status}
+                        {order.status === 'Preparing' && <span className="pulse-dot"></span>}
+                      </span>
+                    </div>
 
-                  {/* Mini Status Tracker for each order */}
-                  <div className="mini-timeline">
-                    {orderStages.map((stage, index) => {
-                      const currentStatusIndex = orderStages.indexOf(order.status);
-                      const isCompleted = index <= currentStatusIndex;
-                      return (
-                        <div key={stage} className={`mini-step ${isCompleted ? "active" : ""}`}>
-                          <div className="dot"></div>
-                          <span>{stage}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
+                    <div className="card-body">
+                      <div className="table-info">
+                        <span className="icon">🍽️</span> Table {order.tableNumber}
+                      </div>
 
-                  <div className="order-items-preview">
-                    {order.items.map(i => (
-                      <span key={i.name} className="item-pill">{i.quantity}x {i.name}</span>
-                    ))}
-                  </div>
-                  <div className="order-total">
-                    Total: ₹{order.totalAmount}
-                  </div>
-                </div>
-              ))}
+                      {/* Linear Progress Bar */}
+                      <div className="linear-progress-track">
+                        {orderStages.map((stage, index) => {
+                          const currentStatusIndex = orderStages.indexOf(order.status);
+                          const isActive = index <= currentStatusIndex;
+                          return (
+                            <div
+                              key={stage}
+                              className={`progress-segment ${isActive ? "filled" : ""}`}
+                              title={stage}
+                            ></div>
+                          );
+                        })}
+                      </div>
+                      <div className="progress-labels">
+                        <span>Received</span>
+                        <span>Prep</span>
+                        <span>Ready</span>
+                      </div>
 
-              <div className="dashboard-actions">
+                      <div className="items-preview-modern">
+                        {order.items.slice(0, 3).map(i => (
+                          <span key={i.name} className="modern-pill">{i.quantity}x {i.name}</span>
+                        ))}
+                        {order.items.length > 3 && <span className="more-pill">+{order.items.length - 3} more</span>}
+                      </div>
+                    </div>
+
+                    <div className="card-footer">
+                      <span className="total-label">Total</span>
+                      <span className="total-amount">₹{order.totalAmount}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="dashboard-actions-floating">
                 <button
                   className="primary-btn view-bill-btn"
                   onClick={handleShowBill}
@@ -162,8 +180,7 @@ function HomePage() {
                   Generate Bill & Pay
                 </button>
               </div>
-
-            </div>
+            </>
           ) : (
             <div className="empty-state">
               <p>No active orders found.</p>

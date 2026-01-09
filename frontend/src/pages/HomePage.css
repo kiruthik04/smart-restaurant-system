@@ -105,47 +105,199 @@ body {
     box-shadow: var(--shadow-soft);
 }
 
-/* 4. Live Status Section */
-.section-header {
+/* 4. Live Status Section & Modern Grid */
+.live-status-card {
+    /* Removed card styling to allow grid items to be the cards */
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+}
+
+.orders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+    margin-top: 25px;
+}
+
+.modern-order-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    /* Softer shadow */
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modern-order-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #f1f2f6;
-    padding-bottom: 15px;
-}
-
-.section-header h3 {
-    margin: 0;
-    color: var(--dark-navy);
-    font-size: 1.5rem;
 }
 
 .order-id {
-    background: #f1f2f6;
-    padding: 5px 12px;
-    border-radius: 8px;
-    font-weight: 700;
-    color: var(--primary-red);
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--dark-navy);
 }
 
-.status-info {
+.status-badge-modern {
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-badge-modern.received {
+    background: #e0f2fe;
+    color: #0284c7;
+}
+
+.status-badge-modern.preparing {
+    background: #fff7ed;
+    color: #ea580c;
+}
+
+.status-badge-modern.ready {
+    background: #dcfce7;
+    color: #16a34a;
+    border: 1px solid #86efac;
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    background: currentColor;
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.7;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(0.9);
+        opacity: 0.7;
+    }
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.table-info {
+    font-size: 0.95rem;
+    color: #64748b;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Linear Progress */
+.linear-progress-track {
+    display: flex;
+    gap: 4px;
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    background: #f1f5f9;
+    margin-top: 5px;
+}
+
+.progress-segment {
+    flex: 1;
+    background: #e2e8f0;
+    transition: background 0.5s ease;
+}
+
+.progress-segment.filled {
+    background: var(--primary-red);
+}
+
+.progress-labels {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 15px;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: 600;
+    margin-top: -5px;
+    /* Pull closer to bar */
 }
 
-.progress-container {
-    height: 18px;
-    background: #e9ecef;
-    border-radius: 50px;
-    overflow: hidden;
+/* Items Preview */
+.items-preview-modern {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 5px;
 }
 
-.progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--primary-red), #ff7675);
-    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+.modern-pill {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: #475569;
+    font-weight: 500;
+}
+
+.more-pill {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    padding: 4px;
+}
+
+.card-footer {
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total-label {
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.total-amount {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--dark-navy);
+}
+
+.dashboard-actions-floating {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
 }
 
 /* 5. Bill Summary Section */

@@ -18,7 +18,7 @@ function OrderPage() {
     const { user } = useAuth(); // Moved to top
     const [menu, setMenu] = useState([]);
     const [cart, setCart] = useState([]);
-    const [tableNumber, setTableNumber] = useState("");
+    const [tableNumber, setTableNumber] = useState(localStorage.getItem("tableNumber") || "");
     const [message, setMessage] = useState("");
     const orderSessionId = getOrderSessionId();
     const [tableActive, setTableActive] = useState(false);
@@ -39,6 +39,15 @@ function OrderPage() {
                 setMessage("Failed to load menu");
             });
     }, []);
+
+    // Persist Table Number
+    useEffect(() => {
+        if (tableNumber) {
+            localStorage.setItem("tableNumber", tableNumber);
+        } else {
+            localStorage.removeItem("tableNumber");
+        }
+    }, [tableNumber]);
 
     // New Effect: Restore Active Table State
     useEffect(() => {
@@ -209,6 +218,8 @@ function OrderPage() {
             // Use tableNumber directly as previously working
             await releaseTable(Number(tableNumber));
             clearOrderSession();
+            localStorage.removeItem("tableNumber"); // Clear persisted table number
+
 
             setCart([]);
             setTableNumber("");
