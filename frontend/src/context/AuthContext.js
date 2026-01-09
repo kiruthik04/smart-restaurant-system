@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import api from '../api/axiosConfig';
+import api from '../api/axios';
 import { clearOrderSession } from '../utils/session';
 
 const AuthContext = createContext(null);

@@ -61,6 +61,12 @@ public class DiningTableServiceImpl implements DiningTableService {
     }
 
     @Override
+    public DiningTable getEntityById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Table not found"));
+    }
+
+    @Override
     public DiningTable getTableBySessionId(String sessionId) {
         return repository.findByCurrentSessionId(sessionId)
                 .orElseThrow(() -> new ResourceNotFoundException("No table found for session: " + sessionId));

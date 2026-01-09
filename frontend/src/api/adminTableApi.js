@@ -1,4 +1,4 @@
-import api from "./axiosConfig";
+import api from "./axios";
 
 export const getAllTables = () =>
   api.get("/api/admin/tables");

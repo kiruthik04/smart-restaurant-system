@@ -1,4 +1,4 @@
-import api from "./axiosConfig";
+import api from "./axios";
 
 export const getAllOrders = () => {
     return api.get("/api/admin/orders");

@@ -1,4 +1,4 @@
-import api from "./axiosConfig";
+import api from "./axios";
 
 export const getTableAvailability = (params) => {
     return api.get("/api/reservations/availability/tables", {

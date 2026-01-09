@@ -35,6 +35,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/tables/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/events/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/orders/session/**").permitAll() // Public Order Tracking
+                        .requestMatchers("/api/orders/user/active/**").authenticated() // Allow any auth user to see
+                                                                                       // active order
                         // Protected Endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/kitchen/**").hasAnyRole("KITCHEN", "ADMIN")

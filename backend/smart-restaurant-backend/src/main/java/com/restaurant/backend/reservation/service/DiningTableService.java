@@ -15,6 +15,8 @@ public interface DiningTableService {
 
     DiningTable getEntityByTableNumber(Integer tableNumber);
 
+    DiningTable getEntityById(Long id); // Added for internal use
+
     DiningTable getTableBySessionId(String sessionId);
 
     void claimTable(Long tableId, String orderSessionId);

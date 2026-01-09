@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -124,10 +125,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderResponse getActiveOrderByUser(Long userId) {
-        Order order = orderRepository.findByUserIdAndStatusNot(userId, "COMPLETED")
-                .orElseThrow(() -> new ResourceNotFoundException("No active order for this user"));
-        return mapToOrderResponse(order);
+    public List<OrderResponse> getActiveOrdersByUser(Long userId) {
+        List<Order> orders = orderRepository.findAllByUserIdAndStatusNot(userId, "COMPLETED");
+
+        if (orders.isEmpty()) {
+            // Optional: throw exception or return empty list
+            // Returning empty list is better for "History/Dashboard" view implies nothing
+            // active
+            return new ArrayList<>();
+        }
+
+        return orders.stream()
+                .map(this::mapToOrderResponse)
+                .toList();
     }
 
     private OrderResponse mapToOrderResponse(Order order) {
@@ -135,6 +145,10 @@ public class OrderServiceImpl implements OrderService {
         response.setOrderId(order.getId());
         response.setStatus(order.getStatus());
         response.setTotalAmount(order.getTotalAmount());
+
+        // Fetch table number
+        DiningTable table = diningTableService.getEntityById(order.getTableId());
+        response.setTableNumber(table.getTableNumber());
 
         var itemResponses = order.getItems().stream()
                 .map(i -> {

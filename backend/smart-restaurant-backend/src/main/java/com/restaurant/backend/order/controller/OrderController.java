@@ -6,6 +6,8 @@ import com.restaurant.backend.order.service.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/orders")
 public class OrderController {
@@ -35,11 +37,11 @@ public class OrderController {
     }
 
     @GetMapping("/user/active/{userId}")
-    public ResponseEntity<OrderResponse> getActiveOrderByUser(@PathVariable Long userId) {
-        try {
-            return ResponseEntity.ok(orderService.getActiveOrderByUser(userId));
-        } catch (com.restaurant.backend.order.exception.ResourceNotFoundException e) {
+    public ResponseEntity<List<OrderResponse>> getActiveOrdersByUser(@PathVariable Long userId) {
+        List<OrderResponse> orders = orderService.getActiveOrdersByUser(userId);
+        if (orders.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
+        return ResponseEntity.ok(orders);
     }
 }

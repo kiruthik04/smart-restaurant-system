@@ -14,9 +14,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     // Changed to Optional for single active order lookup
     Optional<Order> findByTableIdAndStatusNot(Long tableId, String status);
 
+    // Added for Billing: Fetch ALL active orders for the table
+    List<Order> findAllByTableIdAndStatusNot(Long tableId, String status);
+
     List<Order> findByCreatedAtAfter(LocalDateTime dateTime);
 
     List<Order> findByStatusInOrderByCreatedAtAsc(List<String> statuses);
 
-    Optional<Order> findByUserIdAndStatusNot(Long userId, String status);
+    List<Order> findAllByUserIdAndStatusNot(Long userId, String status);
 }

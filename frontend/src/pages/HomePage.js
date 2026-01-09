@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { getOrderSessionId } from "../utils/session";
 import api from "../api/axios";
+import BillModal from "../components/BillModal"; // Import BillModal
+import { releaseTable } from "../api/tableApi";
+import { clearOrderSession } from "../utils/session";
 import "./HomePage.css";
 
 // Import local posters
@@ -9,38 +12,84 @@ import posterImg1 from "../assests/images/realistic-pizza-background-menu-poster
 import posterImg2 from "../assests/images/restaurant-social-media-banner-template-food-menu-posters-for-restaurants-and-cafes-modern-social-media-feed-banner-marketing-on-the-black-background-vector.jpg";
 
 function HomePage() {
+  const { user } = useAuth();
   const [posters] = useState([
     { id: 1, imageUrl: posterImg1, title: "Weekend Feast", description: "Get 20% off on all family platters" },
     { id: 2, imageUrl: posterImg2, title: "Happy Hours", description: "Buy 1 Get 1 Free on Mocktails (4PM - 7PM)" },
   ]);
 
-  const [activeOrder, setActiveOrder] = useState(null);
+  const [activeOrders, setActiveOrders] = useState([]); // Changed to array
+  const [billData, setBillData] = useState(null);
+  const [showBill, setShowBill] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const orderSessionId = getOrderSessionId();
 
   // Step 3: Define Order Stages
   const orderStages = ["Received", "Preparing", "Ready"];
 
-  useEffect(() => {
-    if (orderSessionId) {
-      const fetchOrder = () => {
-        api.get(`/api/orders/session/${orderSessionId}`)
-          .then(res => setActiveOrder(res.data))
-          .catch(err => {
-            if (err.response && err.response.status === 404) {
-              // No active order, this is expected for new users
-              setActiveOrder(null);
-            } else {
-              console.error("Order fetch error", err);
-            }
-          });
-      };
-
-      fetchOrder();
-      const interval = setInterval(fetchOrder, 10000);
-      return () => clearInterval(interval);
+  const handleShowBill = async () => {
+    if (activeOrders.length === 0) return;
+    const tableNumber = activeOrders[0].tableNumber;
+    try {
+      const res = await api.get(`/api/billing/by-number/${tableNumber}`);
+      setBillData(res.data);
+      setShowBill(true);
+    } catch (err) {
+      console.error("Failed to fetch bill", err);
+      alert("Could not fetch bill.");
     }
-  }, [orderSessionId]);
+  };
+
+  const handlePayAndRelease = async () => {
+    if (!billData) return;
+    try {
+      await releaseTable(billData.tableNumber);
+      clearOrderSession();
+      setActiveOrders([]);
+      setShowBill(false);
+      alert("Payment successful! Table released.");
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to release table.");
+    }
+  };
+
+  useEffect(() => {
+    const fetchOrder = () => {
+      let url = null;
+
+      if (user && user.id) {
+        url = `/api/orders/user/active/${user.id}`;
+      } else if (orderSessionId) {
+        url = `/api/orders/session/${orderSessionId}`;
+      }
+
+      if (url) {
+        api.get(url)
+          .then(res => {
+            // Normalize response to array
+            if (Array.isArray(res.data)) {
+              setActiveOrders(res.data);
+            } else if (res.data) {
+              setActiveOrders([res.data]);
+            } else {
+              setActiveOrders([]);
+            }
+          })
+          .catch(err => {
+            // 404/204 means no active orders
+            setActiveOrders([]);
+          });
+      }
+    };
+
+
+
+    fetchOrder();
+    const interval = setInterval(fetchOrder, 10000);
+    return () => clearInterval(interval);
+  }, [orderSessionId, user]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -66,39 +115,54 @@ function HomePage() {
       <div className="content-container">
         <section className="live-status-card">
           <div className="section-header">
-            <h3>Live Order Status</h3>
-            {activeOrder && <span className="order-id">ID: #{activeOrder.id}</span>}
+            <h3>Your Active Orders</h3>
           </div>
 
-          {activeOrder ? (
-            <div className="status-tracker">
-              {/* Step 3: Visual Order Timeline */}
+          {activeOrders.length > 0 ? (
+            <div className="orders-list">
+              {activeOrders.map((order) => (
+                <div key={order.orderId} className="single-order-card">
+                  <div className="order-header">
+                    <span className="order-id">Order #{order.orderId}</span>
+                    <span className={`status-badge ${order.status.toLowerCase()}`}>
+                      {order.status}
+                    </span>
+                  </div>
 
-              <div className="order-timeline">
-                {orderStages.map((stage, index) => {
-                  const currentStatusIndex = orderStages.indexOf(activeOrder.status);
-                  const isCompleted = index <= currentStatusIndex;
-                  const isCurrent = index === currentStatusIndex;
+                  {/* Mini Status Tracker for each order */}
+                  <div className="mini-timeline">
+                    {orderStages.map((stage, index) => {
+                      const currentStatusIndex = orderStages.indexOf(order.status);
+                      const isCompleted = index <= currentStatusIndex;
+                      return (
+                        <div key={stage} className={`mini-step ${isCompleted ? "active" : ""}`}>
+                          <div className="dot"></div>
+                          <span>{stage}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
 
-                  return (
-                    <div
-                      key={stage}
-                      className={`timeline-item ${isCompleted ? "active" : ""} ${isCurrent ? "pulse" : ""}`}
-                    >
-                      <div className="step-circle">
-                        {isCompleted && index < currentStatusIndex ? "✓" : index + 1}
-                      </div>
-                      <span className="step-label">{stage}</span>
-                    </div>
-                  );
-                })}
+                  <div className="order-items-preview">
+                    {order.items.map(i => (
+                      <span key={i.name} className="item-pill">{i.quantity}x {i.name}</span>
+                    ))}
+                  </div>
+                  <div className="order-total">
+                    Total: ₹{order.totalAmount}
+                  </div>
+                </div>
+              ))}
+
+              <div className="dashboard-actions">
+                <button
+                  className="primary-btn view-bill-btn"
+                  onClick={handleShowBill}
+                >
+                  Generate Bill & Pay
+                </button>
               </div>
 
-              <div className="status-footer-info">
-                <p className="time-est">
-                  Est. Ready: <strong>{activeOrder.estimatedTime || "Processing..."}</strong>
-                </p>
-              </div>
             </div>
           ) : (
             <div className="empty-state">
@@ -108,31 +172,13 @@ function HomePage() {
           )}
         </section>
 
-        {activeOrder && (
-          <section className="real-bill-card">
-            <h3>Bill Summary</h3>
-            <div className="bill-table">
-              {activeOrder.items?.map((item, index) => (
-                <div className="bill-item-row" key={index}>
-                  <span>{item.name} x {item.quantity}</span>
-                  <span>₹{item.price * item.quantity}</span>
-                </div>
-              ))}
-              <div className="bill-divider"></div>
-              <div className="bill-item-row subtotal">
-                <span>Subtotal</span>
-                <span>₹{activeOrder.subtotal}</span>
-              </div>
-              <div className="bill-item-row tax">
-                <span>Tax (GST 5%)</span>
-                <span>₹{activeOrder.tax}</span>
-              </div>
-              <div className="bill-item-row grand-total">
-                <span>Total Amount</span>
-                <span>₹{activeOrder.totalAmount}</span>
-              </div>
-            </div>
-          </section>
+        {/* Bill Modal */}
+        {showBill && (
+          <BillModal
+            bill={billData}
+            onClose={() => setShowBill(false)}
+            onConvert={handlePayAndRelease}
+          />
         )}
       </div>
 

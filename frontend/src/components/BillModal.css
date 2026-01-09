@@ -1,0 +1,71 @@
+.bill-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.bill-modal {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.bill-content {
+    margin: 1rem 0;
+}
+
+.bill-order-section {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.bill-order-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.bill-order-section li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.bill-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.grand-total {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    text-align: right;
+}
+
+.bill-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.pay-btn {
+    background-color: #27ae60;
+}
+
+.pay-btn:hover {
+    background-color: #219150;
+}

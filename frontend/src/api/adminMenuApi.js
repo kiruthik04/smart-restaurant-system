@@ -1,4 +1,4 @@
-import api from "./axiosConfig";
+import api from "./axios";
 
 const BASE_URL = "/api/admin/menu";
 

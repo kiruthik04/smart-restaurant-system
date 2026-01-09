@@ -1,4 +1,4 @@
-import api from "./axiosConfig";
+import api from "./axios";
 
 export const getKitchenOrders = () => {
   return api.get("/api/kitchen/orders");
