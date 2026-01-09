@@ -8,7 +8,7 @@ services:
       - key: SPRING_PROFILES_ACTIVE
         value: prod
       - key: DB_URL
-        value: jdbc:mysql://gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/test?sslMode=REQUIRED&useSSL=true&allowPublicKeyRetrieval=true&serverTimezone=UTC
+        value: jdbc:mysql://gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/test?sslMode=REQUIRED&useSSL=true&verifyServerCertificate=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
       - key: DB_USERNAME
         value: 3rNWUf72mPui14N.root
       - key: DB_PASSWORD
