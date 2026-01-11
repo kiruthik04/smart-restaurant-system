@@ -7,6 +7,7 @@ import {
     enableTable
 } from "../api/adminTableApi";
 import "./AdminTablePage.css";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function AdminTablePage() {
 
@@ -91,12 +92,13 @@ function AdminTablePage() {
         }
     };
 
+    if (loading && tables.length === 0) return <LoadingSpinner />;
+
     return (
         <div className="admin-table-page">
             <h2>Admin – Table Management</h2>
 
             {message && <p className="admin-message">{message}</p>}
-            {loading && <p>Loading tables...</p>}
 
             <h3>Add New Table</h3>
 

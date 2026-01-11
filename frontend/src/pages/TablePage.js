@@ -1,4 +1,3 @@
-import TableAvailability from "../components/TableAvailability";
 import TableReservationForm from "../components/TableReservationForm";
 import "./TablePage.css";
 

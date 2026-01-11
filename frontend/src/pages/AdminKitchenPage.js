@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getKitchenOrders } from "../api/kitchenOrderApi";
 import "./AdminKitchenPage.css";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function AdminKitchenPage() {
     const [orders, setOrders] = useState([]);
@@ -8,7 +9,9 @@ function AdminKitchenPage() {
     const [loading, setLoading] = useState(false);
 
     const fetchOrders = () => {
-        setLoading(true);
+        // Only show full spinner on initial load or if explicitly requested
+        if (orders.length === 0) setLoading(true);
+
         getKitchenOrders()
             .then(res => setOrders(res.data))
             .catch(() => setMessage("Failed to load kitchen orders"))
@@ -21,6 +24,8 @@ function AdminKitchenPage() {
         return () => clearInterval(interval);
     }, []);
 
+    if (loading && orders.length === 0) return <LoadingSpinner />;
+
     return (
         <div className="admin-kitchen-page">
             <h2>Kitchen – Orders Queue</h2>
@@ -31,7 +36,7 @@ function AdminKitchenPage() {
                 </div>
             )}
 
-            {loading && orders.length === 0 && <p className="kitchen-loading">Loading...</p>}
+            {/* {loading && orders.length === 0 && <p className="kitchen-loading">Loading...</p>} */}
 
             <div className="kitchen-grid">
                 {orders.length === 0 && !loading ? (

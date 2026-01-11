@@ -6,6 +6,7 @@ import BillModal from "../components/BillModal"; // Import BillModal
 import { releaseTable } from "../api/tableApi";
 import { clearOrderSession } from "../utils/session";
 import "./HomePage.css";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 // Import local posters
 import posterImg1 from "../assests/images/realistic-pizza-background-menu-poster-traditional-italian-food-toppings-restaurant-banner-advertising-vector-d-173434987.jpg";
@@ -23,6 +24,7 @@ function HomePage() {
   const [showBill, setShowBill] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const orderSessionId = getOrderSessionId();
+  const [loading, setLoading] = useState(true);
 
   // Step 3: Define Order Stages
   const orderStages = ["Received", "Preparing", "Ready"];
@@ -80,7 +82,10 @@ function HomePage() {
           .catch(err => {
             // 404/204 means no active orders
             setActiveOrders([]);
-          });
+          })
+          .finally(() => setLoading(false));
+      } else {
+        setLoading(false);
       }
     };
 
@@ -97,6 +102,8 @@ function HomePage() {
     }, 5000);
     return () => clearInterval(timer);
   }, [posters.length]);
+
+  if (loading) return <LoadingSpinner />;
 
   return (
     <div className="home-full-wrapper">

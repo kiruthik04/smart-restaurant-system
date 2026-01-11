@@ -5,6 +5,7 @@ import {
     getOrderById,
     completeOrder
 } from "../api/adminOrderApi";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function AdminOrderPage() {
 
@@ -38,6 +39,7 @@ function AdminOrderPage() {
 
     useEffect(() => {
         fetchOrders();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
@@ -62,13 +64,13 @@ function AdminOrderPage() {
         }
     };
 
+    if (loading && orders.length === 0) return <LoadingSpinner />;
 
     return (
         <div className="admin-order-page">
             <h2>Admin – Order Management</h2>
 
             {message && <p className="admin-order-message">{message}</p>}
-            {loading && <p>Loading orders...</p>}
 
             <div className="order-table-wrapper">
                 <table className="admin-order-table">

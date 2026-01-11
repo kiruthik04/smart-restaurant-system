@@ -1,0 +1,227 @@
+.category-section {
+    padding: 1rem 0;
+}
+
+/* Search Bar */
+.search-wrapper {
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding: 0 0.5rem;
+    z-index: 20;
+    /* High z-index for dropdown */
+}
+
+.menu-search-input {
+    width: 100%;
+    padding: 12px 20px;
+    border: 2px solid #edeeef;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.2s;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.menu-search-input:focus {
+    border-color: #00b894;
+    outline: none;
+    box-shadow: 0 4px 12px rgba(0, 184, 148, 0.1);
+}
+
+/* Suggestions Dropdown */
+.search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0.5rem;
+    right: 0.5rem;
+    background: white;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #f0f0f0;
+    border-top: none;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.search-suggestions li {
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-bottom: 1px solid #f9f9f9;
+}
+
+.search-suggestions li:last-child {
+    border-bottom: none;
+}
+
+.search-suggestions li:hover {
+    background-color: #f1f2f6;
+}
+
+.suggestion-thumb {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+/* Categories Nav */
+.category-nav {
+    display: flex;
+    gap: 0.8rem;
+    overflow-x: auto;
+    padding: 0.5rem 0.5rem 1.5rem;
+    position: sticky;
+    top: 0;
+    background: #fcfcfc;
+    /* Match page bg */
+    z-index: 10;
+    margin-bottom: 1rem;
+    scrollbar-width: thin;
+}
+
+.category-pill {
+    padding: 10px 24px;
+    border-radius: 30px;
+    background-color: #ffffff;
+    color: #636e72;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    border: 1px solid #dfe6e9;
+    transition: all 0.2s;
+    font-size: 0.95rem;
+}
+
+.category-pill.active {
+    background-color: #2d3436;
+    color: white;
+    border-color: #2d3436;
+    box-shadow: 0 4px 8px rgba(45, 52, 54, 0.2);
+    transform: translateY(-1px);
+}
+
+.category-pill:hover:not(.active) {
+    background-color: #dfe6e9;
+}
+
+/* Search results text */
+.search-results-title {
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
+    font-size: 1.1rem;
+    color: #636e72;
+}
+
+/* Items Grid */
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1.2rem;
+    padding: 0.5rem;
+}
+
+.menu-item-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+    border: 1px solid #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.menu-item-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
+}
+
+.item-image-box {
+    height: 130px;
+    background-color: #f8f9fa;
+    width: 100%;
+}
+
+.item-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.item-details {
+    padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.item-name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: #2d3436;
+    line-height: 1.3;
+}
+
+.item-desc-short {
+    font-size: 0.85rem;
+    color: #b2bec3;
+    margin-bottom: 1rem;
+    flex-grow: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.item-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.item-price {
+    font-weight: 800;
+    color: #2d3436;
+    font-size: 1.1rem;
+}
+
+.item-add-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: #f1f2f6;
+    color: #2d3436;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.item-add-btn:hover {
+    background: #00b894;
+    color: white;
+    transform: scale(1.1);
+}
+
+.no-items-message {
+    text-align: center;
+    width: 100%;
+    padding: 2rem;
+    color: #b2bec3;
+    font-style: italic;
+    grid-column: 1 / -1;
+}

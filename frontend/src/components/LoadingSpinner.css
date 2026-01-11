@@ -1,0 +1,49 @@
+/* Food-themed loading spinner */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    width: 100%;
+    color: #00b894;
+    gap: 1.5rem;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(0, 184, 148, 0.2);
+    border-top: 5px solid #00b894;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-text {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #636e72;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}

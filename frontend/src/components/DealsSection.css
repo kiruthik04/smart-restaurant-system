@@ -1,0 +1,120 @@
+.deals-section {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+}
+
+.deals-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.deals-scroll-container {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    scrollbar-width: thin;
+}
+
+.deal-card {
+    min-width: 280px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.2s;
+    cursor: pointer;
+    border: 1px solid #eee;
+}
+
+.deal-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.deal-image-container {
+    height: 160px;
+    background-color: #e9ecef;
+    position: relative;
+}
+
+.deal-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.deal-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #ff4757;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.deal-content {
+    padding: 1rem;
+}
+
+.deal-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #2d3436;
+}
+
+.deal-description {
+    font-size: 0.9rem;
+    color: #636e72;
+    margin-bottom: 0.8rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.deal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.deal-price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2d3436;
+}
+
+.deal-original-price {
+    text-decoration: line-through;
+    color: #b2bec3;
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+}
+
+.add-btn {
+    background-color: #00b894;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.add-btn:hover {
+    background-color: #00a884;
+}

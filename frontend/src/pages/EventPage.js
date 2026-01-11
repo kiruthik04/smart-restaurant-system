@@ -1,4 +1,3 @@
-import HallAvailability from "../components/HallAvailability";
 import EventBookingForm from "../components/EventBookingForm";
 import "./EventPage.css";
 

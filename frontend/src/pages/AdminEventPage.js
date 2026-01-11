@@ -5,6 +5,7 @@ import {
     cancelEvent
 } from "../api/adminEventApi";
 import "./AdminEventPage.css";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function AdminEventPage() {
     const [events, setEvents] = useState([]);
@@ -29,6 +30,7 @@ function AdminEventPage() {
 
     useEffect(() => {
         fetchEvents();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleApprove = async (id) => {
@@ -54,6 +56,8 @@ function AdminEventPage() {
         }
     };
 
+    if (loading && events.length === 0) return <LoadingSpinner />;
+
     return (
         <div className="admin-event-page">
             <h2>Admin – Event Management</h2>
@@ -63,8 +67,6 @@ function AdminEventPage() {
                     {message}
                 </div>
             )}
-
-            {loading && !events.length && <p className="loading-text">Loading event bookings...</p>}
 
             <div className="event-table-wrapper">
                 <table className="admin-event-table">

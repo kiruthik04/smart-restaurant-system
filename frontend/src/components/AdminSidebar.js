@@ -8,10 +8,9 @@ import {
   HiOutlineCalendar,
   HiOutlineMenuAlt2,
   HiOutlineUsers,
-  HiOutlineLogout,
-  HiX
+  HiOutlineLogout
 } from "react-icons/hi";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import "./AdminSidebar.css";
 

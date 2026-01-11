@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getAllTables } from "../api/adminTableApi";
 import { getAllOrders } from "../api/adminOrderApi";
 import { getAnalytics } from "../api/adminAnalyticsApi";
 import "./AdminDashboardPage.css";
 import AdminDashboardCharts from "../components/AdminDashboardCharts";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 function AdminDashboardPage() {
   const [stats, setStats] = useState({
@@ -17,6 +17,7 @@ function AdminDashboardPage() {
   const [tables, setTables] = useState([]);
   const [orders, setOrders] = useState([]);
   const [range, setRange] = useState("TODAY");
+  const [loading, setLoading] = useState(true);
 
   const [analytics, setAnalytics] = useState({
     mostOrderedItems: [],
@@ -27,6 +28,7 @@ function AdminDashboardPage() {
 
   // Tables + Orders (static dashboard data)
   useEffect(() => {
+    setLoading(true);
     Promise.all([getAllTables(), getAllOrders()])
       .then(([tableRes, orderRes]) => {
         const tables = tableRes.data;
@@ -42,7 +44,8 @@ function AdminDashboardPage() {
           completedOrders: orders.filter(o => o.status === "COMPLETED").length,
         });
       })
-      .catch(() => { });
+      .catch(() => { })
+      .finally(() => setLoading(false));
   }, []);
 
   // 🔥 Analytics (depends on range)
@@ -51,6 +54,8 @@ function AdminDashboardPage() {
       .then(res => setAnalytics(res.data))
       .catch(() => { });
   }, [range]);
+
+  if (loading) return <LoadingSpinner />;
 
   return (
     <div className="admin-dashboard">
