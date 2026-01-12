@@ -33,19 +33,21 @@
     .mobile-header {
         display: flex;
         align-items: center;
-        /* Default is row, align-items center vertically */
-        justify-content: flex-start;
-        /* Start from left */
+        /* Aligns items vertically center */
+        justify-content: space-between;
+        /* Pushes Brand to Left, Button to Right */
         background-color: #2c3e50;
         color: white;
-        padding: 0 16px;
-        /* Adjusted padding */
-        height: 60px;
+        padding: 0 20px;
+        /* Improved padding for breathing room */
+        height: 64px;
+        /* Slightly taller for better touch targets */
         position: sticky;
         top: 0;
         z-index: 1001;
         width: 100%;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        /* Stronger shadow */
     }
 
     .mobile-toggle-btn {
@@ -53,29 +55,27 @@
         border: none;
         color: white;
         font-size: 28px;
-        /* Slightly larger */
         cursor: pointer;
-        padding: 0;
-        margin-right: 0;
-        /* Reset margin, we'll specific placement */
-        position: absolute;
-        /* Position it absolute to not affect centering */
-        left: 16px;
+        padding: 8px;
+        /* larger touch target */
+        margin: 0;
         display: flex;
         align-items: center;
         justify-content: center;
         z-index: 10;
-        /* Above text */
+        flex-shrink: 0;
     }
 
     .mobile-brand {
-        font-size: 1.25rem;
+        font-size: 1.4rem;
+        /* Larger font */
         font-weight: 800;
-        /* Bolder */
-        flex: 1;
-        text-align: center;
-        /* Center properly */
+        letter-spacing: 0.5px;
+        text-align: left;
         margin: 0;
+        color: #ecf0f1;
+        text-transform: uppercase;
+        /* Styling polish */
     }
 
     .admin-content {

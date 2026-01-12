@@ -1,0 +1,137 @@
+/* SignupPage.css */
+
+.signup-full-screen {
+    min-height: 100vh;
+    width: 100%;
+    background: linear-gradient(135deg, #f6f8fb 0%, #e1e7ec 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.signup-card {
+    background: white;
+    width: 100%;
+    max-width: 450px;
+    /* Slightly wider for more fields */
+    padding: 2.5rem;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    position: relative;
+    z-index: 20;
+    max-height: 90vh;
+    overflow-y: auto;
+    /* Scroll if height is small */
+}
+
+/* Hide scrollbar for neatness */
+.signup-card::-webkit-scrollbar {
+    width: 6px;
+}
+
+.signup-card::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+.signup-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #2d3436;
+    margin-bottom: 2rem;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.signup-title .gradient-text {
+    background: linear-gradient(135deg, #2d3436 0%, #000000 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.error-message {
+    background: #ffeaa7;
+    color: #d63031;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #636e72;
+    font-size: 0.95rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid rgba(0, 0, 0, 0.06);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    background: #fdfdfd;
+    color: #2d3436;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #00b894;
+    /* Green accent for signup */
+    background: white;
+    box-shadow: 0 4px 15px rgba(0, 184, 148, 0.1);
+}
+
+.signup-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #00b894, #00cec9);
+    /* Green Gradient */
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 1rem;
+    box-shadow: 0 8px 20px rgba(0, 184, 148, 0.3);
+}
+
+.signup-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 184, 148, 0.4);
+    background: linear-gradient(135deg, #00cec9, #00b894);
+}
+
+.signup-footer {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #636e72;
+}
+
+.signup-link {
+    color: #00b894;
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.signup-link:hover {
+    text-decoration: underline;
+}

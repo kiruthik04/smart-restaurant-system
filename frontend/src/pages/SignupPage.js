@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import '../styles/LoginPage.css'; // Reuse Login styles
+import './SignupPage.css';
 
 const SignupPage = () => {
     const [formData, setFormData] = useState({
@@ -31,50 +31,58 @@ const SignupPage = () => {
     };
 
     return (
-        <div className="login-container" style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
-            <h2>Customer Sign Up</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: '15px' }}>
-                    <label>Full Name:</label>
-                    <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-                        required
-                    />
-                </div>
-                <div style={{ marginBottom: '15px' }}>
-                    <label>Username:</label>
-                    <input
-                        type="text"
-                        name="username"
-                        value={formData.username}
-                        onChange={handleChange}
-                        style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-                        required
-                    />
-                </div>
-                <div style={{ marginBottom: '15px' }}>
-                    <label>Password:</label>
-                    <input
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-                        required
-                    />
-                </div>
-                <button type="submit" style={{ width: '100%', padding: '10px', backgroundColor: '#28a745', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-                    Sign Up
-                </button>
-            </form>
-            <p style={{ marginTop: '15px', textAlign: 'center' }}>
-                Already have an account? <Link to="/login">Login here</Link>
-            </p>
+        <div className="signup-full-screen">
+            <div className="signup-card">
+                <h2 className="signup-title"><span className="gradient-text">Join the Fam!</span> 🍔</h2>
+
+                {error && <div className="error-message">{error}</div>}
+
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label className="form-label">Full Name</label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            className="form-input"
+                            placeholder="John Doe"
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label className="form-label">Username</label>
+                        <input
+                            type="text"
+                            name="username"
+                            value={formData.username}
+                            onChange={handleChange}
+                            className="form-input"
+                            placeholder="Choose a username"
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label className="form-label">Password</label>
+                        <input
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            className="form-input"
+                            placeholder="Create a password"
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="signup-btn">
+                        Sign Up
+                    </button>
+                </form>
+                <p className="signup-footer">
+                    Already have an account?
+                    <Link to="/login" className="signup-link">Login here</Link>
+                </p>
+            </div>
         </div>
     );
 };

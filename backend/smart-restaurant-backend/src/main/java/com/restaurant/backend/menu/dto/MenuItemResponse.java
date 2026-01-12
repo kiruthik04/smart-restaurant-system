@@ -3,6 +3,7 @@ package com.restaurant.backend.menu.dto;
 public class MenuItemResponse {
     private Long id;
     private String name;
+    private String category;
     private String description;
     private double price;
     private boolean available;
@@ -11,6 +12,7 @@ public class MenuItemResponse {
             boolean available) {
         this.id = id;
         this.name = name;
+        this.category = category;
         this.description = description;
         this.price = price;
         this.available = available;
@@ -22,6 +24,10 @@ public class MenuItemResponse {
 
     public String getName() {
         return name;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     public String getDescription() {

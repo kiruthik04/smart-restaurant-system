@@ -59,49 +59,45 @@ function KitchenPage() {
             )}
 
             {orders.map(order => (
-                <div key={order.orderId} className="order-card">
-                    <h3>Order #{order.orderId}</h3>
-
-                    <div className="order-meta">
-                        <p><b>Table:</b> {order.tableNumber}</p>
-                        <p>
-                            <b>Status:</b>{" "}
-                            <span
-                                className={`order-status ${order.status === "CREATED"
-                                    ? "status-created"
-                                    : "status-progress"
-                                    }`}
-                            >
-                                {order.status}
-                            </span>
-                        </p>
+                <div key={order.orderId} className={`kds-card ${order.status.toLowerCase()}`}>
+                    {/* Header: Table & Time/ID */}
+                    <div className="kds-card-header">
+                        <div className="kds-table-badge">T-{order.tableNumber}</div>
+                        <div className="kds-order-id">#{order.orderId}</div>
                     </div>
 
-                    <ul className="order-items">
-                        {order.items.map((item, idx) => (
-                            <li key={idx}>
-                                {item.name} × {item.quantity}
-                            </li>
-                        ))}
-                    </ul>
+                    {/* Body: Items List */}
+                    <div className="kds-card-body">
+                        <div className="kds-status-badge">{order.status.replace("_", " ")}</div>
+                        <ul className="kds-items-list">
+                            {order.items.map((item, idx) => (
+                                <li key={idx}>
+                                    <span className="qty">{item.quantity}x</span> {item.name}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
-                    {order.status === "CREATED" && (
-                        <button
-                            className="kitchen-btn start"
-                            onClick={() => handleStart(order.orderId)}
-                        >
-                            Start Cooking
-                        </button>
-                    )}
+                    {/* Footer: Action Button */}
+                    <div className="kds-card-footer">
+                        {order.status === "CREATED" && (
+                            <button
+                                className="kds-btn start-btn"
+                                onClick={() => handleStart(order.orderId)}
+                            >
+                                Start Cooking
+                            </button>
+                        )}
 
-                    {order.status === "IN_PROGRESS" && (
-                        <button
-                            className="kitchen-btn ready"
-                            onClick={() => handleComplete(order.orderId)}
-                        >
-                            Mark Ready
-                        </button>
-                    )}
+                        {order.status === "IN_PROGRESS" && (
+                            <button
+                                className="kds-btn ready-btn"
+                                onClick={() => handleComplete(order.orderId)}
+                            >
+                                Mark Ready
+                            </button>
+                        )}
+                    </div>
                 </div>
             ))}
         </div>

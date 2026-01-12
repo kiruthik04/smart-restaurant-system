@@ -103,7 +103,7 @@ function HomePage() {
     return () => clearInterval(timer);
   }, [posters.length]);
 
-  if (loading) return <LoadingSpinner />;
+
 
   return (
     <div className="home-full-wrapper">
@@ -125,7 +125,11 @@ function HomePage() {
             <h3>Your Active Orders</h3>
           </div>
 
-          {activeOrders.length > 0 ? (
+          {loading ? (
+            <div className="section-loading">
+              <LoadingSpinner />
+            </div>
+          ) : activeOrders.length > 0 ? (
             <>
               <div className="orders-grid">
                 {activeOrders.map((order) => (

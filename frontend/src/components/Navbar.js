@@ -1,11 +1,14 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
+import { FaShoppingCart } from "react-icons/fa";
 import "./Navbar.css";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
   const { user, logout } = useAuth();
+  const { totalItems } = useCart();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -20,13 +23,6 @@ function Navbar() {
         <Link to="/" className="navbar-brand">
           Smart Restaurant
         </Link>
-
-        <button
-          className="menu-toggle"
-          onClick={() => setOpen(!open)}
-        >
-          ☰
-        </button>
 
         <div className={`navbar-links ${open ? "open" : ""}`}>
           <Link to="/" onClick={() => setOpen(false)}>
@@ -49,6 +45,14 @@ function Navbar() {
             <Link to="/kitchen" onClick={() => setOpen(false)}>Kitchen</Link>
           )}
 
+          {/* Desktop Only Cart Icon */}
+          <Link to="/cart" onClick={() => setOpen(false)} className="cart-link desktop-cart">
+            <div className="cart-icon-container">
+              <FaShoppingCart size={20} />
+              {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
+            </div>
+          </Link>
+
           {user ? (
             <button onClick={handleLogout} className="nav-btn">
               Logout ({user.username})
@@ -58,6 +62,23 @@ function Navbar() {
               Login
             </Link>
           )}
+        </div>
+
+        <div className="navbar-actions">
+          {/* Mobile Only Cart Icon */}
+          <Link to="/cart" className="cart-link mobile-cart" onClick={() => setOpen(false)}>
+            <div className="cart-icon-container">
+              <FaShoppingCart size={20} />
+              {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
+            </div>
+          </Link>
+
+          <button
+            className="menu-toggle"
+            onClick={() => setOpen(!open)}
+          >
+            ☰
+          </button>
         </div>
       </div>
     </nav>

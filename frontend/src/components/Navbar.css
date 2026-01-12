@@ -20,8 +20,7 @@
 .navbar-container {
   width: 100%;
   display: flex;
-  /* This pushes the brand to the left and the toggle/links to the right */
-  justify-content: space-between;
+  /* Changed from space-between to align items properly with margin-left: auto strategy */
   align-items: center;
   margin: 0;
 }
@@ -44,6 +43,10 @@
   display: flex;
   gap: 2rem;
   align-items: center;
+  /* Push links (and subsequent actions) to the right end */
+  margin-left: auto;
+  margin-right: 1.5rem;
+  /* Add some space between links and actions */
 }
 
 .navbar-links a {
@@ -76,6 +79,7 @@
 }
 
 /* Mobile Toggle Button - Forced to the far right */
+/* Mobile Toggle Button */
 .menu-toggle {
   display: none;
   background: none;
@@ -85,12 +89,66 @@
   cursor: pointer;
   padding: 0;
   line-height: 1;
-  /* Added margin-left to ensure it stays right if the container flexes */
-  margin-left: auto;
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.cart-link {
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+}
+
+/* Default (Desktop) */
+.mobile-cart {
+  display: none;
+}
+
+.desktop-cart {
+  display: flex !important;
+  /* Ensure it overrides any conflicting flex rules if nested */
+}
+
+.cart-icon-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -8px;
+  right: -10px;
+  background-color: #ff4757;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  min-width: 18px;
+  text-align: center;
 }
 
 /* Responsive Tablet/Mobile View */
 @media (max-width: 768px) {
+  .mobile-cart {
+    display: flex;
+  }
+
+  .desktop-cart {
+    display: none !important;
+  }
+
+  .navbar-container {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
   .navbar {
     padding: 0.8rem 5%;
     /* Maintains the gap from the screen edge */

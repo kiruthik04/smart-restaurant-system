@@ -31,3 +31,20 @@ export const getHallAvailability = (params) => {
         params,
     });
 };
+
+// Hall Management
+export const createEventHall = (hallData) => {
+    return api.post("/api/admin/events/halls", hallData);
+};
+
+export const updateEventHall = (id, hallData) => {
+    return api.put(`/api/admin/events/halls/${id}`, hallData);
+};
+
+export const deleteEventHall = (id) => {
+    return api.delete(`/api/admin/events/halls/${id}`);
+};
+
+export const getEventHalls = () => {
+    return api.get("/api/admin/events/halls");
+};

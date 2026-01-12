@@ -13,6 +13,11 @@
     /* Higher than overlay */
 }
 
+.admin-sidebar.collapsed .logout-btn span:not(.nav-icon) {
+    display: none;
+}
+
+/* Mobile Overrides - Must be last to override 'collapsed' styles */
 @media (max-width: 768px) {
     .admin-sidebar {
         position: fixed;
@@ -34,15 +39,21 @@
         display: flex;
         /* Ensure it's visible */
         position: absolute;
-        /* Optional: verify placement in header-content */
+        /* WAIT: User asked to MOVE it to the end, not be absolute. */
+        /* Let's remove absolute and let flex handle it */
+        position: static;
+        padding: 0;
+        /* Remove unwanted padding as requested */
+        margin-left: auto;
+        /* Push to right if flex parent allows */
     }
 
     /* FORCE TEXT VISIBILITY ON MOBILE DRAWER (Override collapsed state) */
     .admin-sidebar.mobile-open.collapsed .admin-logo {
         opacity: 1;
         width: auto;
-        margin: 0 0 0 15px;
-        /* Restore margin */
+        margin: 0;
+        /* No strange margins */
         overflow: visible;
     }
 
@@ -67,6 +78,11 @@
     .admin-sidebar.mobile-open.collapsed .logout-btn span:not(.nav-icon) {
         display: block;
     }
+
+    /* Force correct header alignment on mobile open, overriding 'center' */
+    .admin-sidebar.mobile-open.collapsed .header-content {
+        justify-content: space-between;
+    }
 }
 
 .admin-sidebar.collapsed {
@@ -88,6 +104,11 @@
     width: 100%;
     justify-content: space-between;
     /* Push button to right */
+}
+
+/* Center button when collapsed */
+.admin-sidebar.collapsed .header-content {
+    justify-content: center;
 }
 
 .collapse-btn {

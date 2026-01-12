@@ -11,9 +11,12 @@ import java.util.List;
 public class AdminEventServiceImpl implements AdminEventService {
 
     private final EventBookingRepository eventBookingRepository;
+    private final com.restaurant.backend.reservation.repository.EventHallRepository eventHallRepository;
 
-    public AdminEventServiceImpl(EventBookingRepository eventBookingRepository) {
+    public AdminEventServiceImpl(EventBookingRepository eventBookingRepository,
+            com.restaurant.backend.reservation.repository.EventHallRepository eventHallRepository) {
         this.eventBookingRepository = eventBookingRepository;
+        this.eventHallRepository = eventHallRepository;
     }
 
     @Override
@@ -40,5 +43,37 @@ public class AdminEventServiceImpl implements AdminEventService {
 
         booking.setStatus("CANCELLED");
         eventBookingRepository.save(booking);
+    }
+
+    @Override
+    public com.restaurant.backend.reservation.model.EventHall createEventHall(
+            com.restaurant.backend.reservation.model.EventHall hall) {
+        return eventHallRepository.save(hall);
+    }
+
+    @Override
+    public com.restaurant.backend.reservation.model.EventHall updateEventHall(Long id,
+            com.restaurant.backend.reservation.model.EventHall hallDetails) {
+        com.restaurant.backend.reservation.model.EventHall hall = eventHallRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Hall not found"));
+
+        hall.setName(hallDetails.getName());
+        hall.setCapacity(hallDetails.getCapacity());
+        hall.setActive(hallDetails.isActive());
+
+        return eventHallRepository.save(hall);
+    }
+
+    @Override
+    public void deleteEventHall(Long id) {
+        if (!eventHallRepository.existsById(id)) {
+            throw new RuntimeException("Hall not found");
+        }
+        eventHallRepository.deleteById(id);
+    }
+
+    @Override
+    public List<com.restaurant.backend.reservation.model.EventHall> getAllHalls() {
+        return eventHallRepository.findAll();
     }
 }

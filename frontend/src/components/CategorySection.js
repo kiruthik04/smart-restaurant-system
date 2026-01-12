@@ -1,28 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './CategorySection.css';
 import { getFoodImage } from '../utils/foodImageUtil';
 
 const CategorySection = ({ menu, addToCart }) => {
-    // Extract unique categories, ensuring 'All' is NOT the default first item for strict tabs
-    const categories = [...new Set(menu.map(item => item.category || "Others"))];
 
-    // Default to the first category if available
-    const [activeCategory, setActiveCategory] = useState(categories[0] || "All");
     const [searchQuery, setSearchQuery] = useState("");
 
-    // Effect to set initial category when menu loads
-    useEffect(() => {
-        if (categories.length > 0 && !categories.includes(activeCategory) && activeCategory !== "All") {
-            setActiveCategory(categories[0]);
-        }
-    }, [menu]);
-
-    // Filtering logic
-    // 1. If Search is active -> Show ALL items matching search (ignore category tabs)
-    // 2. If Search is empty -> Show items for ACTIVE category only
+    // Filtering logic: Search Only
+    // If search is empty, show all items (previously activeCategory="All")
     const displayedItems = searchQuery.trim() !== ""
         ? menu.filter(item => item.name.toLowerCase().includes(searchQuery.toLowerCase()))
-        : menu.filter(item => (item.category || "Others") === activeCategory);
+        : menu;
 
     return (
         <div className="category-section">
@@ -38,24 +26,7 @@ const CategorySection = ({ menu, addToCart }) => {
                 />
             </div>
 
-            {/* Hide tabs if searching to reduce clutter, or keep them to switch back? 
-                Keeping them is better context, but maybe disable them or visually dim them.
-                Actually, standard pattern: tabs filter, search overrides.
-            */}
-            {!searchQuery && (
-                <div className="category-nav">
-                    {categories.map(cat => (
-                        <div
-                            key={cat}
-                            className={`category-pill ${activeCategory === cat ? 'active' : ''}`}
-                            onClick={() => setActiveCategory(cat)}
-                        >
-                            {cat}
-                        </div>
-                    ))}
-                </div>
-            )}
-
+            {/* Menu Grid */}
             <div className="menu-list-container">
                 {searchQuery && <h3 className="search-results-title">Found {displayedItems.length} results</h3>}
 

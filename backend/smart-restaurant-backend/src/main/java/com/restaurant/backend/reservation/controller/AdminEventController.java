@@ -34,4 +34,29 @@ public class AdminEventController {
     public void cancelEvent(@PathVariable Long id) {
         adminEventService.cancelEvent(id);
     }
+
+    // 🔹 CREATE HALL
+    public com.restaurant.backend.reservation.model.EventHall createHall(
+            @RequestBody com.restaurant.backend.reservation.model.EventHall hall) {
+        return adminEventService.createEventHall(hall);
+    }
+
+    // 🔹 UPDATE HALL
+    @PutMapping("/halls/{id}")
+    public com.restaurant.backend.reservation.model.EventHall updateHall(@PathVariable Long id,
+            @RequestBody com.restaurant.backend.reservation.model.EventHall hall) {
+        return adminEventService.updateEventHall(id, hall);
+    }
+
+    // 🔹 DELETE HALL
+    @DeleteMapping("/halls/{id}")
+    public void deleteHall(@PathVariable Long id) {
+        adminEventService.deleteEventHall(id);
+    }
+
+    // 🔹 GET ALL HALLS
+    @GetMapping("/halls")
+    public List<com.restaurant.backend.reservation.model.EventHall> getAllHalls() {
+        return adminEventService.getAllHalls();
+    }
 }

@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import {
     getAllEvents,
     approveEvent,
-    cancelEvent
+    cancelEvent,
+    createEventHall
 } from "../api/adminEventApi";
 import "./AdminEventPage.css";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -12,6 +13,8 @@ function AdminEventPage() {
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
+
+
 
     const fetchEvents = () => {
         setLoading(true);
@@ -56,11 +59,15 @@ function AdminEventPage() {
         }
     };
 
+
+
     if (loading && events.length === 0) return <LoadingSpinner />;
 
     return (
         <div className="admin-event-page">
-            <h2>Admin – Event Management</h2>
+            <div className="admin-page-header">
+                <h2>Admin – Event Management</h2>
+            </div>
 
             {message && (
                 <div className="admin-message-banner" onClick={() => setMessage("")}>
@@ -165,6 +172,8 @@ function AdminEventPage() {
                     </div>
                 </div>
             )}
+
+
         </div>
     );
 }

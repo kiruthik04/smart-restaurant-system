@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import '../styles/LoginPage.css'; // Assuming you might want styles, or inline them
+import './LoginPage.css'; // Assuming you might want styles, or inline them
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
@@ -31,37 +31,45 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="login-container" style={{ maxWidth: '400px', margin: '50px auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
-            <h2>Login</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: '15px' }}>
-                    <label>Username:</label>
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-                        required
-                    />
-                </div>
-                <div style={{ marginBottom: '15px' }}>
-                    <label>Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        style={{ width: '100%', padding: '8px', marginTop: '5px' }}
-                        required
-                    />
-                </div>
-                <button type="submit" style={{ width: '100%', padding: '10px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
-                    Login
-                </button>
-            </form>
-            <p style={{ marginTop: '15px', textAlign: 'center' }}>
-                Don't have an account? <Link to="/signup">Sign up here</Link>
-            </p>
+        <div className="login-full-screen">
+            <div className="login-card">
+                <h2 className="login-title"><span className="gradient-text">Hello Again!</span> 👋</h2>
+
+                {error && <div className="error-message">{error}</div>}
+
+                <form onSubmit={handleSubmit}>
+                    <div className="form-group">
+                        <label className="form-label">Username</label>
+                        <input
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            className="form-input"
+                            placeholder="Enter your username"
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label className="form-label">Password</label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="form-input"
+                            placeholder="••••••••"
+                            required
+                        />
+                    </div>
+                    <button type="submit" className="login-btn">
+                        Sign In
+                    </button>
+                </form>
+
+                <p className="login-footer">
+                    Don't have an account?
+                    <Link to="/signup" className="login-link">Sign up here</Link>
+                </p>
+            </div>
         </div>
     );
 };

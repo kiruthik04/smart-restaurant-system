@@ -23,13 +23,13 @@ function AdminLayout({ children }) {
     <div className="admin-layout">
       {/* Mobile Header */}
       <div className="mobile-header">
+        <span className="mobile-brand">Smart Restro</span>
         <button
           className="mobile-toggle-btn"
           onClick={() => setMobileOpen(!mobileOpen)}
         >
           ☰
         </button>
-        <span className="mobile-brand">Smart Restro</span>
       </div>
 
       {/* Sidebar - Passed mobileOpen state */}

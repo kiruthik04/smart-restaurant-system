@@ -49,7 +49,30 @@ public class OrderServiceImpl implements OrderService {
             String currentOwner = table.getCurrentSessionId();
 
             if (currentOwner != null && !currentOwner.equals(incomingSession)) {
-                throw new IllegalStateException("Table is currently in use");
+                // Check if we can reclaim the table
+                List<Order> activeOrders = orderRepository.findByTableIdAndStatusNot(table.getId(), "COMPLETED");
+
+                if (activeOrders.isEmpty()) {
+                    // Scenario A: Locked but empty (Zombie session) -> Reclaim
+                    diningTableService.claimTable(table.getId(), incomingSession);
+                } else {
+                    // Scenario B: Active orders exist -> Check User Match
+                    boolean sameUser = false;
+                    if (request.getUserId() != null) {
+                        // Check ownership of the first active order
+                        Long activeUserId = activeOrders.get(0).getUserId();
+                        if (activeUserId != null && activeUserId.equals(request.getUserId())) {
+                            sameUser = true;
+                        }
+                    }
+
+                    if (sameUser) {
+                        // Reclaim for same user (e.g. they logged out and back in)
+                        diningTableService.claimTable(table.getId(), incomingSession);
+                    } else {
+                        throw new IllegalStateException("Table is currently in use by another customer");
+                    }
+                }
             }
 
             // 2️⃣ Create Order (DO NOT SAVE YET)
@@ -117,11 +140,18 @@ public class OrderServiceImpl implements OrderService {
         // getTableBySessionId throws ResourceNotFoundException if not found, so we
         // don't need null check here
 
-        // 2. Find the active order for this tableId
-        Order order = orderRepository.findByTableIdAndStatusNot(table.getId(), "COMPLETED")
-                .orElseThrow(() -> new ResourceNotFoundException("No active order for this session"));
+        // 2. Find the active orders for this tableId
+        List<Order> orders = orderRepository.findByTableIdAndStatusNot(table.getId(), "COMPLETED");
 
-        return mapToOrderResponse(order);
+        if (orders.isEmpty()) {
+            throw new ResourceNotFoundException("No active order for this session");
+        }
+
+        // Return the most recent order for the status check
+        // (Assuming ID increments, last one is newest)
+        Order latestOrder = orders.get(orders.size() - 1);
+
+        return mapToOrderResponse(latestOrder);
     }
 
     @Override

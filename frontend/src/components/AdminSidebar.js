@@ -8,7 +8,8 @@ import {
   HiOutlineCalendar,
   HiOutlineMenuAlt2,
   HiOutlineUsers,
-  HiOutlineLogout
+  HiOutlineLogout,
+  HiOutlineOfficeBuilding
 } from "react-icons/hi";
 import { useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
@@ -35,6 +36,10 @@ function AdminSidebar({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) {
       <div className="sidebar-header">
         {/* New flex/grid container to keep items side-by-side */}
         <div className="header-content">
+          {(!collapsed || mobileOpen) && (
+            <h2 className="admin-logo">Smart Restro</h2>
+          )}
+
           <button
             className="collapse-btn"
             onClick={() => {
@@ -43,12 +48,8 @@ function AdminSidebar({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) {
             }}
             aria-label="Toggle Sidebar"
           >
-            <HiOutlineMenu />
+            {collapsed && !mobileOpen ? <HiOutlineMenu /> : <HiOutlineMenuAlt2 />}
           </button>
-
-          {(!collapsed || mobileOpen) && (
-            <h2 className="admin-logo">Smart Restro</h2>
-          )}
         </div>
       </div>
 
@@ -107,6 +108,17 @@ function AdminSidebar({ collapsed, setCollapsed, mobileOpen, setMobileOpen }) {
             <HiOutlineCalendar />
           </span>
           {(!collapsed || mobileOpen) && <span>Events</span>}
+        </Link>
+
+        <Link
+          to="/admin/halls"
+          className={`nav-link ${location.pathname.includes("halls") ? "active" : ""}`}
+          title="Halls"
+        >
+          <span className="nav-icon">
+            <HiOutlineOfficeBuilding />
+          </span>
+          {(!collapsed || mobileOpen) && <span>Halls</span>}
         </Link>
 
         <Link

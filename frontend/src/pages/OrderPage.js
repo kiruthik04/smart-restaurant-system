@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 import CategorySection from "../components/CategorySection";
-import DealsSection from "../components/DealsSection";
 import LoadingSpinner from "../components/LoadingSpinner";
 // import Cart from "../components/Cart"; // Keeping Cart import commented out if needed later
 // User said "remove the components", but removing Cart completely breaks the app functionality usually.
@@ -23,8 +23,9 @@ import "./OrderPage.css";
 
 function OrderPage() {
     const { user } = useAuth();
+    const { addToCart, cart, totalItems, totalPrice } = useCart();
     const [menu, setMenu] = useState([]);
-    const [cart, setCart] = useState([]);
+    // Local cart state removed
     const [tableNumber, setTableNumber] = useState(localStorage.getItem("tableNumber") || "");
     const [message, setMessage] = useState("");
     const orderSessionId = getOrderSessionId();
@@ -32,7 +33,7 @@ function OrderPage() {
     const [releasing, setReleasing] = useState(false);
     const [billData, setBillData] = useState(null);
     const [showBill, setShowBill] = useState(false);
-    const [showCartModal, setShowCartModal] = useState(false);
+    // showCartModal state removed
     const [loading, setLoading] = useState(true); // Loading state
 
     useEffect(() => {
@@ -86,66 +87,18 @@ function OrderPage() {
         fetchActiveOrder();
     }, [user, orderSessionId]);
 
-    const addToCart = (item) => {
-        setCart((prev) => {
-            const existing = prev.find(i => i.id === item.id);
-            if (existing) {
-                return prev.map(i =>
-                    i.id === item.id
-                        ? { ...i, quantity: i.quantity + 1 }
-                        : i
-                );
-            }
-            return [...prev, { ...item, quantity: 1 }];
-        });
+    const handleAddToCart = (item) => {
+        addToCart(item);
         setMessage(`${item.name} added to cart!`);
         setTimeout(() => setMessage(""), 2000);
     };
 
-    const updateQuantity = (id, qty) => {
-        setCart(prev =>
-            prev.map(i =>
-                i.id === id ? { ...i, quantity: qty } : i
-            ).filter(i => i.quantity > 0)
-        );
-    };
+    // updateQuantity removed (handled in CartPage)
 
     const navigate = useNavigate();
     const location = useLocation();
 
-    const placeOrder = () => {
-        if (!user) {
-            navigate("/login", { state: { from: location } });
-            return;
-        }
-
-        if (!tableNumber || cart.length === 0) {
-            setMessage("Table number and items are required");
-            return;
-        }
-
-        const payload = {
-            tableNumber: Number(tableNumber),
-            orderSessionId: orderSessionId,
-            userId: user ? user.id : null,
-            items: cart.map(i => ({
-                menuId: i.id,
-                quantity: i.quantity
-            }))
-
-        };
-
-        createOrder(payload)
-            .then(() => {
-                setMessage("Order placed successfully");
-                setCart([]);
-                setTableActive(true);
-                setShowCartModal(false);
-            })
-            .catch(err => {
-                setMessage(err.response?.data?.message || "Order failed");
-            });
-    };
+    // placeOrder removed (moved to CartPage)
 
     const handleFinishClick = async () => {
         if (!tableNumber) {
@@ -175,7 +128,7 @@ function OrderPage() {
             clearOrderSession();
             localStorage.removeItem("tableNumber");
 
-            setCart([]);
+            // setCart([]); // Global cart is separate now, handled by user
             setTableNumber("");
             setTableActive(false);
             setBillData(null);
@@ -188,20 +141,15 @@ function OrderPage() {
         }
     };
 
-    // Filter deals - assuming 'isDeal' or specific category exists, or just taking random 5 for demo if not present
-    const deals = menu.filter(item => item.isDeal || item.category === 'Deals').slice(0, 5);
-    // If no deals found, maybe take 3 specials
-    const finalDeals = deals.length > 0 ? deals : menu.slice(0, 3);
 
-    if (loading) {
-        return <LoadingSpinner />;
-    }
+
+
 
     return (
         <div className="order-page-redesign">
             <header className="order-header">
                 <div>
-                    <h2>Welcome Foodie! 😋</h2>
+                    <h2><span className="gradient-text">Welcome Foodie!</span> 😋</h2>
                     <p className="subtitle">What are you craving today?</p>
                 </div>
                 <div className="table-info">
@@ -216,54 +164,28 @@ function OrderPage() {
                 </div>
             </header>
 
-            {finalDeals.length > 0 && <DealsSection deals={finalDeals} addToCart={addToCart} />}
+            {loading ? (
+                <div className="section-loading" style={{ minHeight: '300px', display: 'flex', alignItems: 'center' }}>
+                    <LoadingSpinner />
+                </div>
+            ) : (
+                <>
+                    <CategorySection menu={menu} addToCart={handleAddToCart} />
+                </>
+            )}
 
-            <CategorySection menu={menu} addToCart={addToCart} />
-
-            {/* Floating Cart Bar */}
-            {cart.length > 0 && (
-                <div className="floating-cart-bar" onClick={() => setShowCartModal(true)}>
+            {/* Floating Cart Bar - Redirects to Cart Page */}
+            {totalItems > 0 && (
+                <div className="floating-cart-bar" onClick={() => navigate("/cart")}>
                     <div className="cart-info">
-                        <span className="cart-count">{cart.reduce((acc, item) => acc + item.quantity, 0)} Items</span>
-                        <span className="cart-total">₹{cart.reduce((acc, item) => acc + (item.price * item.quantity), 0)}</span>
+                        <span className="cart-count">{totalItems} Items</span>
+                        <span className="cart-total">₹{totalPrice}</span>
                     </div>
                     <button className="view-cart-btn">View Cart &gt;</button>
                 </div>
             )}
 
-            {/* Reuse Cart Component as Modal or Bottom Sheet could be better, but for now specific modal code */}
-            {showCartModal && (
-                <div className="cart-modal-overlay">
-                    <div className="cart-modal-content">
-                        <div className="cart-modal-header">
-                            <h3>Your Cart</h3>
-                            <button className="close-btn" onClick={() => setShowCartModal(false)}>×</button>
-                        </div>
-                        {cart.length === 0 ? <p>Cart is empty</p> : (
-                            <div className="cart-items-list">
-                                {cart.map(item => (
-                                    <div key={item.id} className="cart-item-row">
-                                        <span>{item.name}</span>
-                                        <div className="qty-controls">
-                                            <button onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
-                                            <span>{item.quantity}</span>
-                                            <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
-                                        </div>
-                                        <span>₹{item.price * item.quantity}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                        <div className="cart-modal-footer">
-                            <div className="total-row">
-                                <span>Total</span>
-                                <span>₹{cart.reduce((acc, item) => acc + (item.price * item.quantity), 0)}</span>
-                            </div>
-                            <button className="place-order-btn" onClick={placeOrder}>Place Order</button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {/* Cart Modal removed */}
 
 
             {message && (
@@ -272,7 +194,7 @@ function OrderPage() {
                 </div>
             )}
 
-            {tableActive && !showCartModal && (
+            {tableActive && (
                 <div className="active-table-status">
                     <span>Table {tableNumber} is Active</span>
                     <button onClick={handleFinishClick} disabled={releasing} className="finish-btn-small">

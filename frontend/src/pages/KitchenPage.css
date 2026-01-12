@@ -1,105 +1,253 @@
+/* KitchenPage.css - Kitchen Display System (KDS) */
+
 .kitchen-page {
-  max-width: 1000px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 1.5rem;
+  background-color: #f1f2f6;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
 }
 
 .kitchen-page h2 {
-  margin-bottom: 16px;
-  color: #222;
+  margin-bottom: 1.5rem;
+  color: #2d3436;
+  font-size: 1.8rem;
+  font-weight: 800;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 1rem;
 }
 
-/* Info messages */
-.kitchen-message {
-  margin-bottom: 12px;
-  font-weight: 500;
+/* Messages */
+.kitchen-message,
+.kitchen-loading,
+.kitchen-empty {
+  font-size: 1.2rem;
+  text-align: center;
+  margin-top: 3rem;
+  color: #636e72;
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-.kitchen-loading {
-  color: #555;
+/* -------------------------------------------------- */
+/* KDS Grid Layout */
+/* -------------------------------------------------- */
+.kitchen-page {
+  display: flex;
+  flex-direction: column;
 }
 
-/* Order card */
-.order-card {
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 16px;
-  margin-bottom: 16px;
-  background-color: #fff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+/* Use a Grid that auto-fills based on card width */
+.kds-card-container {
+  /* Note: If you have a wrapper, else usage logic might depend on direct children */
+  /* Implicit grid logic is usually applied to the container of the map */
 }
 
-.order-card h3 {
-  margin-top: 0;
-  margin-bottom: 6px;
+/* Since the map is direct child of .kitchen-page in React structure (often mixed with other elements), 
+   we might need to wrap them or just target div.kds-card if using flex wrap or apply grid to a wrapper.
+   However, based on previous structure, orders are direct children. 
+   Let's assume we want the whole page content to be the grid generally, 
+   BUT we have H2 and messages. 
+   Ideally, we should wrap orders in a container in JS. 
+   But since I only modified the map part, let's style the parent (kitchen-page) carefully or rely on flex-wrap.
+*/
+
+/* Better Strategy: Make .kitchen-page a Flex container for column layout, 
+   and add a new CSS Grid just for the cards? 
+   No, I can't add a wrapper div in CSS only. 
+   I will use flex-wrap behavior on the parent or CSS Grid for the whole page 
+   where the first child is full width.
+*/
+
+/* Actually, let's use a nice CSS Grid on the .kitchen-page itself 
+   and make the H2 span all columns. */
+
+.kitchen-page {
+  display: grid;
+  gap: 1.5rem;
+  /* Responsive Grid: Cards are ~300px wide */
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  align-content: start;
 }
 
-.order-meta {
-  font-size: 14px;
-  margin-bottom: 8px;
+.kitchen-page h2,
+.kitchen-message,
+.kitchen-loading,
+.kitchen-empty {
+  grid-column: 1 / -1;
+  /* Span full width */
 }
 
-.order-status {
-  font-weight: 600;
+/* -------------------------------------------------- */
+/* KDS Ticket Card */
+/* -------------------------------------------------- */
+.kds-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  /* For header color */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
+  /* Default height or aspect ratio if needed */
+  height: 100%;
 }
 
-.status-created {
-  color: #0275d8;
+.kds-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
-.status-progress {
-  color: #f0ad4e;
+/* Status: CREATED (New) */
+.kds-card.created {
+  border-top: 6px solid #0984e3;
+  /* Blue */
 }
 
-/* Items list */
-.order-items {
-  padding-left: 20px;
-  margin-bottom: 12px;
+.kds-card.created .kds-card-header {
+  background-color: #e3f2fd;
+  color: #0984e3;
 }
 
-.order-items li {
-  margin-bottom: 4px;
+.kds-card.created .kds-status-badge {
+  background-color: #0984e3;
 }
 
-/* Buttons */
-.kitchen-btn {
-  padding: 8px 14px;
-  font-size: 14px;
+/* Status: IN_PROGRESS (Cooking) */
+.kds-card.in_progress {
+  border-top: 6px solid #e17055;
+  /* Orange/Red */
+}
+
+.kds-card.in_progress .kds-card-header {
+  background-color: #ffeaa7;
+  color: #d35400;
+}
+
+.kds-card.in_progress .kds-status-badge {
+  background-color: #e17055;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Header Section */
+.kds-card-header {
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+.kds-table-badge {
+  font-size: 1.6rem;
+  font-weight: 900;
+}
+
+.kds-order-id {
+  font-size: 1rem;
+  opacity: 0.8;
+  font-family: monospace;
+}
+
+/* Body Section */
+.kds-card-body {
+  padding: 1rem;
+  flex: 1;
+  /* Grow to fill height */
+}
+
+.kds-status-badge {
+  display: inline-block;
+  color: white;
+  padding: 4px 10px;
   border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  letter-spacing: 0.5px;
+}
+
+.kds-items-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.kds-items-list li {
+  font-size: 1.15rem;
+  margin-bottom: 0.6rem;
+  color: #2d3436;
+  line-height: 1.4;
+  border-bottom: 1px solid #f1f2f6;
+  padding-bottom: 6px;
+}
+
+.kds-items-list li:last-child {
+  border-bottom: none;
+}
+
+.qty {
+  font-weight: 900;
+  display: inline-block;
+  min-width: 30px;
+  color: #2d3436;
+}
+
+/* Footer Section */
+.kds-card-footer {
+  padding: 1rem;
+  background: #f8f9fa;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.kds-btn {
+  width: 100%;
+  padding: 14px;
   border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
   cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+
+.start-btn {
+  background-color: #0984e3;
   color: white;
 }
 
-.kitchen-btn.start {
-  background-color: #0275d8;
+.start-btn:hover {
+  background-color: #0c76c7;
+  box-shadow: 0 4px 10px rgba(9, 132, 227, 0.3);
 }
 
-.kitchen-btn.start:hover {
-  background-color: #025aa5;
+.ready-btn {
+  background-color: #00b894;
+  color: white;
 }
 
-.kitchen-btn.ready {
-  background-color: #5cb85c;
-}
-
-.kitchen-btn.ready:hover {
-  background-color: #449d44;
-}
-
-/* Empty state */
-.kitchen-empty {
-  color: #666;
-  font-style: italic;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  .order-card {
-    padding: 12px;
-  }
-
-  .kitchen-btn {
-    width: 100%;
-  }
+.ready-btn:hover {
+  background-color: #00a383;
+  box-shadow: 0 4px 10px rgba(0, 184, 148, 0.3);
 }
