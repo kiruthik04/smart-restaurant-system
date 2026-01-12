@@ -28,6 +28,7 @@ D:\Project\smart-restaurant-system-1\backend\smart-restaurant-backend\src\main\j
 D:\Project\smart-restaurant-system-1\backend\smart-restaurant-backend\src\main\java\com\restaurant\backend\reservation\controller\DiningTableController.java
 D:\Project\smart-restaurant-system-1\backend\smart-restaurant-backend\src\main\java\com\restaurant\backend\reservation\repository\EventBookingRepository.java
 D:\Project\smart-restaurant-system-1\backend\smart-restaurant-backend\src\main\java\com\restaurant\backend\order\service\OrderService.java
+D:\Project\smart-restaurant-system-1\backend\smart-restaurant-backend\src\main\java\com\restaurant\backend\config\DataInitializer.java
 D:\Project\smart-restaurant-system-1\backend\smart-restaurant-backend\src\main\java\com\restaurant\backend\order\service\BillService.java
 D:\Project\smart-restaurant-system-1\backend\smart-restaurant-backend\src\main\java\com\restaurant\backend\reservation\dto\DiningTableRequest.java
 D:\Project\smart-restaurant-system-1\backend\smart-restaurant-backend\src\main\java\com\restaurant\backend\reservation\service\AdminEventService.java
