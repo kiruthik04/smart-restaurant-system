@@ -130,10 +130,13 @@ function AdminMenuPage() {
                                 </span>
                             </td>
                             <td data-label="Actions" className="actions">
-                                <button onClick={() => handleEdit(item)} style={{ marginRight: '8px' }}>
+                                <button className="edit-btn" onClick={() => handleEdit(item)}>
                                     Edit
                                 </button>
-                                <button onClick={() => handleToggle(item.id)}>
+                                <button
+                                    className={item.available ? "toggle-btn disable" : "toggle-btn enable"}
+                                    onClick={() => handleToggle(item.id)}
+                                >
                                     {item.available ? "Disable" : "Enable"}
                                 </button>
                                 <button className="danger" onClick={() => handleDelete(item.id)}>

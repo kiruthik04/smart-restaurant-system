@@ -5,8 +5,8 @@
 }
 
 .kitchen-header {
-    background: #111827;
-    color: white;
+    background: var(--nav-bg);
+    color: var(--nav-text);
     padding: 16px 24px;
     display: flex;
     /* Use flexbox */
@@ -22,27 +22,30 @@
     margin: 0;
 }
 
-.kitchen-logout-btn {
-    background-color: #ef4444;
-    /* Red color */
-    color: white;
-    border: none;
+.kitchen-profile-btn {
+    background-color: transparent;
+    color: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 8px 16px;
-    border-radius: 6px;
+    border-radius: 20px;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.kitchen-logout-btn:hover {
-    background-color: #dc2626;
+.kitchen-profile-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.4);
 }
 
 .kitchen-content {
     flex: 1;
     padding: 24px;
-    background: #f9fafb;
+    background: var(--bg-primary);
 }
 
 /* Mobile */

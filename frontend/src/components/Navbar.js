@@ -2,20 +2,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart, FaUserCircle } from "react-icons/fa";
+import ProfileModal from "./ProfileModal";
 import "./Navbar.css";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
-  const { user, logout } = useAuth();
+  const [profileOpen, setProfileOpen] = useState(false);
+  const { user } = useAuth();
   const { totalItems } = useCart();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    logout();
-    setOpen(false);
-    navigate("/");
-  };
 
   return (
     <nav className="navbar">
@@ -23,6 +18,8 @@ function Navbar() {
         <Link to="/" className="navbar-brand">
           Smart Restaurant
         </Link>
+
+
 
         <div className={`navbar-links ${open ? "open" : ""}`}>
           <Link to="/" onClick={() => setOpen(false)}>
@@ -54,9 +51,19 @@ function Navbar() {
           </Link>
 
           {user ? (
-            <button onClick={handleLogout} className="nav-btn">
-              Logout ({user.username})
-            </button>
+            <div style={{ position: 'relative' }}>
+              <button
+                onClick={() => {
+                  setProfileOpen(!profileOpen);
+                  setOpen(false);
+                }}
+                className="nav-btn profile-trigger-btn"
+              >
+                <FaUserCircle size={20} style={{ marginRight: '8px' }} />
+                My Profile
+              </button>
+              <ProfileModal isOpen={profileOpen} onClose={() => setProfileOpen(false)} />
+            </div>
           ) : (
             <Link to="/login" onClick={() => setOpen(false)}>
               Login

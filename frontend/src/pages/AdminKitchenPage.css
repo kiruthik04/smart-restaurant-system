@@ -1,34 +1,20 @@
 /* AdminKitchenPage.css - Premium Kitchen Dashboard */
-
-:root {
-    --primary: #2563eb;
-    --bg-main: #f8fafc;
-    --card-bg: #ffffff;
-    --text-bold: #0f172a;
-    --text-soft: #64748b;
-    --border: #e2e8f0;
-    --waiting: #f59e0b;
-    /* Amber for Waiting */
-    --cooking: #10b981;
-    /* Emerald for Progress */
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-    --radius: 16px;
-}
+/* Uses global vars from index.css */
 
 .admin-kitchen-page {
     padding: 40px 24px;
-    background-color: var(--bg-main);
+    background-color: var(--bg-primary);
     min-height: 100vh;
-    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    font-family: var(--font-body);
     max-width: 1400px;
     margin: 0 auto;
+    color: var(--text-primary);
 }
 
 .admin-kitchen-page h2 {
     font-size: 1.875rem;
     font-weight: 800;
-    color: var(--text-bold);
+    color: var(--text-primary);
     margin-bottom: 32px;
     letter-spacing: -0.025em;
     display: flex;
@@ -45,9 +31,10 @@
 }
 
 /* Message Banner */
+/* Message Banner */
 .kitchen-message-banner {
     padding: 16px 20px;
-    background: var(--primary);
+    background: var(--primary-color);
     color: white;
     border-radius: 12px;
     margin-bottom: 24px;
@@ -80,9 +67,9 @@
 
 /* Order Card */
 .order-card {
-    background: var(--card-bg);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
+    background: var(--bg-paper);
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
     box-shadow: var(--shadow-sm);
     display: flex;
     flex-direction: column;
@@ -98,17 +85,17 @@
 
 /* Card Accent Bars */
 .order-card.created {
-    border-top: 6px solid var(--waiting);
+    border-top: 6px solid #f59e0b;
 }
 
 .order-card.in_progress {
-    border-top: 6px solid var(--cooking);
+    border-top: 6px solid #10b981;
 }
 
 /* Card Header */
 .card-header {
     padding: 20px;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -118,12 +105,12 @@
     margin: 0;
     font-size: 1.15rem;
     font-weight: 700;
-    color: var(--text-bold);
+    color: var(--text-primary);
 }
 
 .table-badge {
-    background: #f1f5f9;
-    color: var(--primary);
+    background: var(--bg-secondary);
+    color: var(--primary-color);
     padding: 6px 14px;
     border-radius: 30px;
     font-size: 0.8rem;
@@ -141,10 +128,10 @@
 
 .kitchen-item {
     padding: 10px 0;
-    color: var(--text-bold);
+    color: var(--text-primary);
     font-size: 1rem;
     font-weight: 500;
-    border-bottom: 1px solid #f8fafc;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -152,7 +139,7 @@
 
 .kitchen-item::before {
     content: '•';
-    color: var(--primary);
+    color: var(--primary-color);
     font-weight: bold;
 }
 

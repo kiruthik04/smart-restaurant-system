@@ -1,35 +1,20 @@
 /* AdminMenuPage.css - Premium Management UI */
-
-:root {
-    --primary: #2563eb;
-    --primary-hover: #1d4ed8;
-    --success: #10b981;
-    --success-bg: #ecfdf5;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-    --danger-bg: #fef2f2;
-    --bg-main: #f8fafc;
-    --card-bg: #ffffff;
-    --text-bold: #0f172a;
-    --text-soft: #64748b;
-    --border: #e2e8f0;
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
-    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --radius: 12px;
-}
+/* Uses global vars from index.css */
 
 .admin-menu-page {
     padding: 40px 24px;
     max-width: 1400px;
     margin: auto;
-    background-color: var(--bg-main);
+    background-color: var(--bg-primary);
     min-height: 100vh;
+    color: var(--text-primary);
+    font-family: var(--font-body);
 }
 
 .admin-menu-page h2 {
     font-size: clamp(24px, 4vw, 32px);
     font-weight: 800;
-    color: var(--text-bold);
+    color: var(--text-primary);
     margin-bottom: 32px;
     letter-spacing: -0.03em;
     display: flex;
@@ -49,13 +34,14 @@
     color: white;
     border: none;
     border-radius: 6px;
+    cursor: pointer;
 }
 
 .admin-menu-page h2::before {
     content: '';
     width: 6px;
     height: 32px;
-    background: var(--primary);
+    background: var(--primary-color);
     border-radius: 4px;
 }
 
@@ -64,32 +50,32 @@
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    background: var(--card-bg);
-    border-radius: var(--radius);
+    background: var(--bg-paper);
+    border-radius: 12px;
     overflow: hidden;
     /* Ensures corners are rounded */
     box-shadow: var(--shadow-md);
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-color);
 }
 
 .menu-table th {
-    background-color: #f1f5f9;
+    background-color: var(--bg-secondary);
     padding: 18px 24px;
     text-align: left;
     font-size: 13px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-weight: 700;
-    color: var(--text-soft);
-    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .menu-table td {
     padding: 20px 24px;
     font-size: 15px;
-    color: var(--text-bold);
+    color: var(--text-primary);
     font-weight: 500;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-color);
     transition: background 0.2s ease;
 }
 
@@ -98,7 +84,7 @@
 }
 
 .menu-table tr:hover td {
-    background-color: #f8fafc;
+    background-color: var(--bg-secondary);
 }
 
 /* STATUS BADGES */
@@ -113,58 +99,90 @@
 }
 
 .status-active {
-    background-color: var(--success-bg);
-    color: var(--success);
+    background-color: rgba(16, 185, 129, 0.2);
+    color: #10b981;
     border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .status-inactive {
-    background-color: var(--danger-bg);
-    color: var(--danger);
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
     border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 /* BUTTON ACTIONS */
 .actions {
     display: flex;
-    gap: 12px;
+    gap: 8px;
+    justify-content: flex-end;
 }
 
 .actions button {
-    padding: 8px 16px;
+    padding: 8px 14px;
     border-radius: 8px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid var(--border);
-    background: white;
-    color: var(--text-bold);
+    border: 1px solid transparent;
 }
 
-.actions button:hover {
-    background: var(--bg-main);
-    border-color: var(--text-soft);
+/* Edit Button - Secondary/Neutral */
+.edit-btn {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.edit-btn:hover {
+    background: var(--bg-secondary);
+    border-color: var(--text-secondary);
     transform: translateY(-1px);
 }
 
+/* Toggle Button - Enable (Success) */
+.toggle-btn.enable {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.toggle-btn.enable:hover {
+    background: #10b981;
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Toggle Button - Disable (Warning) */
+.toggle-btn.disable {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.toggle-btn.disable:hover {
+    background: #f59e0b;
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Delete Button - Danger */
 .actions button.danger {
-    color: var(--danger);
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
 .actions button.danger:hover {
-    background: var(--danger);
+    background: #ef4444;
     color: white;
-    border-color: var(--danger);
     box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+    transform: translateY(-1px);
 }
 
-/* TOGGLE BUTTON SPECIAL STYLE */
-.actions button:not(.danger):hover {
-    border-color: var(--primary);
-    color: var(--primary);
-    background: rgba(37, 99, 235, 0.05);
-}
+
 
 /* RESPONSIVE DESIGN - Mobile Friendly Table */
 @media (max-width: 992px) {
@@ -216,10 +234,10 @@
 
     .menu-table tr {
         margin-bottom: 24px;
-        background: white;
-        border: 1px solid var(--border);
+        background: var(--bg-paper);
+        border: 1px solid var(--border-color);
         border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--shadow-sm);
         /* Card shadow */
         overflow: hidden;
     }
@@ -228,10 +246,11 @@
         text-align: right;
         padding: 14px 20px;
         position: relative;
-        border-bottom: 1px solid var(--border);
+        border-bottom: 1px solid var(--border-color);
         display: flex;
         justify-content: space-between;
         align-items: center;
+        color: var(--text-primary);
     }
 
     .menu-table td:last-child {
@@ -240,13 +259,13 @@
         /* Actions at right */
         padding-top: 20px;
         padding-bottom: 20px;
-        background: #f8fafc;
+        background: var(--bg-secondary);
     }
 
     .menu-table td::before {
         content: attr(data-label);
         font-weight: 700;
-        color: var(--text-soft);
+        color: var(--text-secondary);
         text-transform: uppercase;
         font-size: 11px;
         letter-spacing: 0.05em;
@@ -276,16 +295,17 @@
 }
 
 .menu-modal {
-    background: white;
+    background: var(--bg-paper);
     padding: 32px;
     border-radius: 16px;
     width: 100%;
     max-width: 500px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--shadow-md);
     animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     position: relative;
     max-height: 90vh;
     overflow-y: auto;
+    border: 1px solid var(--border-color);
 }
 
 @keyframes fadeIn {
@@ -315,12 +335,12 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: 16px;
     position: sticky;
     top: -32px;
     /* Offset padding */
-    background: white;
+    background: var(--bg-paper);
     z-index: 10;
 }
 
@@ -328,14 +348,14 @@
     margin: 0;
     font-size: 20px;
     font-weight: 700;
-    color: var(--text-bold);
+    color: var(--text-primary);
 }
 
 .close-btn {
     background: none;
     border: none;
     font-size: 28px;
-    color: var(--text-soft);
+    color: var(--text-secondary);
     cursor: pointer;
     line-height: 1;
     padding: 0;
@@ -343,7 +363,7 @@
 }
 
 .close-btn:hover {
-    color: var(--danger);
+    color: var(--primary-color);
 }
 
 .form-group {
@@ -355,22 +375,24 @@
     margin-bottom: 8px;
     font-size: 14px;
     font-weight: 600;
-    color: var(--text-bold);
+    color: var(--text-primary);
 }
 
 .form-group .form-control {
     width: 100%;
     padding: 10px 14px;
     border-radius: 8px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--border-color);
     font-size: 15px;
     transition: all 0.2s;
     outline: none;
     font-family: inherit;
+    background: var(--bg-primary);
+    color: var(--text-primary);
 }
 
 .form-group .form-control:focus {
-    border-color: var(--primary);
+    border-color: var(--primary-color);
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
@@ -385,10 +407,10 @@
     gap: 12px;
     margin-top: 32px;
     padding-top: 20px;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--border-color);
     position: sticky;
     bottom: -32px;
-    background: white;
+    background: var(--bg-paper);
     z-index: 10;
 }
 
@@ -404,7 +426,7 @@
 }
 
 .btn-primary {
-    background: var(--primary);
+    background: var(--primary-color);
     color: white;
 }
 
@@ -415,13 +437,12 @@
 }
 
 .btn-secondary {
-    background: white;
-    border: 1px solid var(--border);
-    color: var(--text-soft);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
 }
 
 .btn-secondary:hover {
-    background: #f8fafc;
-    color: var(--text-bold);
-    border-color: var(--text-soft);
+    background: var(--border-color);
+    color: var(--text-primary);
 }

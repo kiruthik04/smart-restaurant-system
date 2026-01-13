@@ -1,5 +1,8 @@
 import { useAuth } from "../context/AuthContext";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ProfileModal from "./ProfileModal";
+import { FaUserCircle } from "react-icons/fa";
 import "./KitchenLayout.css";
 
 function KitchenLayout({ children }) {
@@ -11,14 +14,23 @@ function KitchenLayout({ children }) {
     navigate("/");
   };
 
+  const [profileOpen, setProfileOpen] = useState(false);
+
   return (
     <div className="kitchen-layout">
       <header className="kitchen-header">
         <h1>Kitchen Dashboard</h1>
 
-        <button className="kitchen-logout-btn" onClick={handleLogout}>
-          Logout
-        </button>
+        <div style={{ position: 'relative' }}>
+          <button
+            className="kitchen-profile-btn"
+            onClick={() => setProfileOpen(!profileOpen)}
+          >
+            <FaUserCircle size={24} />
+            <span>Kitchen Staff</span>
+          </button>
+          <ProfileModal isOpen={profileOpen} onClose={() => setProfileOpen(false)} />
+        </div>
       </header>
 
       <main className="kitchen-content">

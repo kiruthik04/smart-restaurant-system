@@ -7,7 +7,7 @@
 }
 
 .navbar {
-  background: var(--dark-navy);
+  background: var(--nav-bg);
   /* Use padding for the side gaps instead of max-width margins */
   padding: 0.8rem 5%;
   position: sticky;

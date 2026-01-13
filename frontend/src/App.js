@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import TablePage from "./pages/TablePage";
 import EventPage from "./pages/EventPage";
@@ -19,6 +19,7 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
+import { ThemeProvider } from "./context/ThemeContext";
 import CartPage from "./pages/CartPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./styles/global.css";
@@ -31,76 +32,81 @@ function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <CartProvider>
-          <div className="page-wrapper">
-            <Routes>
-              {/* PUBLIC */}
-              <Route path="/login" element={<PublicLayout><LoginPage /></PublicLayout>} />
-              <Route path="/signup" element={<PublicLayout><SignupPage /></PublicLayout>} />
-              <Route path="/forgot-password" element={<PublicLayout><ForgotPasswordPage /></PublicLayout>} />
-              <Route path="/reset-password" element={<PublicLayout><ResetPasswordPage /></PublicLayout>} />
-              <Route path="/" element={<PublicLayout><HomePage /></PublicLayout>} />
-              <Route path="/tables" element={<PublicLayout><TablePage /></PublicLayout>} />
-              <Route path="/events" element={<PublicLayout><EventPage /></PublicLayout>} />
-              <Route path="/order" element={<PublicLayout><OrderPage /></PublicLayout>} />
-              <Route path="/cart" element={<PublicLayout><CartPage /></PublicLayout>} />
+        <ThemeProvider>
+          <CartProvider>
+            <div className="page-wrapper">
+              <Routes>
+                {/* PUBLIC */}
+                <Route path="/login" element={<PublicLayout><LoginPage /></PublicLayout>} />
+                <Route path="/signup" element={<PublicLayout><SignupPage /></PublicLayout>} />
+                <Route path="/forgot-password" element={<PublicLayout><ForgotPasswordPage /></PublicLayout>} />
+                <Route path="/reset-password" element={<PublicLayout><ResetPasswordPage /></PublicLayout>} />
+                <Route path="/" element={<PublicLayout><HomePage /></PublicLayout>} />
+                <Route path="/tables" element={<PublicLayout><TablePage /></PublicLayout>} />
+                <Route path="/events" element={<PublicLayout><EventPage /></PublicLayout>} />
+                <Route path="/order" element={<PublicLayout><OrderPage /></PublicLayout>} />
+                <Route path="/cart" element={<PublicLayout><CartPage /></PublicLayout>} />
 
-              {/* ADMIN (Protected) */}
-              <Route path="/admin" element={
-                <ProtectedRoute roles={['ADMIN']}>
-                  <AdminLayout><AdminDashboardPage /></AdminLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/tables" element={
-                <ProtectedRoute roles={['ADMIN']}>
-                  <AdminLayout><AdminTablePage /></AdminLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/orders" element={
-                <ProtectedRoute roles={['ADMIN']}>
-                  <AdminLayout><AdminOrderPage /></AdminLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/kitchen" element={
-                <ProtectedRoute roles={['ADMIN']}>
-                  <AdminLayout><AdminKitchenPage /></AdminLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/events" element={
-                <ProtectedRoute roles={['ADMIN']}>
-                  <AdminLayout><AdminEventPage /></AdminLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/halls" element={
-                <ProtectedRoute roles={['ADMIN']}>
-                  <AdminLayout><AdminHallPage /></AdminLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/menu" element={
-                <ProtectedRoute roles={['ADMIN']}>
-                  <AdminLayout><AdminMenuPage /></AdminLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/menu/add" element={
-                <ProtectedRoute roles={['ADMIN']}>
-                  <AdminLayout><AddMenuPage /></AdminLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/admin/staff" element={
-                <ProtectedRoute roles={['ADMIN']}>
-                  <AdminLayout><AdminStaffPage /></AdminLayout>
-                </ProtectedRoute>
-              } />
+                {/* ADMIN (Protected) */}
+                <Route path="/admin" element={
+                  <ProtectedRoute roles={['ADMIN']}>
+                    <AdminLayout><AdminDashboardPage /></AdminLayout>
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/tables" element={
+                  <ProtectedRoute roles={['ADMIN']}>
+                    <AdminLayout><AdminTablePage /></AdminLayout>
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/orders" element={
+                  <ProtectedRoute roles={['ADMIN']}>
+                    <AdminLayout><AdminOrderPage /></AdminLayout>
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/kitchen" element={
+                  <ProtectedRoute roles={['ADMIN']}>
+                    <AdminLayout><AdminKitchenPage /></AdminLayout>
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/events" element={
+                  <ProtectedRoute roles={['ADMIN']}>
+                    <AdminLayout><AdminEventPage /></AdminLayout>
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/halls" element={
+                  <ProtectedRoute roles={['ADMIN']}>
+                    <AdminLayout><AdminHallPage /></AdminLayout>
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/menu" element={
+                  <ProtectedRoute roles={['ADMIN']}>
+                    <AdminLayout><AdminMenuPage /></AdminLayout>
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/menu/add" element={
+                  <ProtectedRoute roles={['ADMIN']}>
+                    <AdminLayout><AddMenuPage /></AdminLayout>
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin/staff" element={
+                  <ProtectedRoute roles={['ADMIN']}>
+                    <AdminLayout><AdminStaffPage /></AdminLayout>
+                  </ProtectedRoute>
+                } />
 
-              {/* KITCHEN (Protected) */}
-              <Route path="/kitchen" element={
-                <ProtectedRoute roles={['KITCHEN', 'ADMIN']}>
-                  <KitchenLayout><KitchenPage /></KitchenLayout>
-                </ProtectedRoute>
-              } />
-            </Routes>
-          </div>
-        </CartProvider>
+                {/* KITCHEN (Protected) */}
+                <Route path="/kitchen" element={
+                  <ProtectedRoute roles={['KITCHEN', 'ADMIN']}>
+                    <KitchenLayout><KitchenPage /></KitchenLayout>
+                  </ProtectedRoute>
+                } />
+
+                {/* FALLBACK */}
+                <Route path="*" element={<Navigate to="/" />} />
+              </Routes>
+            </div>
+          </CartProvider>
+        </ThemeProvider>
       </AuthProvider>
     </BrowserRouter>
   );

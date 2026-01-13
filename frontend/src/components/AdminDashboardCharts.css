@@ -8,11 +8,13 @@
 }
 
 /* Individual chart card */
+/* Individual chart card */
 .chart-card {
-  background: #ffffff;
+  background: var(--bg-paper);
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   /* Added to ensure cards handle internal sizing correctly */
   width: 100%;
@@ -22,7 +24,7 @@
 /* Hover effect */
 .chart-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-md);
 }
 
 /* Chart titles */
@@ -30,7 +32,7 @@
   text-align: center;
   font-size: 1.2rem;
   font-weight: 600;
-  color: #1f2937;
+  color: var(--text-primary);
   margin-bottom: 16px;
 }
 

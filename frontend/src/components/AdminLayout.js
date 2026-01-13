@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
 import AdminSidebar from "./AdminSidebar";
+import ProfileModal from "./ProfileModal";
+import { FaUserCircle } from "react-icons/fa";
 import "./AdminLayout.css";
 
 function AdminLayout({ children }) {
   const [collapsed, setCollapsed] = useState(window.innerWidth < 768);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -49,6 +52,20 @@ function AdminLayout({ children }) {
       )}
 
       <main className={`admin-content ${collapsed ? "collapsed" : ""}`}>
+        {/* Desktop Header for Profile */}
+        <header className="admin-desktop-header">
+          <div style={{ position: 'relative' }}>
+            <button
+              className="profile-trigger-btn"
+              onClick={() => setProfileOpen(!profileOpen)}
+            >
+              <FaUserCircle size={20} />
+              <span>Admin Profile</span>
+            </button>
+            <ProfileModal isOpen={profileOpen} onClose={() => setProfileOpen(false)} />
+          </div>
+        </header>
+
         <div className="admin-container">
           {children}
         </div>

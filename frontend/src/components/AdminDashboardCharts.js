@@ -85,6 +85,45 @@ function AdminDashboardCharts({ tables, orders, analytics }) {
   };
 
 
+  // Determine if dark mode is active
+  const isDark = document.documentElement.classList.contains("dark");
+  const textColor = isDark ? "#cbd5e1" : "#64748b"; // Slate 300 vs Slate 500
+  const gridColor = isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.05)";
+
+  // Common Options
+  const commonOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        labels: { color: textColor }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { color: textColor },
+        grid: { color: gridColor }
+      },
+      y: {
+        ticks: { color: textColor },
+        grid: { color: gridColor }
+      }
+    }
+  };
+
+  // Specific Options
+  const pieOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { color: textColor }
+      }
+    }
+  };
+
+
   const peakHours = analytics?.peakHours || [];
 
   const peakHoursData = {
@@ -136,33 +175,33 @@ function AdminDashboardCharts({ tables, orders, analytics }) {
     <div className="dashboard-charts">
       <div className="chart-card">
         <h3>Order Status</h3>
-        <Pie data={ordersPieData} />
+        <Pie data={ordersPieData} options={pieOptions} />
       </div>
 
       <div className="chart-card">
         <h3>Table Usage</h3>
-        <Bar data={tableBarData} />
+        <Bar data={tableBarData} options={commonOptions} />
       </div>
 
       <div className="chart-card">
         <h3>Most Ordered Items</h3>
-        <Bar data={mostOrderedData} />
+        <Bar data={mostOrderedData} options={commonOptions} />
       </div>
 
       <div className="chart-card">
         <h3>Peak Hours</h3>
-        <Line data={peakHoursData} />
+        <Line data={peakHoursData} options={commonOptions} />
       </div>
 
       <div className="chart-card full-width">
         <h3>Revenue Trend</h3>
 
         {revenueTimeline.length === 0 ? (
-          <p style={{ textAlign: "center", color: "#888" }}>
+          <p style={{ textAlign: "center", color: textColor }}>
             No revenue data for selected range
           </p>
         ) : (
-          <Line data={revenueLineData} />
+          <Line data={revenueLineData} options={commonOptions} />
         )}
       </div>
     </div>
