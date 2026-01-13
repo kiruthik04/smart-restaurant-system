@@ -62,12 +62,18 @@ function AdminMenuPage() {
         e.preventDefault();
         if (!editingItem) return;
 
+        const data = new FormData();
+        data.append("name", formData.name);
+        data.append("category", formData.category);
+        data.append("price", formData.price);
+        data.append("description", formData.description);
+        data.append("available", editingItem.available);
+        if (formData.image) {
+            data.append("image", formData.image);
+        }
+
         try {
-            await updateMenuItem(editingItem.id, {
-                ...editingItem,
-                ...formData,
-                price: parseFloat(formData.price)
-            });
+            await updateMenuItem(editingItem.id, data);
             setShowModal(false);
             setEditingItem(null);
             loadMenu(); // Refresh list
@@ -95,6 +101,7 @@ function AdminMenuPage() {
             <table className="menu-table">
                 <thead>
                     <tr>
+                        <th>Image</th>
                         <th>Name</th>
                         <th>Category</th>
                         <th>Price (₹)</th>
@@ -106,6 +113,14 @@ function AdminMenuPage() {
                 <tbody>
                     {menu.map((item) => (
                         <tr key={item.id}>
+                            <td>
+                                <img
+                                    src={`/api/menu/${item.id}/image`}
+                                    alt={item.name}
+                                    style={{ width: "50px", height: "50px", objectFit: "cover", borderRadius: "5px" }}
+                                    onError={(e) => e.target.style.display = 'none'}
+                                />
+                            </td>
                             <td data-label="Name" style={{ fontWeight: 'bold' }}>{item.name}</td>
                             <td data-label="Category">{item.category}</td>
                             <td data-label="Price">₹{item.price}</td>
@@ -176,6 +191,14 @@ function AdminMenuPage() {
                                     rows="3"
                                     value={formData.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Change Image</label>
+                                <input
+                                    type="file"
+                                    className="form-control"
+                                    onChange={(e) => setFormData({ ...formData, image: e.target.files[0] })}
                                 />
                             </div>
                             <div className="modal-actions">

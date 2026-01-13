@@ -39,4 +39,15 @@ public class MenuController {
     public MenuItemResponse getMenuById(@PathVariable Long id) {
         return menuService.getMenuItemById(id);
     }
+
+    @GetMapping("/{id}/image")
+    public org.springframework.http.ResponseEntity<byte[]> getMenuImage(@PathVariable Long id) {
+        byte[] image = menuService.getMenuItemImage(id);
+        if (image != null && image.length > 0) {
+            return org.springframework.http.ResponseEntity.ok()
+                    .contentType(org.springframework.http.MediaType.IMAGE_JPEG)
+                    .body(image);
+        }
+        return org.springframework.http.ResponseEntity.notFound().build();
+    }
 }

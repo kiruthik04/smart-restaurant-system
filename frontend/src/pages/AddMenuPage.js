@@ -13,6 +13,7 @@ function AddMenuPage() {
         price: "",
         available: true,
     });
+    const [image, setImage] = useState(null);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -20,6 +21,12 @@ function AddMenuPage() {
             ...item,
             [name]: type === "checkbox" ? checked : value,
         });
+    };
+
+    const handleFileChange = (e) => {
+        if (e.target.files && e.target.files[0]) {
+            setImage(e.target.files[0]);
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -30,12 +37,23 @@ function AddMenuPage() {
             return;
         }
 
-        await addMenuItem({
-            ...item,
-            price: Number(item.price),
-        });
+        const formData = new FormData();
+        formData.append("name", item.name);
+        formData.append("category", item.category);
+        formData.append("description", item.description);
+        formData.append("price", item.price);
+        formData.append("available", item.available);
+        if (image) {
+            formData.append("image", image);
+        }
 
-        navigate("/admin/menu"); // 🔄 back to menu list
+        try {
+            await addMenuItem(formData);
+            navigate("/admin/menu");
+        } catch (error) {
+            console.error("Failed to add menu item", error);
+            alert("Failed to add menu item");
+        }
     };
 
     return (
@@ -48,12 +66,14 @@ function AddMenuPage() {
                     placeholder="Name"
                     value={item.name}
                     onChange={handleChange}
+                    required
                 />
 
                 <select
                     name="category"
                     value={item.category}
                     onChange={handleChange}
+                    required
                 >
                     <option value="">Select Category</option>
                     <option value="Starter">Starter</option>
@@ -75,7 +95,13 @@ function AddMenuPage() {
                     placeholder="Price"
                     value={item.price}
                     onChange={handleChange}
+                    required
                 />
+
+                <div className="form-group">
+                    <label>Image</label>
+                    <input type="file" onChange={handleFileChange} />
+                </div>
 
                 <label className="checkbox">
                     <input

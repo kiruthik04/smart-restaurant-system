@@ -102,6 +102,9 @@ public class MenuServiceImpl implements MenuService {
         existing.setDescription(item.getDescription());
         existing.setPrice(item.getPrice());
         existing.setAvailable(item.isAvailable());
+        if (item.getImage() != null && item.getImage().length > 0) {
+            existing.setImage(item.getImage());
+        }
 
         return menuItemRepository.save(existing);
     }
@@ -120,4 +123,10 @@ public class MenuServiceImpl implements MenuService {
         menuItemRepository.save(item);
     }
 
+    @Override
+    public byte[] getMenuItemImage(Long id) {
+        MenuItem item = menuItemRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Menu item not found"));
+        return item.getImage();
+    }
 }

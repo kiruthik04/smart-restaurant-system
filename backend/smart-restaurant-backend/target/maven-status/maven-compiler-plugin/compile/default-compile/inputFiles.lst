@@ -64,6 +64,7 @@ D:\Project\smart-restaurant-system-1\backend\smart-restaurant-backend\src\main\j
 D:\Project\smart-restaurant-system-1\backend\smart-restaurant-backend\src\main\java\com\restaurant\backend\reservation\dto\MenuItemDto.java
 D:\Project\smart-restaurant-system-1\backend\smart-restaurant-backend\src\main\java\com\restaurant\backend\reservation\exception\InvalidReservationException.java
 D:\Project\smart-restaurant-system-1\backend\smart-restaurant-backend\src\main\java\com\restaurant\backend\kitchen\repository\KitchenOrderRepository.java
+D:\Project\smart-restaurant-system-1\backend\smart-restaurant-backend\src\main\java\com\restaurant\backend\service\EmailService.java
 D:\Project\smart-restaurant-system-1\backend\smart-restaurant-backend\src\main\java\com\restaurant\backend\exception\GlobalExceptionHandler.java
 D:\Project\smart-restaurant-system-1\backend\smart-restaurant-backend\src\main\java\com\restaurant\backend\order\dto\OrderItemRequest.java
 D:\Project\smart-restaurant-system-1\backend\smart-restaurant-backend\src\main\java\com\restaurant\backend\reservation\dto\SmartReservationRequest.java

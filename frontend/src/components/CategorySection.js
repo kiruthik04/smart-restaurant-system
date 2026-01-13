@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './CategorySection.css';
-import { getFoodImage } from '../utils/foodImageUtil';
+import './CategorySection.css';
 
 const CategorySection = ({ menu, addToCart }) => {
 
@@ -36,7 +36,11 @@ const CategorySection = ({ menu, addToCart }) => {
                             <div key={item.id} className="menu-item-card">
                                 <div className="item-image-box">
                                     <img
-                                        src={item.imageUrl || getFoodImage(item.name, item.category)}
+                                        src={`/api/menu/${item.id}/image`}
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = "https://placehold.co/400x300?text=No+Image"; // Fallback
+                                        }}
                                         alt={item.name}
                                         className="item-image"
                                     />

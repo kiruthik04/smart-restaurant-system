@@ -8,6 +8,7 @@ const SignupPage = () => {
         username: '',
         password: '',
         name: '',
+        email: '',
         role: 'CUSTOMER' // Force role to CUSTOMER
     });
     const [error, setError] = useState('');
@@ -59,6 +60,18 @@ const SignupPage = () => {
                             onChange={handleChange}
                             className="form-input"
                             placeholder="Choose a username"
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label className="form-label">Email</label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="form-input"
+                            placeholder="your@email.com"
                             required
                         />
                     </div>

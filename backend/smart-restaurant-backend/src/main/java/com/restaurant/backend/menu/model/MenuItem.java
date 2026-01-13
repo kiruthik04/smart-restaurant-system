@@ -20,6 +20,10 @@ public class MenuItem {
     private double price;
     private boolean available;
 
+    @jakarta.persistence.Lob
+    @jakarta.persistence.Column(columnDefinition = "LONGBLOB")
+    private byte[] image;
+
     public MenuItem() {
 
     }
@@ -78,6 +82,14 @@ public class MenuItem {
 
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
 }

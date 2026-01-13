@@ -60,6 +60,11 @@ const LoginPage = () => {
                             required
                         />
                     </div>
+                    <div className="form-group">
+                        <div className="forgot-password-link-wrapper">
+                            <Link to="/forgot-password" className="forgot-password-link">Forgot Password?</Link>
+                        </div>
+                    </div>
                     <button type="submit" className="login-btn">
                         Sign In
                     </button>

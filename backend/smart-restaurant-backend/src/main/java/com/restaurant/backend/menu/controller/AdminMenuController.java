@@ -22,14 +22,54 @@ public class AdminMenuController {
         return menuService.getAll();
     }
 
-    @PostMapping
-    public MenuItem create(@RequestBody MenuItem item) {
+    @PostMapping(consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+    public MenuItem create(
+            @RequestParam("name") String name,
+            @RequestParam("category") String category,
+            @RequestParam("description") String description,
+            @RequestParam("price") double price,
+            @RequestParam("available") boolean available,
+            @RequestParam(value = "image", required = false) org.springframework.web.multipart.MultipartFile image)
+            throws java.io.IOException {
+        MenuItem item = new MenuItem(name, category, description, price, available);
+        if (image != null && !image.isEmpty()) {
+            item.setImage(image.getBytes());
+        }
         return menuService.create(item);
     }
 
-    @PutMapping("/{id}")
-    public MenuItem update(@PathVariable Long id, @RequestBody MenuItem item) {
-        return menuService.update(id, item);
+    // Changed to POST to avoid PUT Multipart issues on some containers
+    @PostMapping(value = "/{id}", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+    public MenuItem update(
+            @PathVariable Long id,
+            @RequestParam("name") String name,
+            @RequestParam("category") String category,
+            @RequestParam("description") String description,
+            @RequestParam("price") double price,
+            @RequestParam("available") boolean available,
+            @RequestParam(value = "image", required = false) org.springframework.web.multipart.MultipartFile image)
+            throws java.io.IOException {
+        try {
+            MenuItem item = new MenuItem(name, category, description, price, available);
+            if (image != null && !image.isEmpty()) {
+                item.setImage(image.getBytes());
+            }
+            return menuService.update(id, item);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @GetMapping("/{id}/image")
+    public org.springframework.http.ResponseEntity<byte[]> getImage(@PathVariable Long id) {
+        byte[] image = menuService.getMenuItemImage(id);
+        if (image != null && image.length > 0) {
+            return org.springframework.http.ResponseEntity.ok()
+                    .contentType(org.springframework.http.MediaType.IMAGE_JPEG)
+                    .body(image);
+        }
+        return org.springframework.http.ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")

@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { createOrder } from "../api/orderApi";
 import { getOrderSessionId } from "../utils/session";
-import { getFoodImage } from "../utils/foodImageUtil";
 import "./CartPage.css";
 
 function CartPage() {
@@ -88,7 +87,11 @@ function CartPage() {
                     <div key={item.id} className="cart-item-row">
                         <div className="cart-item-image">
                             <img
-                                src={item.imageUrl || getFoodImage(item.name, item.category)}
+                                src={`/api/menu/${item.id}/image`}
+                                onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = "https://placehold.co/400x300?text=No+Image";
+                                }}
                                 alt={item.name}
                             />
                         </div>

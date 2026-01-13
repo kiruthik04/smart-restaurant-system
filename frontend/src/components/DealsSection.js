@@ -1,6 +1,6 @@
 import React from 'react';
 import './DealsSection.css';
-import { getFoodImage } from '../utils/foodImageUtil';
+import './DealsSection.css';
 
 const DealsSection = ({ deals, addToCart }) => {
     if (!deals || deals.length === 0) return null;
@@ -15,7 +15,11 @@ const DealsSection = ({ deals, addToCart }) => {
                     <div key={deal.id} className="deal-card">
                         <div className="deal-image-container">
                             <img
-                                src={deal.imageUrl || getFoodImage(deal.name, deal.category)}
+                                src={`/api/menu/${deal.id}/image`}
+                                onError={(e) => {
+                                    e.target.onerror = null;
+                                    e.target.src = "https://placehold.co/400x300?text=No+Image";
+                                }}
                                 alt={deal.name}
                                 className="deal-image"
                             />

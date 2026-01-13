@@ -27,4 +27,6 @@ public interface MenuService {
     void delete(Long id);
 
     void toggleAvailability(Long id);
+
+    byte[] getMenuItemImage(Long id);
 }

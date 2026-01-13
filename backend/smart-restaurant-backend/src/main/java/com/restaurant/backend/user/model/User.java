@@ -22,4 +22,11 @@ public class User {
     private String role; // ADMIN, CUSTOMER, KITCHEN
 
     private String name;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    private String resetToken;
+
+    private java.time.LocalDateTime resetTokenExpiry;
 }

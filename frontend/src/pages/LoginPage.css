@@ -119,10 +119,25 @@
 }
 
 .login-footer {
-  margin-top: 2rem;
-  text-align: center;
+  margin-top: 1rem;
+  text-decoration: none;
   font-size: 0.95rem;
-  color: #636e72;
+  transition: color 0.3s ease;
+}
+
+.forgot-password-link-wrapper {
+  text-align: right;
+  margin-top: 0.5rem;
+}
+
+.forgot-password-link {
+  color: #667eea;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.forgot-password-link:hover {
+  text-decoration: underline;
 }
 
 .login-link {
