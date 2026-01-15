@@ -9,11 +9,14 @@ const getBaseUrl = () => {
     return "http://localhost:8080";
   }
   // Fallback for production (Render)
-  return "https://smart-restaurant-backend.onrender.com";
+  return "https://smart-restaurant-system-cog3.onrender.com";
 };
 
+const baseURL = getBaseUrl();
+console.log("Using API Base URL:", baseURL);
+
 const api = axios.create({
-  baseURL: getBaseUrl(),
+  baseURL: baseURL,
 });
 
 export default api;
