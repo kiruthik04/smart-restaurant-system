@@ -27,12 +27,23 @@ function AdminLayout({ children }) {
       {/* Mobile Header */}
       <div className="mobile-header">
         <span className="mobile-brand">Smart Restro</span>
-        <button
-          className="mobile-toggle-btn"
-          onClick={() => setMobileOpen(!mobileOpen)}
-        >
-          ☰
-        </button>
+        <div className="mobile-actions">
+          <div style={{ position: 'relative' }}>
+            <button
+              className="mobile-profile-btn"
+              onClick={() => setProfileOpen(!profileOpen)}
+            >
+              <FaUserCircle size={28} />
+            </button>
+            <ProfileModal isOpen={profileOpen} onClose={() => setProfileOpen(false)} />
+          </div>
+          <button
+            className="mobile-toggle-btn"
+            onClick={() => setMobileOpen(!mobileOpen)}
+          >
+            ☰
+          </button>
+        </div>
       </div>
 
       {/* Sidebar - Passed mobileOpen state */}
