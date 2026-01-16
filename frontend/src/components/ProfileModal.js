@@ -71,7 +71,7 @@ function ProfileModal({ isOpen, onClose }) {
     };
 
     return (
-        <div className="profile-modal-content" onClick={e => e.stopPropagation()}>
+        <div className={`profile-modal-content ${user.role === 'CUSTOMER' ? 'customer-view' : ''}`} onClick={e => e.stopPropagation()}>
             <button className="profile-modal-close" onClick={onClose}>&times;</button>
 
             <div className="profile-header">

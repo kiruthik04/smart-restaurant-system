@@ -36,12 +36,14 @@ const CategorySection = ({ menu, addToCart }) => {
             threshold: 0.1
         });
 
-        if (observerTarget.current) {
-            observer.observe(observerTarget.current);
+        const currentTarget = observerTarget.current;
+
+        if (currentTarget) {
+            observer.observe(currentTarget);
         }
 
         return () => {
-            if (observerTarget.current) observer.unobserve(observerTarget.current);
+            if (currentTarget) observer.unobserve(currentTarget);
         };
     }, [handleObserver]);
 

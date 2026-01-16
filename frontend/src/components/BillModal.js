@@ -7,6 +7,9 @@ function BillModal({ bill, onClose, onConvert }) {
     return (
         <div className="bill-modal-overlay">
             <div className="bill-modal">
+                <button className="bill-modal-close" onClick={onClose}>
+                    ×
+                </button>
                 <h2>Bill Summary - Table {bill.tableNumber}</h2>
                 <div className="bill-content">
                     {bill.orders.map((order, index) => (
@@ -31,7 +34,7 @@ function BillModal({ bill, onClose, onConvert }) {
                         <strong>Grand Total: ${bill.grandTotal.toFixed(2)}</strong>
                     </div>
                     <div className="bill-actions">
-                        <button onClick={onClose} className="secondary-btn">Cancel</button>
+                        {/* Cancel button removed */}
                         <button onClick={onConvert} className="primary-btn pay-btn">Pay & Release Table</button>
                     </div>
                 </div>

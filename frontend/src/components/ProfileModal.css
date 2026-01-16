@@ -315,7 +315,65 @@
     color: #9ca3af;
 }
 
-.dark .btn-cancel:hover {
-    background: rgba(255, 255, 255, 0.05);
+/* --- Force Light Theme for Customer Role (Overrides Dark Mode) --- */
+.dark .profile-modal-content.customer-view {
+    background: var(--bg-white);
+    color: var(--text-dark);
+    border-color: rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-dropdown);
+}
+
+.dark .profile-modal-content.customer-view::before {
+    background: var(--bg-white);
+    border-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark .profile-modal-content.customer-view .profile-header {
+    border-bottom-color: #f1f2f6;
+}
+
+.dark .profile-modal-content.customer-view .profile-name {
+    color: var(--text-dark);
+}
+
+.dark .profile-modal-content.customer-view .profile-role {
+    background: #f1f2f6;
+    color: var(--text-light);
+}
+
+.dark .profile-modal-content.customer-view .profile-avatar {
+    background-color: var(--bg-soft-orange);
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.1);
+}
+
+.dark .profile-modal-content.customer-view .btn-change-password {
+    background: white;
+    border: 2px solid var(--primary-orange);
+    color: var(--primary-orange);
+}
+
+.dark .profile-modal-content.customer-view .btn-change-password:hover {
+    background: var(--primary-orange);
     color: white;
+}
+
+.dark .profile-modal-content.customer-view .change-password-form {
+    background: #f9f9f9;
+}
+
+.dark .profile-modal-content.customer-view .form-group input {
+    background: white;
+    border: 1px solid #e0e0e0;
+    color: var(--text-dark);
+}
+
+.dark .profile-modal-content.customer-view .btn-cancel {
+    background: white;
+    border: 1px solid #dcdcdc;
+    color: var(--text-light);
+}
+
+.dark .profile-modal-content.customer-view .btn-cancel:hover {
+    background: white;
+    color: var(--text-light);
 }
