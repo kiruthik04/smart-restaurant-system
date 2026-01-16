@@ -1,16 +1,49 @@
-import React, { useState } from 'react';
-import './CategorySection.css';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './CategorySection.css';
 
 const CategorySection = ({ menu, addToCart }) => {
 
     const [searchQuery, setSearchQuery] = useState("");
+    const [visibleCount, setVisibleCount] = useState(12); // Initial load count
+    const observerTarget = useRef(null);
 
     // Filtering logic: Search Only
-    // If search is empty, show all items (previously activeCategory="All")
-    const displayedItems = searchQuery.trim() !== ""
+    const filteredItems = searchQuery.trim() !== ""
         ? menu.filter(item => item.name.toLowerCase().includes(searchQuery.toLowerCase()))
         : menu;
+
+    // Slice for display
+    const displayedItems = filteredItems.slice(0, visibleCount);
+    const hasMore = visibleCount < filteredItems.length;
+
+    // Reset pagination when search changes
+    useEffect(() => {
+        setVisibleCount(12);
+    }, [searchQuery]);
+
+    // Infinite Scroll Observer
+    const handleObserver = useCallback((entries) => {
+        const [target] = entries;
+        if (target.isIntersecting && hasMore) {
+            setVisibleCount(prev => prev + 12); // Load 12 more
+        }
+    }, [hasMore]);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(handleObserver, {
+            root: null,
+            rootMargin: "100px", // Preload before reaching bottom
+            threshold: 0.1
+        });
+
+        if (observerTarget.current) {
+            observer.observe(observerTarget.current);
+        }
+
+        return () => {
+            if (observerTarget.current) observer.unobserve(observerTarget.current);
+        };
+    }, [handleObserver]);
 
     return (
         <div className="category-section">
@@ -28,7 +61,7 @@ const CategorySection = ({ menu, addToCart }) => {
 
             {/* Menu Grid */}
             <div className="menu-list-container">
-                {searchQuery && <h3 className="search-results-title">Found {displayedItems.length} results</h3>}
+                {searchQuery && <h3 className="search-results-title">Found {filteredItems.length} results</h3>}
 
                 <div className="items-grid">
                     {displayedItems.length > 0 ? (
@@ -66,6 +99,15 @@ const CategorySection = ({ menu, addToCart }) => {
                         </div>
                     )}
                 </div>
+
+                {/* Loading Sentinel */}
+                {hasMore && (
+                    <div ref={observerTarget} className="scroll-loader">
+                        <div className="loader-dots">
+                            <span>.</span><span>.</span><span>.</span>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -138,7 +138,7 @@ function HomePage() {
                       <span className="order-id">#{order.orderId}</span>
                       <span className={`status-badge-modern ${order.status.toLowerCase()}`}>
                         {order.status}
-                        {order.status === 'Preparing' && <span className="pulse-dot"></span>}
+                        {(order.status === 'IN_PROGRESS' || order.status === 'PREPARING') && <span className="pulse-dot"></span>}
                       </span>
                     </div>
 
@@ -150,12 +150,23 @@ function HomePage() {
                       {/* Linear Progress Bar */}
                       <div className="linear-progress-track">
                         {orderStages.map((stage, index) => {
-                          const currentStatusIndex = orderStages.indexOf(order.status);
+                          // Map Backend Status to UI Index
+                          const getStatusIndex = (s) => {
+                            const status = s?.toUpperCase();
+                            if (status === 'PLACED' || status === 'RECEIVED') return 0;
+                            if (status === 'IN_PROGRESS' || status === 'PREPARING') return 1;
+                            if (status === 'READY' || status === 'COMPLETED') return 2;
+                            return -1;
+                          };
+
+                          const currentStatusIndex = getStatusIndex(order.status);
                           const isActive = index <= currentStatusIndex;
+                          const isCurrentStage = index === currentStatusIndex;
+
                           return (
                             <div
                               key={stage}
-                              className={`progress-segment ${isActive ? "filled" : ""}`}
+                              className={`progress-segment ${isActive ? "filled" : ""} ${isCurrentStage && currentStatusIndex === 1 ? "pulsing" : ""}`}
                               title={stage}
                             ></div>
                           );
@@ -163,7 +174,7 @@ function HomePage() {
                       </div>
                       <div className="progress-labels">
                         <span>Received</span>
-                        <span>Prep</span>
+                        <span>Preparing</span>
                         <span>Ready</span>
                       </div>
 

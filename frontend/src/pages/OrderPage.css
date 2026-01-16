@@ -1,13 +1,13 @@
+/* OrderPage.css - Bright Foodie Redesign */
 .order-page-redesign {
     max-width: 100%;
     margin: 0 auto;
     padding: 1.5rem;
-    padding-bottom: 100px;
-    background-color: #f8f9fa;
-    /* Clean backdrop */
+    padding-bottom: 120px;
+    background-color: var(--bg-warm, #FFF8F0);
+    /* Match Home */
     min-height: 100vh;
     font-family: 'Outfit', 'Inter', sans-serif;
-    /* Try Premium Font stack */
 }
 
 .order-header {
@@ -16,7 +16,7 @@
     align-items: center;
     margin-bottom: 2rem;
     padding-bottom: 1.5rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 2px dashed rgba(255, 107, 0, 0.1);
 }
 
 .order-header h2 {
@@ -24,22 +24,22 @@
     margin-bottom: 0.5rem;
     font-weight: 800;
     letter-spacing: -1.2px;
-    color: #2d3436;
-    /* Default color for emoji */
+    color: var(--text-dark, #2D3436);
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
 .gradient-text {
-    background: linear-gradient(135deg, #2d3436 0%, #000000 100%);
+    background: linear-gradient(135deg, var(--primary-orange, #FF6B00) 0%, #FF9100 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .subtitle {
-    color: #636e72;
+    color: var(--text-light, #636e72);
     font-size: 1rem;
+    font-weight: 500;
 }
 
 .table-info {
@@ -50,36 +50,36 @@
 
 .table-info label {
     font-size: 0.85rem;
-    color: #636e72;
+    color: var(--primary-orange, #FF6B00);
     margin-bottom: 0.4rem;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
 }
 
+/* Updated Input Field - Soft & Friendly */
 .table-input-minimal {
-    width: 70px;
+    width: 80px;
     text-align: center;
-    padding: 10px;
-    border: 2px solid rgba(0, 0, 0, 0.08);
-    /* Softer border */
-    border-radius: 16px;
-    /* More rounded */
+    padding: 12px;
+    border: 2px solid #FFE0B2;
+    /* Light Orange Border */
+    border-radius: 50px;
     font-size: 1.4rem;
     font-weight: 800;
     outline: none;
     background: white;
-    color: #2d3436;
+    color: var(--text-dark, #2D3436);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 4px 10px rgba(255, 107, 0, 0.05);
 }
 
 .table-input-minimal:focus {
-    border-color: #0984e3;
-    box-shadow: 0 0 0 4px rgba(9, 132, 227, 0.15);
+    border-color: var(--primary-orange, #FF6B00);
+    box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.2);
+    transform: scale(1.05);
 }
 
-
-/* Floating Cart Bar - Premium Glassmorphism */
+/* Floating Cart Bar - Vibrant Pill */
 .floating-cart-bar {
     position: fixed;
     bottom: 30px;
@@ -87,31 +87,23 @@
     transform: translateX(-50%);
     width: 90%;
     max-width: 500px;
-
-    background: rgba(45, 52, 54, 0.95);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-
+    background: var(--text-dark, #2D3436);
     color: white;
-    padding: 1rem 1.5rem;
+    padding: 12px 20px;
     border-radius: 50px;
-    /* Pill shape */
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     z-index: 1000;
     animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transition: transform 0.2s, box-shadow 0.2s;
+    border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .floating-cart-bar:hover {
     transform: translateX(-50%) translateY(-5px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+    background: black;
 }
 
 @keyframes slideUp {
@@ -132,11 +124,10 @@
 }
 
 .cart-count {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.8rem;
+    color: var(--secondary-amber, #FFC107);
     text-transform: uppercase;
-    font-weight: 600;
-    letter-spacing: 0.5px;
+    font-weight: 700;
 }
 
 .cart-total {
@@ -146,19 +137,19 @@
 
 .view-cart-btn {
     background: white;
-    color: #2d3436;
+    color: var(--primary-orange, #FF6B00);
     border: none;
-    padding: 0.8rem 1.5rem;
+    padding: 10px 24px;
     border-radius: 30px;
-    font-weight: 700;
+    font-weight: 800;
     font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .view-cart-btn:hover {
-    background: #f1f2f6;
-    transform: scale(1.05);
+    background: var(--secondary-amber, #FFC107);
+    color: var(--text-dark, #2D3436);
 }
 
 /* Toast */
@@ -166,27 +157,24 @@
     position: fixed;
     top: 90px;
     right: 30px;
-    /* Breathing room */
     padding: 16px 28px;
     border-radius: 50px;
-    /* Modern Pill shape */
     color: white;
     font-weight: 700;
     z-index: 1100;
     animation: toastSlideIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     display: flex;
     align-items: center;
     gap: 12px;
-    backdrop-filter: blur(5px);
 }
 
 .toast-message.success {
-    background: linear-gradient(135deg, #00b894, #00cec9);
+    background: linear-gradient(135deg, #00C853, #64DD17);
 }
 
 .toast-message.error {
-    background: linear-gradient(135deg, #ff7675, #d63031);
+    background: linear-gradient(135deg, #FF6B6B, #EE5253);
 }
 
 @keyframes toastSlideIn {
@@ -207,22 +195,18 @@
     bottom: 30px;
     left: 30px;
     top: auto;
-    /* Override previous top */
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding: 0.8rem 1.2rem;
+    background: white;
+    padding: 10px 20px;
     border-radius: 50px;
-    /* Pill shape */
     display: flex;
     align-items: center;
     gap: 1rem;
     font-size: 0.95rem;
     font-weight: 700;
-    color: #2d3436;
+    color: var(--text-dark, #2D3436);
     z-index: 1000;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--primary-orange, #FF6B00);
     animation: slideInLeft 0.5s ease-out;
 }
 
@@ -239,20 +223,18 @@
 }
 
 .finish-btn-small {
-    background: #ff7675;
+    background: var(--primary-orange, #FF6B00);
     color: white;
     border: none;
-    padding: 8px 16px;
+    padding: 8px 18px;
     border-radius: 20px;
     font-size: 0.85rem;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 4px 10px rgba(255, 118, 117, 0.3);
 }
 
 .finish-btn-small:hover {
-    background: #d63031;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 15px rgba(214, 48, 49, 0.4);
+    background: #e65100;
+    transform: scale(1.05);
 }

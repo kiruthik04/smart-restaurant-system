@@ -1,10 +1,9 @@
-/* TablePage.css */
+/* TablePage.css - Bright Foodie Redesign */
 :root {
-    --primary-red: #ff4757;
+    --primary-orange: #FF6B00;
+    --secondary-amber: #FFC107;
     --dark-navy: #2f3542;
-    --light-bg: #f1f2f6;
-    --shadow-premium: 0 15px 35px rgba(0, 0, 0, 0.1);
-    --glass-effect: rgba(255, 255, 255, 0.9);
+    --bg-warm: #FFF8F0;
 }
 
 .table-page {
@@ -12,32 +11,36 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--light-bg);
-    /* Optional: Add a subtle culinary-themed background pattern */
-    background-image: radial-gradient(#ced6e0 0.5px, transparent 0.5px);
-    background-size: 20px 20px;
+    background-color: var(--bg-warm);
+    /* Pattern */
+    background-image: radial-gradient(#FFCCBC 0.5px, transparent 0.5px);
+    background-size: 24px 24px;
     padding: 2rem 1rem;
 }
 
 .table-section {
     width: 100%;
     max-width: 700px;
-    /* Slightly wider than the form itself for breathing room */
     animation: fadeInScale 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Container for the form to live inside the section */
+/* Form Container - Bright & Clean */
 .table-section .reservation-container {
     margin: 0 auto;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: var(--shadow-premium);
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 40px rgba(255, 107, 0, 0.08);
+    /* Soft orange shadow */
+    border-radius: 24px;
+    padding: 2rem;
 }
 
-/* Header enhancement inside the page context */
 .table-section h2 {
     position: relative;
     margin-bottom: 2.5rem;
+    color: var(--dark-navy);
+    font-weight: 800;
+    text-align: center;
 }
 
 .table-section h2::after {
@@ -48,11 +51,62 @@
     transform: translateX(-50%);
     width: 60px;
     height: 4px;
-    background: var(--primary-red);
+    background: var(--primary-orange);
     border-radius: 2px;
 }
 
-/* Animation for the page entry */
+/* ---- GLOBAL INPUT STYLE FOR THIS PAGE ---- */
+/* Targeting inputs inside the form component via deep selector or global class if possible. 
+   Assuming standard inputs inside. */
+.table-section input,
+.table-section select,
+.table-section textarea {
+    width: 100%;
+    padding: 14px 20px;
+    border: 2px solid #FFE0B2;
+    /* Soft Orange */
+    border-radius: 12px;
+    font-size: 1rem;
+    background: #FFF;
+    color: var(--dark-navy);
+    transition: all 0.3s ease;
+    outline: none;
+    font-family: 'Outfit', sans-serif;
+}
+
+.table-section input:focus,
+.table-section select:focus,
+.table-section textarea:focus {
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.15);
+}
+
+.table-section label {
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 6px;
+    display: block;
+}
+
+.table-section button[type="submit"] {
+    background: linear-gradient(135deg, var(--primary-orange), #FF9100);
+    color: white;
+    font-weight: 700;
+    padding: 16px;
+    border-radius: 50px;
+    border: none;
+    width: 100%;
+    font-size: 1.1rem;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(255, 107, 0, 0.25);
+    transition: all 0.2s;
+}
+
+.table-section button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 25px rgba(255, 107, 0, 0.35);
+}
+
 @keyframes fadeInScale {
     from {
         opacity: 0;
@@ -65,15 +119,9 @@
     }
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .table-page {
         padding: 1rem;
         align-items: flex-start;
-        /* Better for scrolling on mobile */
-    }
-
-    .table-section {
-        max-width: 100%;
     }
 }

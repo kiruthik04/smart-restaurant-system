@@ -88,29 +88,31 @@ function ProfileModal({ isOpen, onClose }) {
                 </div>
             )}
 
-            <div className="theme-switcher">
-                <button
-                    className={`theme-btn ${theme === 'light' ? 'active' : ''}`}
-                    onClick={() => setTheme('light')}
-                    title="Light Mode"
-                >
-                    <FaSun />
-                </button>
-                <button
-                    className={`theme-btn ${theme === 'dark' ? 'active' : ''}`}
-                    onClick={() => setTheme('dark')}
-                    title="Dark Mode"
-                >
-                    <FaMoon />
-                </button>
-                <button
-                    className={`theme-btn ${theme === 'system' ? 'active' : ''}`}
-                    onClick={() => setTheme('system')}
-                    title="System Mode"
-                >
-                    <FaDesktop />
-                </button>
-            </div>
+            {user.role !== 'CUSTOMER' && (
+                <div className="theme-switcher">
+                    <button
+                        className={`theme-btn ${theme === 'light' ? 'active' : ''}`}
+                        onClick={() => setTheme('light')}
+                        title="Light Mode"
+                    >
+                        <FaSun />
+                    </button>
+                    <button
+                        className={`theme-btn ${theme === 'dark' ? 'active' : ''}`}
+                        onClick={() => setTheme('dark')}
+                        title="Dark Mode"
+                    >
+                        <FaMoon />
+                    </button>
+                    <button
+                        className={`theme-btn ${theme === 'system' ? 'active' : ''}`}
+                        onClick={() => setTheme('system')}
+                        title="System Mode"
+                    >
+                        <FaDesktop />
+                    </button>
+                </div>
+            )}
 
             {!showChangePassword ? (
                 <div className="profile-actions">

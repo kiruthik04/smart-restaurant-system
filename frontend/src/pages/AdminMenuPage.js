@@ -129,19 +129,21 @@ function AdminMenuPage() {
                                     {item.available ? "Available" : "Unavailable"}
                                 </span>
                             </td>
-                            <td data-label="Actions" className="actions">
-                                <button className="edit-btn" onClick={() => handleEdit(item)}>
-                                    Edit
-                                </button>
-                                <button
-                                    className={item.available ? "toggle-btn disable" : "toggle-btn enable"}
-                                    onClick={() => handleToggle(item.id)}
-                                >
-                                    {item.available ? "Disable" : "Enable"}
-                                </button>
-                                <button className="danger" onClick={() => handleDelete(item.id)}>
-                                    Delete
-                                </button>
+                            <td data-label="Actions">
+                                <div className="actions">
+                                    <button className="edit-btn" onClick={() => handleEdit(item)}>
+                                        Edit
+                                    </button>
+                                    <button
+                                        className={item.available ? "toggle-btn disable" : "toggle-btn enable"}
+                                        onClick={() => handleToggle(item.id)}
+                                    >
+                                        {item.available ? "Disable" : "Enable"}
+                                    </button>
+                                    <button className="danger" onClick={() => handleDelete(item.id)}>
+                                        Delete
+                                    </button>
+                                </div>
                             </td>
                         </tr>
                     ))}

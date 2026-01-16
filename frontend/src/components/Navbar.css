@@ -1,26 +1,32 @@
-/* Navbar.css */
+/* Navbar.css - Vibrant Foodie Theme */
 :root {
-  --primary-red: #ff4757;
+  --primary-orange: #FF6B00;
   --dark-navy: #2f3542;
-  --shadow-premium: 0 4px 20px rgba(0, 0, 0, 0.1);
+  --text-dark: #2D3436;
+  --bg-white: #ffffff;
+  --header-bg: #FF6B00;
+  /* Vibrant Orange Background */
+  --header-text: #ffffff;
+  --shadow-premium: 0 4px 25px rgba(255, 107, 0, 0.25);
+  /* Stronger glow */
   --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .navbar {
-  background: var(--nav-bg);
-  /* Use padding for the side gaps instead of max-width margins */
+  /* Vibrant Orange Gradient */
+  background: linear-gradient(135deg, #FF6B00 0%, #FF9100 100%);
   padding: 0.8rem 5%;
   position: sticky;
   top: 0;
   width: 100%;
   z-index: 1000;
   box-shadow: var(--shadow-premium);
+  border-bottom: none;
 }
 
 .navbar-container {
   width: 100%;
   display: flex;
-  /* Changed from space-between to align items properly with margin-left: auto strategy */
   align-items: center;
   margin: 0;
 }
@@ -29,13 +35,16 @@
   font-size: 1.6rem;
   font-weight: 800;
   color: white;
+  /* White text on Orange */
   text-decoration: none;
-  letter-spacing: -1px;
+  letter-spacing: -0.5px;
   transition: var(--transition-smooth);
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-brand:hover {
-  color: var(--primary-red);
+  transform: translateY(-1px);
+  opacity: 0.9;
 }
 
 /* Links Container */
@@ -43,24 +52,25 @@
   display: flex;
   gap: 2rem;
   align-items: center;
-  /* Push links (and subsequent actions) to the right end */
   margin-left: auto;
   margin-right: 1.5rem;
-  /* Add some space between links and actions */
 }
 
 .navbar-links a {
-  color: #ced6e0;
+  color: white;
+  /* White Links */
   text-decoration: none;
   font-weight: 600;
   font-size: 1rem;
   transition: var(--transition-smooth);
   position: relative;
   padding: 5px 0;
+  opacity: 0.9;
 }
 
 .navbar-links a:hover {
-  color: white;
+  opacity: 1;
+  transform: translateY(-1px);
 }
 
 .navbar-links a::after {
@@ -70,22 +80,23 @@
   left: 0;
   width: 0;
   height: 2px;
-  background: var(--primary-red);
+  background: white;
+  /* White styling line */
   transition: var(--transition-smooth);
+  border-radius: 2px;
 }
 
 .navbar-links a:hover::after {
   width: 100%;
 }
 
-/* Mobile Toggle Button - Forced to the far right */
 /* Mobile Toggle Button */
 .menu-toggle {
   display: none;
   background: none;
   border: none;
   color: white;
-  font-size: 2rem;
+  font-size: 1.8rem;
   cursor: pointer;
   padding: 0;
   line-height: 1;
@@ -104,6 +115,10 @@
   text-decoration: none;
 }
 
+.cart-link:hover {
+  transform: scale(1.05);
+}
+
 /* Default (Desktop) */
 .mobile-cart {
   display: none;
@@ -111,7 +126,6 @@
 
 .desktop-cart {
   display: flex !important;
-  /* Ensure it overrides any conflicting flex rules if nested */
 }
 
 .cart-icon-container {
@@ -120,18 +134,33 @@
   align-items: center;
 }
 
+/* Badge Flipped: White BG, Orange Text */
 .cart-badge {
   position: absolute;
   top: -8px;
   right: -10px;
-  background-color: #ff4757;
-  color: white;
+  background-color: white;
+  color: var(--primary-orange);
   border-radius: 50%;
   padding: 2px 6px;
   font-size: 0.75rem;
-  font-weight: bold;
+  font-weight: 800;
   min-width: 18px;
   text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Profile Button / Icon Styles */
+.nav-btn.icon-btn {
+  color: white !important;
+  padding: 6px;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.nav-btn.icon-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white !important;
 }
 
 /* Responsive Tablet/Mobile View */
@@ -151,26 +180,27 @@
 
   .navbar {
     padding: 0.8rem 5%;
-    /* Maintains the gap from the screen edge */
   }
 
   .menu-toggle {
     display: block;
   }
 
+  /* Mobile Dropdown - Keep White for readability */
   .navbar-links {
     position: absolute;
     top: 100%;
     left: 0;
     width: 100%;
-    background: var(--dark-navy);
+    background: white;
     flex-direction: column;
     gap: 0;
     padding: 0;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.4s ease-in-out;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   }
 
   .navbar-links.open {
@@ -182,14 +212,18 @@
     width: 100%;
     text-align: center;
     padding: 1.2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+    color: var(--text-dark);
+    /* Dark Text inside white dropdown */
+    opacity: 1;
   }
 
   .navbar-links a:hover {
-    background: rgba(255, 71, 87, 0.1);
-    color: var(--primary-red);
+    background: #FFF8E1;
+    color: var(--primary-orange);
   }
 
+  /* Hide the underline effect in dropdown */
   .navbar-links a::after {
     display: none;
   }

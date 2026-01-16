@@ -50,29 +50,39 @@ function Navbar() {
             </div>
           </Link>
 
-          {user ? (
-            <div style={{ position: 'relative' }}>
+          {!user && (
+            <Link to="/login" onClick={() => setOpen(false)}>Login</Link>
+          )}
+        </div>
+
+        <div className="navbar-actions">
+          {user && (
+            <div className="profile-icon-container" style={{ position: 'relative' }}>
               <button
                 onClick={() => {
                   setProfileOpen(!profileOpen);
                   setOpen(false);
                 }}
-                className="nav-btn profile-trigger-btn"
+                className="nav-btn icon-btn"
+                style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', display: 'flex' }}
               >
-                <FaUserCircle size={20} style={{ marginRight: '8px' }} />
-                My Profile
+                <FaUserCircle size={24} />
               </button>
               <ProfileModal isOpen={profileOpen} onClose={() => setProfileOpen(false)} />
             </div>
-          ) : (
-            <Link to="/login" onClick={() => setOpen(false)}>
-              Login
-            </Link>
           )}
-        </div>
 
-        <div className="navbar-actions">
-          {/* Mobile Only Cart Icon */}
+          {/* Cart Icon - Visible on both now if we want, or keep logic. 
+              The user said "profile icon for it in both mobile and normal view".
+              Existing code has separate mobile/desktop carts. 
+              Refactoring to unified cart might be out of scope but cleaner. 
+              For now, I will touch only Profile.
+          */}
+
+          {/* Mobile Only Cart Icon - existing logic implies desktop cart is in links. 
+              Wait, checking lines 46-51 in original file, desktop cart is in links.
+              If I move profile to actions, it will be to the RIGHT of links.
+          */}
           <Link to="/cart" className="cart-link mobile-cart" onClick={() => setOpen(false)}>
             <div className="cart-icon-container">
               <FaShoppingCart size={20} />

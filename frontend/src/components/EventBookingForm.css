@@ -24,7 +24,7 @@
     margin-bottom: 2rem;
     text-align: center;
     font-weight: 800;
-    border-bottom: 4px solid var(--primary-red);
+    border-bottom: 4px solid #FF6B00;
     display: inline-block;
     padding-bottom: 8px;
     width: 100%;
@@ -54,24 +54,30 @@
 
 .form-group input {
     padding: 1rem;
-    border: 2px solid var(--soft-gray);
+    border: 2px solid #e0e0e0;
+    /* Neutral gray border */
     border-radius: 12px;
     font-size: 1rem;
-    background: #f9f9f9;
+    background-color: #ffffff !important;
+    /* Force White */
+    color: #2D3436 !important;
+    /* Force Dark Text */
     transition: var(--transition-smooth);
+    font-family: inherit;
 }
 
 .form-group input:focus:not(:disabled) {
     outline: none;
-    border-color: var(--primary-red);
-    background: white;
-    box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.1);
+    border-color: #FF6B00;
+    /* Bright Orange */
+    background-color: #ffffff !important;
+    box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.15);
 }
 
 .form-group input:disabled {
-    background: #eeeeee;
+    background-color: #f1f2f6 !important;
     cursor: not-allowed;
-    color: #777;
+    color: #b2bec3 !important;
 }
 
 /* Step 2 Sections */

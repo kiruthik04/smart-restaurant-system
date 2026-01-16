@@ -77,6 +77,8 @@
     font-weight: 500;
     border-bottom: 1px solid var(--border-color);
     transition: background 0.2s ease;
+    vertical-align: middle;
+    /* Ensure text centers vertically with images */
 }
 
 .menu-table tr:last-child td {

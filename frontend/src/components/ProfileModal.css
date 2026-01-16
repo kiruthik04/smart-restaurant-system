@@ -1,25 +1,32 @@
-/* ProfileModal.css renamed/refactored for Dropdown behavior */
-
-/* Removed overlay entirely */
-
-.profile-modal-content {
-    position: absolute;
-    top: 120%;
-    /* Space from button */
-    right: 0;
-    width: 320px;
-    width: 320px;
-    background: var(--bg-paper);
-    color: var(--text-primary);
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    border: 1px solid var(--border-color);
-    padding: 1.5rem;
-    z-index: 1100;
-    animation: slideDown 0.2s ease;
+/* ProfileModal.css - Bright Foodie Theme */
+:root {
+    --primary-orange: #FF6B00;
+    --primary-hover: #e65100;
+    --text-dark: #2D3436;
+    --text-light: #636e72;
+    --bg-white: #ffffff;
+    --bg-soft-orange: #FFF3E0;
+    --shadow-dropdown: 0 10px 40px rgba(0, 0, 0, 0.15);
+    --radius-md: 16px;
 }
 
-/* Triangle/Arrow pointer */
+/* Modal Dropdown Container */
+.profile-modal-content {
+    position: absolute;
+    top: 130%;
+    right: 0;
+    width: 320px;
+    background: var(--bg-white);
+    color: var(--text-dark);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-dropdown);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1.8rem;
+    z-index: 1100;
+    animation: slideDown 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Arrow Pointer */
 .profile-modal-content::before {
     content: '';
     position: absolute;
@@ -27,242 +34,288 @@
     right: 20px;
     width: 16px;
     height: 16px;
-    background: var(--bg-paper);
+    background: var(--bg-white);
     transform: rotate(45deg);
-    border-left: 1px solid var(--border-color);
-    border-top: 1px solid var(--border-color);
+    border-left: 1px solid rgba(0, 0, 0, 0.05);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
     z-index: -1;
 }
 
 .profile-modal-close {
     position: absolute;
-    top: 10px;
-    right: 15px;
+    top: 12px;
+    right: 12px;
     background: none;
     border: none;
     font-size: 1.2rem;
     cursor: pointer;
-    color: var(--text-secondary);
-    padding: 4px;
+    color: var(--text-light);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
 }
 
 .profile-modal-close:hover {
-    color: var(--text-primary);
+    background-color: #f1f2f6;
+    color: var(--primary-orange);
 }
 
+/* Header Section */
 .profile-header {
     text-align: center;
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 2px dashed #f1f2f6;
 }
 
 .profile-avatar {
-    width: 60px;
-    height: 60px;
-    background-color: var(--bg-secondary);
-    color: var(--primary-color);
+    width: 72px;
+    height: 72px;
+    background-color: var(--bg-soft-orange);
+    color: var(--primary-orange);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.8rem;
-    margin: 0 auto 0.8rem;
-    font-weight: bold;
+    font-size: 2rem;
+    margin: 0 auto 1rem;
+    font-weight: 800;
+    box-shadow: 0 4px 12px rgba(255, 107, 0, 0.1);
 }
 
 .profile-name {
     margin: 0;
-    color: var(--text-primary);
-    font-size: 1.1rem;
-    font-weight: 700;
+    color: var(--text-dark);
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
 }
 
 .profile-role {
-    color: var(--text-secondary);
-    margin: 0.25rem 0 0;
+    margin-top: 6px;
     font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    background: var(--bg-secondary);
+    letter-spacing: 1px;
+    font-weight: 700;
+    background: #f1f2f6;
+    color: var(--text-light);
     display: inline-block;
-    padding: 2px 8px;
-    border-radius: 12px;
+    padding: 4px 10px;
+    border-radius: 50px;
 }
 
+/* Theme Switcher - Hidden on Customer side usually, but styling just in case */
 .theme-switcher {
     display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    background: #f9fafb;
-    padding: 0.25rem;
-    border-radius: 8px;
+    background: #f1f2f6;
+    padding: 4px;
+    border-radius: 50px;
+    margin-bottom: 1.2rem;
 }
 
 .theme-btn {
     flex: 1;
-    background: transparent;
     border: none;
-    padding: 0.5rem;
-    border-radius: 6px;
+    background: transparent;
+    padding: 6px;
+    border-radius: 50px;
     cursor: pointer;
-    color: #6b7280;
-    font-size: 1rem;
+    color: var(--text-light);
     transition: all 0.2s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.theme-btn:hover {
-    background: #e5e7eb;
-    color: #374151;
 }
 
 .theme-btn.active {
     background: white;
-    color: #ef4444;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    color: var(--primary-orange);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
+/* Action Buttons */
 .profile-actions {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
-}
-
-.btn-change-password,
-.btn-logout {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: all 0.2s;
+    gap: 12px;
 }
 
 .btn-change-password {
-    background-color: white;
-    border: 1px solid #e5e7eb;
-    color: #374151;
+    width: 100%;
+    padding: 12px;
+    border-radius: 50px;
+    border: 2px solid var(--primary-orange);
+    background: white;
+    color: var(--primary-orange);
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.95rem;
 }
 
 .btn-change-password:hover {
-    background-color: #f9fafb;
-    border-color: #d1d5db;
+    background: var(--primary-orange);
+    color: white;
 }
 
 .btn-logout {
-    background-color: #fee2e2;
-    color: #b91c1c;
+    width: 100%;
+    padding: 12px;
+    border-radius: 50px;
+    border: none;
+    background: #FFEBEE;
+    /* Light Red */
+    color: #D32F2F;
+    /* Dark Red */
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.95rem;
 }
 
 .btn-logout:hover {
-    background-color: #fecaca;
-    color: #991b1b;
+    background: #FFCDD2;
+    color: #C62828;
 }
 
-/* Change Password Form - Compact */
+/* Forms */
 .change-password-form {
+    background: #f9f9f9;
+    padding: 1rem;
+    border-radius: 12px;
     margin-top: 1rem;
-    animation: fadeIn 0.2s ease;
-}
-
-.form-group {
-    margin-bottom: 0.8rem;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 0.3rem;
-    color: #4b5563;
-    font-size: 0.8rem;
-    font-weight: 500;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-bottom: 5px;
+    font-weight: 600;
 }
 
 .form-group input {
     width: 100%;
-    padding: 0.6rem;
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    font-size: 0.9rem;
-    background: var(--bg-primary);
-    color: var(--text-primary);
+    padding: 0.8rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background: white;
+    color: var(--text-dark);
 }
 
 .form-group input:focus {
     outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.1);
+    border-color: var(--primary-orange);
+    box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
 }
 
-.form-actions {
-    display: flex;
-    gap: 0.8rem;
-    margin-top: 1.2rem;
-}
-
-.btn-cancel,
 .btn-save {
-    flex: 1;
-    padding: 0.6rem;
-    border-radius: 6px;
+    background: var(--primary-orange);
+    color: white;
     border: none;
-    font-size: 0.85rem;
-    font-weight: 600;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 700;
     cursor: pointer;
 }
 
 .btn-cancel {
-    background-color: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
-}
-
-.btn-cancel:hover {
-    background-color: var(--bg-secondary);
-}
-
-.btn-save {
-    background-color: var(--primary-color);
-    color: white;
-}
-
-.error-message {
-    color: #ef4444;
-    font-size: 0.8rem;
-    text-align: center;
-    margin-bottom: 0.8rem;
-    background: rgba(239, 68, 68, 0.1);
-    padding: 0.5rem;
-    border-radius: 4px;
-}
-
-.success-message {
-    color: #059669;
-    font-size: 0.8rem;
-    text-align: center;
-    margin-bottom: 0.8rem;
-    background: rgba(5, 150, 105, 0.1);
-    padding: 0.5rem;
-    border-radius: 4px;
+    background: white;
+    border: 1px solid #dcdcdc;
+    color: var(--text-light);
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 @keyframes slideDown {
     from {
         opacity: 0;
-        transform: translateY(-8px);
+        transform: translateY(-10px);
     }
 
     to {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* --- Dark Mode Support (for Admin Dashboard) --- */
+.dark .profile-modal-content {
+    background: #1f2937;
+    /* Dark Grey/Navy */
+    color: #f3f4f6;
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.dark .profile-modal-content::before {
+    background: #1f2937;
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .profile-header {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark .profile-name {
+    color: #f3f4f6;
+}
+
+.dark .profile-role {
+    background: rgba(255, 255, 255, 0.1);
+    color: #9ca3af;
+}
+
+.dark .profile-avatar {
+    background: rgba(255, 107, 0, 0.2);
+    box-shadow: none;
+}
+
+.dark .theme-switcher {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.dark .theme-btn {
+    color: #9ca3af;
+}
+
+.dark .theme-btn.active {
+    background: #374151;
+    color: var(--primary-orange);
+}
+
+.dark .btn-change-password {
+    background: transparent;
+    border-color: var(--primary-orange);
+    color: var(--primary-orange);
+}
+
+.dark .btn-change-password:hover {
+    background: var(--primary-orange);
+    color: white;
+}
+
+/* Forms in Dark Mode */
+.dark .change-password-form {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.dark .form-group input {
+    background: #374151;
+    border-color: #4b5563;
+    color: white;
+}
+
+.dark .btn-cancel {
+    background: transparent;
+    border-color: #4b5563;
+    color: #9ca3af;
+}
+
+.dark .btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
 }
