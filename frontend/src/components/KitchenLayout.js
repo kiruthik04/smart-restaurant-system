@@ -1,18 +1,12 @@
-import { useAuth } from "../context/AuthContext";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import ProfileModal from "./ProfileModal";
 import { FaUserCircle } from "react-icons/fa";
 import "./KitchenLayout.css";
 
 function KitchenLayout({ children }) {
-  const { logout } = useAuth();
-  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate("/");
-  };
+
+
 
   const [profileOpen, setProfileOpen] = useState(false);
 

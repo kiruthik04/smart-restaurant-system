@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import CategorySection from "../components/CategorySection";
@@ -12,7 +12,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 // For now, I will stick to what I built: CategorySection passes `addToCart`.
 // I will add a floating "View Cart" button if items > 0.
 import { getAvailableMenuItems } from "../api/menuApi";
-import { createOrder } from "../api/orderApi";
+
 import { getOrderSessionId } from "../utils/session";
 import { releaseTable } from "../api/tableApi";
 import { clearOrderSession } from "../utils/session";
@@ -23,7 +23,7 @@ import "./OrderPage.css";
 
 function OrderPage() {
     const { user } = useAuth();
-    const { addToCart, cart, totalItems, totalPrice } = useCart();
+    const { addToCart, totalItems, totalPrice } = useCart();
     const [menu, setMenu] = useState([]);
     // Local cart state removed
     const [tableNumber, setTableNumber] = useState(localStorage.getItem("tableNumber") || "");
@@ -96,7 +96,7 @@ function OrderPage() {
     // updateQuantity removed (handled in CartPage)
 
     const navigate = useNavigate();
-    const location = useLocation();
+
 
     // placeOrder removed (moved to CartPage)
 

@@ -7,7 +7,7 @@ import { getOrderSessionId } from "../utils/session";
 import "./CartPage.css";
 
 function CartPage() {
-    const { cart, updateQuantity, removeFromCart, totalPrice, clearCart } = useCart();
+    const { cart, updateQuantity, totalPrice, clearCart } = useCart();
     const { user } = useAuth();
     const navigate = useNavigate();
 

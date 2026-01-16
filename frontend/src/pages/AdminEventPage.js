@@ -3,7 +3,6 @@ import {
     getAllEvents,
     approveEvent,
     cancelEvent,
-    createEventHall
 } from "../api/adminEventApi";
 import "./AdminEventPage.css";
 import LoadingSpinner from "../components/LoadingSpinner";
