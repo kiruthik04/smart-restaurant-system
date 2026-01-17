@@ -1,4 +1,5 @@
 import "./ChefSpecials.css";
+import { baseURL } from '../api/axios';
 const ChefSpecials = ({ specials }) => {
   return (
     <div className="chef-specials-section">
@@ -6,7 +7,7 @@ const ChefSpecials = ({ specials }) => {
       <div className="specials-grid">
         {specials.map(item => (
           <div key={item.id} className="special-card">
-            <img src={item.imageUrl} alt={item.name} />
+            <img src={`${baseURL}${item.imageUrl}`} alt={item.name} />
             <div className="special-info">
               <h4>{item.name}</h4>
               <p>₹{item.price}</p>

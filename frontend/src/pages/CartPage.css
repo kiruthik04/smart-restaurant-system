@@ -225,6 +225,8 @@
   outline: none;
   transition: all 0.3s;
   background-color: #fcfcfc;
+  color: #2d3436; /* Ensure text is visible */
+  opacity: 1;
 }
 
 .table-input:focus {

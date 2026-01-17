@@ -1,5 +1,6 @@
 import React from 'react';
 import './DealsSection.css';
+import { baseURL } from '../api/axios';
 import './DealsSection.css';
 
 const DealsSection = ({ deals, addToCart }) => {
@@ -15,7 +16,7 @@ const DealsSection = ({ deals, addToCart }) => {
                     <div key={deal.id} className="deal-card">
                         <div className="deal-image-container">
                             <img
-                                src={`/api/menu/${deal.id}/image`}
+                                src={`${baseURL}/api/menu/${deal.id}/image`}
                                 onError={(e) => {
                                     e.target.onerror = null;
                                     e.target.src = "https://placehold.co/400x300?text=No+Image";

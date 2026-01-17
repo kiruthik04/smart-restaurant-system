@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { baseURL } from '../api/axios';
 import './CategorySection.css';
 
 const CategorySection = ({ menu, addToCart }) => {
@@ -71,7 +72,7 @@ const CategorySection = ({ menu, addToCart }) => {
                             <div key={item.id} className="menu-item-card">
                                 <div className="item-image-box">
                                     <img
-                                        src={`/api/menu/${item.id}/image`}
+                                        src={`${baseURL}/api/menu/${item.id}/image`}
                                         onError={(e) => {
                                             e.target.onerror = null;
                                             e.target.src = "https://placehold.co/400x300?text=No+Image"; // Fallback
