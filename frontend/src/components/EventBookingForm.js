@@ -141,7 +141,7 @@ function EventBookingForm() {
                                             className={`hall-card ${selectedHallId === hall.id ? 'selected' : ''}`}
                                             onClick={() => setSelectedHallId(hall.id)}
                                         >
-                                            <h5>{hall.name}</h5>
+                                            <h5>{hall.hallName}</h5>
                                             <p>Capacity: {hall.capacity}</p>
                                         </div>
                                     ))
