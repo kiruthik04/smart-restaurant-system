@@ -15,7 +15,7 @@ function BillModal({ bill, onClose, onConvert }) {
 
     // Merchant VPA - Replace with actual
     const merchantVPA = "merchant@upi";
-    const merchantName = "Smart Restaurant";
+    const merchantName = "Love, Rosie";
     const amount = bill.grandTotal.toFixed(2);
 
     // Construct UPI String

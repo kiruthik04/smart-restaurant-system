@@ -231,7 +231,7 @@ function HomePage() {
         <div className="footer-grid">
           <div className="footer-box">
             <h4>📍 Visit Us</h4>
-            <p>123 Gourmet Avenue, Food City, 400001</p>
+            <p>Sathyamangalam - 638402</p>
           </div>
           <div className="footer-box">
             <h4>⏰ Opening Hours</h4>
@@ -239,8 +239,8 @@ function HomePage() {
           </div>
           <div className="footer-box">
             <h4>📞 Contact Support</h4>
-            <p>Phone: +91 98765 43210</p>
-            <p>Email: hello@smartrestro.com</p>
+            <p>Phone: 8610559369</p>
+            <p>Email: hello@loverosie.com</p>
           </div>
         </div>
       </footer>

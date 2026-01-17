@@ -139,10 +139,12 @@
     background: white;
     color: var(--primary-orange, #FF6B00);
     border: none;
-    padding: 10px 24px;
+    padding: 8px 18px;
+    /* Reduced from 10px 24px */
     border-radius: 30px;
     font-weight: 800;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
+    /* Reduced from 0.95rem */
     cursor: pointer;
     transition: all 0.2s;
 }
@@ -151,6 +153,8 @@
     background: var(--secondary-amber, #FFC107);
     color: var(--text-dark, #2D3436);
 }
+
+
 
 /* Toast */
 .toast-message {
