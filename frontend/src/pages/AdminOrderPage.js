@@ -92,7 +92,8 @@ function AdminOrderPage() {
                                 <td>
                                     <span className={`status-${order.status.toLowerCase()}`}>
                                         {order.status === "CREATED" ? "Waiting for Kitchen" :
-                                            order.status === "IN_PROGRESS" ? "Being Cooked" : "Done"}
+                                            order.status === "IN_PROGRESS" ? "Being Cooked" :
+                                                order.status === "READY" ? "Ready to Serve" : "Done"}
                                     </span>
                                 </td>
                                 <td>
@@ -138,7 +139,7 @@ function AdminOrderPage() {
                         </div>
 
                         <div className="modal-footer">
-                            {selectedOrder.status === "CREATED" && (
+                            {(selectedOrder.status === "CREATED" || selectedOrder.status === "READY") && (
                                 <button className="complete-btn" onClick={() => markCompleted(selectedOrder.orderId)}>
                                     Mark as Completed
                                 </button>

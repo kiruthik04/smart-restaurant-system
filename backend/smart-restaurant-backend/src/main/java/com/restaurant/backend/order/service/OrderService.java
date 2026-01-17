@@ -12,4 +12,6 @@ public interface OrderService {
     OrderResponse getOrderBySession(String sessionId);
 
     List<OrderResponse> getActiveOrdersByUser(Long userId);
+
+    OrderResponse generateBill(Long orderId);
 }

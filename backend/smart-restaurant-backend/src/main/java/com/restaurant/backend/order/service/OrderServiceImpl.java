@@ -170,6 +170,22 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
     }
 
+    @Override
+    @Transactional
+    public OrderResponse generateBill(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+
+        if (!"READY".equals(order.getStatus())) {
+            throw new IllegalStateException(
+                    "Order must be READY to generate bill. Current status: " + order.getStatus());
+        }
+
+        order.setStatus("COMPLETED");
+        Order savedOrder = orderRepository.save(order);
+        return mapToOrderResponse(savedOrder);
+    }
+
     private OrderResponse mapToOrderResponse(Order order) {
         OrderResponse response = new OrderResponse();
         response.setOrderId(order.getId());

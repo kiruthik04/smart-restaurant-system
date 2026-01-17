@@ -26,8 +26,7 @@ function HomePage() {
   const orderSessionId = getOrderSessionId();
   const [loading, setLoading] = useState(true);
 
-  // Step 3: Define Order Stages
-  const orderStages = ["Received", "Preparing", "Ready"];
+  // Step 3: Define Order Stages (Removed unused variable)
 
   const handleShowBill = async () => {
     if (activeOrders.length === 0) return;
@@ -45,7 +44,17 @@ function HomePage() {
   const handlePayAndRelease = async () => {
     if (!billData) return;
     try {
+      // Step 1: Mark all active orders as COMPLETED (Billed) in Backend
+      // We iterate because generateBill is per order. 
+      // In a real app, you might have a bulk-bill endpoint.
+      const orderPromises = activeOrders.map(order =>
+        api.put(`/api/orders/${order.orderId}/bill`)
+      );
+      await Promise.all(orderPromises);
+
+      // Step 2: Release Table
       await releaseTable(billData.tableNumber);
+
       clearOrderSession();
       setActiveOrders([]);
       setShowBill(false);
@@ -53,7 +62,7 @@ function HomePage() {
       window.location.reload();
     } catch (err) {
       console.error(err);
-      alert("Failed to release table.");
+      alert("Failed to complete payment process.");
     }
   };
 
@@ -132,75 +141,72 @@ function HomePage() {
           ) : activeOrders.length > 0 ? (
             <>
               <div className="orders-grid">
-                {activeOrders.map((order) => (
-                  <div key={order.orderId} className="modern-order-card">
-                    <div className="card-header">
-                      <span className="order-id">#{order.orderId}</span>
-                      <span className={`status-badge-modern ${order.status.toLowerCase()}`}>
-                        {order.status}
-                        {(order.status === 'IN_PROGRESS' || order.status === 'PREPARING') && <span className="pulse-dot"></span>}
-                      </span>
+                {activeOrders.map((order) => {
+                  const isReady = order.status === 'READY';
+                  return (
+                    <div key={order.orderId} className="modern-order-card">
+                      <div className="card-header">
+                        <span className="order-id">#{order.orderId}</span>
+                        <span className={`status-badge-modern ${order.status.toLowerCase()}`}>
+                          {order.status}
+                        </span>
+                      </div>
+
+                      <div className="card-body">
+                        <div className="table-info">
+                          <span className="icon">🍽️</span> Table {order.tableNumber}
+                        </div>
+
+                        {/* 3-Segment Progress Bar */}
+                        <div className="linear-progress-track">
+                          {/* Segment 1: Received */}
+                          <div className={`progress-segment seg-received ${["RECEIVED", "PREPARING", "IN_PROGRESS", "READY"].includes(order.status) ? "active loading" : ""
+                            }`} title="Received"></div>
+
+                          {/* Segment 2: Preparing */}
+                          <div className={`progress-segment seg-preparing ${["PREPARING", "IN_PROGRESS", "READY"].includes(order.status) ? "active loading" : ""
+                            }`} title="Preparing"></div>
+
+                          {/* Segment 3: Ready */}
+                          <div className={`progress-segment seg-ready ${["READY"].includes(order.status) ? "active completed" : ""
+                            }`} title="Ready"></div>
+                        </div>
+
+                        <div className="progress-labels">
+                          <span>Received</span>
+                          <span>Preparing</span>
+                          <span>Ready</span>
+                        </div>
+
+                        <div className="items-preview-modern">
+                          {order.items.slice(0, 3).map(i => (
+                            <span key={i.name} className="modern-pill">{i.quantity}x {i.name}</span>
+                          ))}
+                          {order.items.length > 3 && <span className="more-pill">+{order.items.length - 3} more</span>}
+                        </div>
+                      </div>
+
+                      <div className="card-footer">
+                        <span className="total-label">Total</span>
+                        <span className="total-amount">₹{order.totalAmount}</span>
+                      </div>
+
+                      {/* Generate Bill Button for Specific Order */}
+                      {isReady && (
+                        <button
+                          className="primary-btn generate-bill-btn"
+                          onClick={() => {
+                            /* In a real scenario, you might want to confirm specific order or table billing */
+                            handleShowBill(order);
+                          }}
+                          style={{ marginTop: '1rem', width: '100%' }}
+                        >
+                          Generate Bill & Pay
+                        </button>
+                      )}
                     </div>
-
-                    <div className="card-body">
-                      <div className="table-info">
-                        <span className="icon">🍽️</span> Table {order.tableNumber}
-                      </div>
-
-                      {/* Linear Progress Bar */}
-                      <div className="linear-progress-track">
-                        {orderStages.map((stage, index) => {
-                          // Map Backend Status to UI Index
-                          const getStatusIndex = (s) => {
-                            const status = s?.toUpperCase();
-                            if (status === 'PLACED' || status === 'RECEIVED') return 0;
-                            if (status === 'IN_PROGRESS' || status === 'PREPARING') return 1;
-                            if (status === 'READY' || status === 'COMPLETED') return 2;
-                            return -1;
-                          };
-
-                          const currentStatusIndex = getStatusIndex(order.status);
-                          const isActive = index <= currentStatusIndex;
-                          const isCurrentStage = index === currentStatusIndex;
-
-                          return (
-                            <div
-                              key={stage}
-                              className={`progress-segment ${isActive ? "filled" : ""} ${isCurrentStage && currentStatusIndex === 1 ? "pulsing" : ""}`}
-                              title={stage}
-                            ></div>
-                          );
-                        })}
-                      </div>
-                      <div className="progress-labels">
-                        <span>Received</span>
-                        <span>Preparing</span>
-                        <span>Ready</span>
-                      </div>
-
-                      <div className="items-preview-modern">
-                        {order.items.slice(0, 3).map(i => (
-                          <span key={i.name} className="modern-pill">{i.quantity}x {i.name}</span>
-                        ))}
-                        {order.items.length > 3 && <span className="more-pill">+{order.items.length - 3} more</span>}
-                      </div>
-                    </div>
-
-                    <div className="card-footer">
-                      <span className="total-label">Total</span>
-                      <span className="total-amount">₹{order.totalAmount}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="dashboard-actions-floating">
-                <button
-                  className="primary-btn view-bill-btn"
-                  onClick={handleShowBill}
-                >
-                  Generate Bill & Pay
-                </button>
+                  );
+                })}
               </div>
             </>
           ) : (

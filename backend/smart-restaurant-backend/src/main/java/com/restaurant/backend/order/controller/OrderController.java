@@ -44,4 +44,9 @@ public class OrderController {
         }
         return ResponseEntity.ok(orders);
     }
+
+    @PutMapping("/{orderId}/bill")
+    public ResponseEntity<OrderResponse> generateBill(@PathVariable Long orderId) {
+        return ResponseEntity.ok(orderService.generateBill(orderId));
+    }
 }

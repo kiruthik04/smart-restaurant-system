@@ -52,7 +52,7 @@ public class KitchenOrderServiceImpl implements KitchenOrderService {
             throw new IllegalStateException("Only IN_PROGRESS orders can be completed");
         }
 
-        order.setStatus("COMPLETED");
+        order.setStatus("READY");
         orderRepository.save(order);
     }
 

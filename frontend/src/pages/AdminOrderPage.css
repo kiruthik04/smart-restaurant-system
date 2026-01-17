@@ -112,10 +112,17 @@
   border: 1px solid #bfdbfe;
 }
 
+.status-ready {
+  background: #e3fcef;
+  color: #43A047;
+  /* Green */
+  border: 1px solid #b7eb8f;
+}
+
 .status-completed {
-  background: #f0fdf4;
-  color: #166534;
-  border: 1px solid #bbf7d0;
+  background: #e6fffa;
+  color: #00b894;
+  border: 1px solid #55efc4;
 }
 
 /* Action Buttons */
