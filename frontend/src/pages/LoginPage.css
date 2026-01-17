@@ -27,7 +27,8 @@
 
 .login-card {
   background: white;
-  width: 100%;
+  width: 90%;
+  /* Responsive width */
   max-width: 400px;
   padding: 3rem 2.5rem;
   border-radius: 24px;
@@ -36,6 +37,14 @@
   border: 1px solid rgba(255, 255, 255, 0.8);
   position: relative;
   z-index: 20;
+}
+
+@media (max-width: 480px) {
+  .login-card {
+    padding: 2rem 1.5rem;
+    /* Less padding on small mobile */
+    width: 95%;
+  }
 }
 
 .login-title {

@@ -28,6 +28,8 @@
   width: 100%;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  /* Ensure brand and actions are spaced */
   margin: 0;
 }
 
@@ -40,6 +42,8 @@
   letter-spacing: -0.5px;
   transition: var(--transition-smooth);
   text-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  /* Prevent wrapping */
 }
 
 .navbar-brand:hover {
@@ -100,12 +104,15 @@
   cursor: pointer;
   padding: 0;
   line-height: 1;
+  margin-left: 10px;
+  /* Space from other icons */
 }
 
 .navbar-actions {
   display: flex;
   align-items: center;
   gap: 15px;
+  /* Consistent gap for all icons */
 }
 
 .cart-link {
@@ -132,30 +139,44 @@
   position: relative;
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 32px;
+  /* Fixed width for alignment */
+  height: 32px;
 }
 
 /* Badge Flipped: White BG, Orange Text */
 .cart-badge {
   position: absolute;
-  top: -8px;
-  right: -10px;
+  top: -5px;
+  right: -5px;
   background-color: white;
   color: var(--primary-orange);
   border-radius: 50%;
-  padding: 2px 6px;
-  font-size: 0.75rem;
+  padding: 2px 5px;
+  font-size: 0.7rem;
   font-weight: 800;
   min-width: 18px;
   text-align: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  line-height: normal;
 }
 
 /* Profile Button / Icon Styles */
+.profile-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .nav-btn.icon-btn {
   color: white !important;
-  padding: 6px;
+  padding: 0;
   border-radius: 50%;
   transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nav-btn.icon-btn:hover {
@@ -173,13 +194,20 @@
     display: none !important;
   }
 
+  .navbar {
+    padding: 0.8rem 4%;
+    /* Slightly less padding on mobile */
+  }
+
   .navbar-container {
     flex-direction: row;
+    /* Keep row direction */
     justify-content: space-between;
   }
 
-  .navbar {
-    padding: 0.8rem 5%;
+  .navbar-brand {
+    font-size: 1.4rem;
+    /* Slightly smaller brand on mobile */
   }
 
   .menu-toggle {
@@ -196,6 +224,8 @@
     flex-direction: column;
     gap: 0;
     padding: 0;
+    margin: 0;
+    /* Remove auto margins */
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.4s ease-in-out;

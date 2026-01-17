@@ -376,26 +376,51 @@ body {
 
     .promo-slider {
         aspect-ratio: 16 / 9;
+        min-height: auto;
+        /* Allow shrinking */
     }
 }
 
 @media (max-width: 768px) {
     .promo-slider {
-        aspect-ratio: 1 / 1;
-        max-height: 50vh;
+        aspect-ratio: 16 / 10;
+        /* Better aspect ratio for mobile */
+        max-height: 40vh;
+    }
+
+    .poster-overlay {
+        bottom: 10%;
+        left: 5%;
+        right: 5%;
     }
 
     .poster-overlay h2 {
-        font-size: 2.5rem;
+        font-size: 1.8rem;
+        /* Smaller title */
+        margin-bottom: 5px;
+    }
+
+    .poster-overlay p {
+        font-size: 0.9rem;
     }
 
     .content-container {
         width: 95%;
-        margin-top: 10px;
+        margin-top: 20px;
+        gap: 25px;
     }
 
     .modern-order-card {
         padding: 1.2rem;
+    }
+
+    .orders-grid {
+        grid-template-columns: 1fr;
+        /* Single column for orders */
+    }
+
+    .section-header h3 {
+        font-size: 1.4rem;
     }
 }
 

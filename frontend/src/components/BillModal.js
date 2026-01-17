@@ -86,6 +86,12 @@ function BillModal({ bill, onClose, onConvert }) {
                             Credit/Debit Card
                         </button>
                         <button
+                            className={`tab-btn ${paymentMethod === 'NETBANKING' ? 'active' : ''}`}
+                            onClick={() => setPaymentMethod('NETBANKING')}
+                        >
+                            Net Banking
+                        </button>
+                        <button
                             className={`tab-btn ${paymentMethod === 'CASH' ? 'active' : ''}`}
                             onClick={() => setPaymentMethod('CASH')}
                         >
@@ -160,6 +166,28 @@ function BillModal({ bill, onClose, onConvert }) {
                                 )}
                             </div>
                         )}
+                        {paymentMethod === 'NETBANKING' && (
+                            <div className="net-banking-container">
+                                {isProcessing ? (
+                                    <div className="processing-state">
+                                        <div className="spinner"></div>
+                                        <p>Redirecting to Bank...</p>
+                                        <small>Please do not refresh</small>
+                                    </div>
+                                ) : (
+                                    <div className="bank-selection">
+                                        <p>Select your Bank</p>
+                                        <select className="bank-dropdown" defaultValue="">
+                                            <option value="" disabled>Choose a Bank</option>
+                                            <option value="HDFC">HDFC Bank</option>
+                                            <option value="ICICI">ICICI Bank</option>
+                                            <option value="SBI">State Bank of India</option>
+                                            <option value="AXIS">Axis Bank</option>
+                                        </select>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                         {paymentMethod === 'CASH' && (
                             <div className="instruction-box">
                                 <span className="icon">💵</span>
@@ -174,9 +202,9 @@ function BillModal({ bill, onClose, onConvert }) {
                         <strong>Grand Total: ₹{bill.grandTotal.toFixed(2)}</strong>
                     </div>
                     <div className="bill-actions">
-                        {paymentMethod === 'CARD' ? (
+                        {paymentMethod === 'CARD' || paymentMethod === 'NETBANKING' ? (
                             <button
-                                onClick={processCardPayment}
+                                onClick={processCardPayment} // Reuse logic for now or create separate handler
                                 className="primary-btn pay-btn"
                                 disabled={isProcessing}
                             >

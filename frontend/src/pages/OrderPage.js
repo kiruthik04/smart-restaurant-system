@@ -60,6 +60,22 @@ function OrderPage() {
         }
     }, [tableNumber]);
 
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const offset = window.scrollY;
+            if (offset > 150) { // Threshold to trigger sticky behavior
+                setScrolled(true);
+            } else {
+                setScrolled(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
     useEffect(() => {
         const fetchActiveOrder = async () => {
             let url = null;
@@ -195,8 +211,8 @@ function OrderPage() {
             )}
 
             {tableActive && (
-                <div className="active-table-status">
-                    <span>Table {tableNumber} is Active</span>
+                <div className={`active-table-status ${scrolled ? 'scrolled' : ''}`}>
+                    <span>Table {tableNumber} Active</span>
                     <button onClick={handleFinishClick} disabled={releasing} className="finish-btn-small">
                         {releasing ? "..." : "Pay Bill"}
                     </button>
