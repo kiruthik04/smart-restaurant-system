@@ -93,48 +93,64 @@ public class AuthController {
         User user = userRepository.findByEmail(email).orElse(null);
         if (user == null) {
             // For security, don't reveal if user exists
-            return ResponseEntity.ok("If an account exists with that email, a reset link has been sent.");
+            return ResponseEntity.ok("If an account exists with that email, an OTP has been sent.");
         }
 
-        String token = java.util.UUID.randomUUID().toString();
-        user.setResetToken(token);
-        user.setResetTokenExpiry(java.time.LocalDateTime.now().plusMinutes(15));
+        // Generate 6-digit OTP
+        String otp = String.format("%06d", new java.util.Random().nextInt(999999));
+        user.setOtp(otp);
+        user.setOtpExpiry(java.time.LocalDateTime.now().plusMinutes(5));
         userRepository.save(user);
 
-        String resetLink = "http://localhost:3000/reset-password?token=" + token;
-        // String resetLink = "https://smartrestro.vercel.app/reset-password?token=" +
-        // token; // Prod URL
-
-        System.out.println("DEBUG: Reset Token for " + email + ": " + token);
+        System.out.println("DEBUG: OTP for " + email + ": " + otp);
 
         try {
-            emailService.sendSimpleMessage(email, "Password Reset Request",
-                    "Click the link to reset your password: " + resetLink);
+            emailService.sendSimpleMessage(email, "Password Reset OTP",
+                    "Your OTP for password reset is: " + otp + "\nIt expires in 5 minutes.");
         } catch (Exception e) {
             System.err.println("Failed to send email: " + e.getMessage());
-            // Don't error out to the user
         }
 
-        return ResponseEntity.ok("If an account exists with that email, a reset link has been sent.");
+        return ResponseEntity.ok("If an account exists with that email, an OTP has been sent.");
+    }
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<?> verifyOtp(@RequestBody java.util.Map<String, String> request) {
+        String email = request.get("email");
+        String otp = request.get("otp");
+
+        if (email == null || otp == null) {
+            return ResponseEntity.badRequest().body("Email and OTP are required");
+        }
+
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null || user.getOtp() == null || !user.getOtp().equals(otp)
+                || user.getOtpExpiry().isBefore(java.time.LocalDateTime.now())) {
+            return ResponseEntity.badRequest().body("Invalid or expired OTP");
+        }
+
+        return ResponseEntity.ok("OTP verified successfully");
     }
 
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody java.util.Map<String, String> request) {
-        String token = request.get("token");
+        String email = request.get("email");
+        String otp = request.get("otp");
         String newPassword = request.get("newPassword");
 
-        if (token == null || newPassword == null) {
-            return ResponseEntity.badRequest().body("Token and new password are required");
+        if (email == null || otp == null || newPassword == null) {
+            return ResponseEntity.badRequest().body("Email, OTP, and new password are required");
         }
 
-        User user = userRepository.findByResetToken(token).orElse(null);
-        if (user == null || user.getResetTokenExpiry().isBefore(java.time.LocalDateTime.now())) {
-            return ResponseEntity.badRequest().body("Invalid or expired token");
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null || user.getOtp() == null || !user.getOtp().equals(otp)
+                || user.getOtpExpiry().isBefore(java.time.LocalDateTime.now())) {
+            return ResponseEntity.badRequest().body("Invalid or expired OTP");
         }
 
         user.setPassword(passwordEncoder.encode(newPassword));
-        user.setResetToken(null);
-        user.setResetTokenExpiry(null);
+        user.setOtp(null);
+        user.setOtpExpiry(null);
         userRepository.save(user);
 
         return ResponseEntity.ok("Password has been reset successfully");
@@ -161,5 +177,92 @@ public class AuthController {
         userRepository.save(user);
 
         return ResponseEntity.ok("Password changed successfully");
+    }
+
+    @PutMapping("/profile")
+    public ResponseEntity<?> updateProfile(@RequestBody java.util.Map<String, String> request) {
+        String username = org.springframework.security.core.context.SecurityContextHolder.getContext()
+                .getAuthentication().getName();
+        String newName = request.get("name");
+        String newEmail = request.get("email");
+
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+
+        boolean emailChanged = false;
+
+        if (newName != null && !newName.isBlank()) {
+            user.setName(newName);
+        }
+
+        if (newEmail != null && !newEmail.isBlank() && !newEmail.equals(user.getEmail())) {
+            // Check if email is taken by another user
+            userRepository.findByEmail(newEmail).ifPresent(existingUser -> {
+                if (!existingUser.getId().equals(user.getId())) {
+                    throw new IllegalArgumentException("Email already in use");
+                }
+            });
+
+            // Generate OTP for email change
+            String otp = String.format("%06d", new java.util.Random().nextInt(999999));
+            user.setNewEmail(newEmail);
+            user.setNewEmailOtp(otp);
+            user.setNewEmailOtpExpiry(java.time.LocalDateTime.now().plusMinutes(5));
+            emailChanged = true;
+
+            System.out.println("DEBUG: Email Change OTP for " + newEmail + ": " + otp);
+
+            try {
+                emailService.sendSimpleMessage(newEmail, "Verify Email Change",
+                        "Your OTP for email change is: " + otp + "\nIt expires in 5 minutes.");
+            } catch (Exception e) {
+                System.err.println("Failed to send email: " + e.getMessage());
+            }
+        }
+
+        userRepository.save(user);
+
+        java.util.Map<String, Object> response = new java.util.HashMap<>();
+        response.put("username", user.getUsername());
+        response.put("name", user.getName() != null ? user.getName() : "");
+        response.put("email", user.getEmail());
+        response.put("role", user.getRole());
+        response.put("id", user.getId());
+
+        if (emailChanged) {
+            response.put("status", "OTP_SENT");
+            response.put("message", "OTP sent to new email. Please verify.");
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/verify-email-change")
+    public ResponseEntity<?> verifyEmailChange(@RequestBody java.util.Map<String, String> request) {
+        String username = org.springframework.security.core.context.SecurityContextHolder.getContext()
+                .getAuthentication().getName();
+        String otp = request.get("otp");
+
+        if (otp == null) {
+            return ResponseEntity.badRequest().body("OTP is required");
+        }
+
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.getNewEmail() == null || user.getNewEmailOtp() == null || !user.getNewEmailOtp().equals(otp)
+                || user.getNewEmailOtpExpiry().isBefore(java.time.LocalDateTime.now())) {
+            return ResponseEntity.badRequest().body("Invalid or expired OTP");
+        }
+
+        // Apply Validated Change
+        user.setEmail(user.getNewEmail());
+        user.setNewEmail(null);
+        user.setNewEmailOtp(null);
+        user.setNewEmailOtpExpiry(null);
+        userRepository.save(user);
+
+        return ResponseEntity.ok(java.util.Map.of(
+                "success", true,
+                "message", "Email updated successfully",
+                "email", user.getEmail()));
     }
 }

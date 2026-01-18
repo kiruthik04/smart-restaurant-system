@@ -46,6 +46,15 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     };
 
+    const updateUser = (userData) => {
+        // Merge with existing user data to avoid losing fields like 'role' if not returned
+        setUser(prev => {
+            const updated = { ...prev, ...userData };
+            localStorage.setItem('user', JSON.stringify(updated));
+            return updated;
+        });
+    };
+
     const register = async (userData) => {
         try {
             await api.post('/api/auth/register', userData);
@@ -56,7 +65,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, register, loading }}>
+        <AuthContext.Provider value={{ user, login, logout, register, updateUser, loading }}>
             {!loading && children}
         </AuthContext.Provider>
     );

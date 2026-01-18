@@ -29,4 +29,14 @@ public class User {
     private String resetToken;
 
     private java.time.LocalDateTime resetTokenExpiry;
+
+    private String otp;
+
+    private java.time.LocalDateTime otpExpiry;
+
+    private String newEmail;
+
+    private String newEmailOtp;
+
+    private java.time.LocalDateTime newEmailOtpExpiry;
 }

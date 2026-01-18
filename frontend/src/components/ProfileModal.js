@@ -118,9 +118,12 @@ function ProfileModal({ isOpen, onClose }) {
                 <div className="profile-actions">
                     <button
                         className="btn-change-password"
-                        onClick={() => setShowChangePassword(true)}
+                        onClick={() => {
+                            onClose();
+                            navigate('/profile');
+                        }}
                     >
-                        Change Password
+                        Edit Profile
                     </button>
                     <button
                         className="btn-logout"
@@ -129,56 +132,7 @@ function ProfileModal({ isOpen, onClose }) {
                         Logout
                     </button>
                 </div>
-            ) : (
-                <form className="change-password-form" onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label>Current Password</label>
-                        <input
-                            type="password"
-                            name="oldPassword"
-                            value={passwords.oldPassword}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>New Password</label>
-                        <input
-                            type="password"
-                            name="newPassword"
-                            value={passwords.newPassword}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label>Confirm New Password</label>
-                        <input
-                            type="password"
-                            name="confirmPassword"
-                            value={passwords.confirmPassword}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="form-actions">
-                        <button
-                            type="button"
-                            className="btn-cancel"
-                            onClick={() => setShowChangePassword(false)}
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            className="btn-save"
-                            disabled={loading}
-                        >
-                            {loading ? 'Saving...' : 'Save Changes'}
-                        </button>
-                    </div>
-                </form>
-            )}
+            ) : null}
         </div>
     );
 }

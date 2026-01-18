@@ -17,6 +17,7 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import ProfilePage from "./pages/ProfilePage";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -41,6 +42,11 @@ function App() {
                 <Route path="/signup" element={<PublicLayout><SignupPage /></PublicLayout>} />
                 <Route path="/forgot-password" element={<PublicLayout><ForgotPasswordPage /></PublicLayout>} />
                 <Route path="/reset-password" element={<PublicLayout><ResetPasswordPage /></PublicLayout>} />
+                <Route path="/profile" element={
+                  <ProtectedRoute>
+                    <PublicLayout><ProfilePage /></PublicLayout>
+                  </ProtectedRoute>
+                } />
                 <Route path="/" element={<PublicLayout><HomePage /></PublicLayout>} />
                 <Route path="/tables" element={<PublicLayout><TablePage /></PublicLayout>} />
                 <Route path="/events" element={<PublicLayout><EventPage /></PublicLayout>} />
