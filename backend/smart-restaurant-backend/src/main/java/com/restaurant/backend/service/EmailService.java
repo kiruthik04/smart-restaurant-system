@@ -23,4 +23,17 @@ public class EmailService {
         message.setText(text);
         emailSender.send(message);
     }
+
+    public void sendHtmlMessage(String to, String subject, String htmlBody) throws jakarta.mail.MessagingException {
+        jakarta.mail.internet.MimeMessage message = emailSender.createMimeMessage();
+        org.springframework.mail.javamail.MimeMessageHelper helper = new org.springframework.mail.javamail.MimeMessageHelper(
+                message, true, "UTF-8");
+
+        helper.setFrom(fromEmail);
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(htmlBody, true);
+
+        emailSender.send(message);
+    }
 }

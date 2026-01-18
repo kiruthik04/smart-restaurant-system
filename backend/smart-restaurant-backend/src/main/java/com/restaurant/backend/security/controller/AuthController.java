@@ -53,6 +53,10 @@ public class AuthController {
         // Fetch role from DB to include in response
         User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
 
+        if (!user.isVerified()) {
+            return ResponseEntity.status(403).body("Account not verified. Please verify your email.");
+        }
+
         final String token = jwtUtil.generateToken(userDetails.getUsername(), user.getRole());
 
         return ResponseEntity.ok(new AuthResponse(token, user.getUsername(), user.getRole(), user.getId()));
@@ -63,24 +67,75 @@ public class AuthController {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("Username already exists");
         }
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            return ResponseEntity.badRequest().body("Email already registered");
+        }
 
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setName(request.getName());
-        user.setEmail(request.getEmail()); // Ensure RegisterRequest has this too, need to check DTO
+        user.setEmail(request.getEmail());
+        user.setVerified(false);
 
         // Default role if not provided
         String role = request.getRole() != null ? request.getRole().toUpperCase() : "CUSTOMER";
-        // Basic validation for roles
         if (!role.equals("ADMIN") && !role.equals("CUSTOMER") && !role.equals("KITCHEN")) {
             return ResponseEntity.badRequest().body("Invalid role. Allowed: ADMIN, CUSTOMER, KITCHEN");
         }
         user.setRole(role);
 
+        // Generate OTP
+        String otp = String.format("%06d", new java.util.Random().nextInt(999999));
+        user.setOtp(otp);
+        user.setOtpExpiry(java.time.LocalDateTime.now().plusMinutes(10));
+
         userRepository.save(user);
 
-        return ResponseEntity.ok("User registered successfully");
+        // Send OTP Email
+        try {
+            String htmlContent = generateOtpEmailTemplate(otp, "verify your account");
+            emailService.sendHtmlMessage(request.getEmail(), "Welcome to Love, Rosie! Verify your Email", htmlContent);
+        } catch (Exception e) {
+            System.err.println("Failed to send email: " + e.getMessage());
+            return ResponseEntity.internalServerError().body("Failed to send verification email");
+        }
+
+        return ResponseEntity.ok(java.util.Map.of(
+                "message", "Registration successful. Please check your email for OTP.",
+                "status", "OTP_SENT",
+                "email", user.getEmail()));
+    }
+
+    @PostMapping("/verify-registration")
+    public ResponseEntity<?> verifyRegistration(@RequestBody java.util.Map<String, String> request) {
+        String email = request.get("email");
+        String otp = request.get("otp");
+
+        if (email == null || otp == null) {
+            return ResponseEntity.badRequest().body("Email and OTP are required");
+        }
+
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+
+        if (user.isVerified()) {
+            return ResponseEntity.ok("User already verified");
+        }
+
+        if (user.getOtp() == null || !user.getOtp().equals(otp)
+                || user.getOtpExpiry().isBefore(java.time.LocalDateTime.now())) {
+            return ResponseEntity.badRequest().body("Invalid or expired OTP");
+        }
+
+        user.setVerified(true);
+        user.setOtp(null);
+        user.setOtpExpiry(null);
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Account verified successfully. You can now login.");
     }
 
     @PostMapping("/forgot-password")
@@ -105,8 +160,8 @@ public class AuthController {
         System.out.println("DEBUG: OTP for " + email + ": " + otp);
 
         try {
-            emailService.sendSimpleMessage(email, "Password Reset OTP",
-                    "Your OTP for password reset is: " + otp + "\nIt expires in 5 minutes.");
+            String htmlContent = generateOtpEmailTemplate(otp, "reset your password");
+            emailService.sendHtmlMessage(email, "Password Reset Verification", htmlContent);
         } catch (Exception e) {
             System.err.println("Failed to send email: " + e.getMessage());
         }
@@ -212,8 +267,8 @@ public class AuthController {
             System.out.println("DEBUG: Email Change OTP for " + newEmail + ": " + otp);
 
             try {
-                emailService.sendSimpleMessage(newEmail, "Verify Email Change",
-                        "Your OTP for email change is: " + otp + "\nIt expires in 5 minutes.");
+                String htmlContent = generateOtpEmailTemplate(otp, "update your email address");
+                emailService.sendHtmlMessage(newEmail, "Email Change Verification", htmlContent);
             } catch (Exception e) {
                 System.err.println("Failed to send email: " + e.getMessage());
             }
@@ -264,5 +319,45 @@ public class AuthController {
                 "success", true,
                 "message", "Email updated successfully",
                 "email", user.getEmail()));
+    }
+
+    private String generateOtpEmailTemplate(String otp, String action) {
+        return """
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+                        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f4f4f4; margin: 0; padding: 0; }
+                        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+                        .header { text-align: center; margin-bottom: 30px; }
+                        .header h1 { color: #2c3e50; margin: 0; font-size: 28px; letter-spacing: 1px; }
+                        .content { color: #555555; line-height: 1.6; font-size: 16px; }
+                        .otp-box { background-color: #f8f9fa; border: 2px dashed #e9ecef; border-radius: 8px; padding: 20px; text-align: center; margin: 30px 0; }
+                        .otp { font-size: 36px; font-weight: bold; color: #dc3545; letter-spacing: 8px; font-family: monospace; }
+                        .footer { text-align: center; margin-top: 40px; font-size: 12px; color: #999999; border-top: 1px solid #eeeeee; padding-top: 20px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h1>Love, Rosie</h1>
+                        </div>
+                        <div class="content">
+                            <p>Hello,</p>
+                            <p>You requested to <strong>%s</strong>. Please use the verification code below to complete this action:</p>
+                            <div class="otp-box">
+                                <div class="otp">%s</div>
+                            </div>
+                            <p>This code will expire in 5 minutes.</p>
+                            <p>If you did not request this, please ignore this email or contact support if you have concerns.</p>
+                        </div>
+                        <div class="footer">
+                            <p>&copy; 2024 Love, Rosie. All rights reserved.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+                """
+                .formatted(action, otp);
     }
 }

@@ -39,4 +39,5 @@ public class User {
     private String newEmailOtp;
 
     private java.time.LocalDateTime newEmailOtpExpiry;
+    private boolean isVerified = false;
 }
