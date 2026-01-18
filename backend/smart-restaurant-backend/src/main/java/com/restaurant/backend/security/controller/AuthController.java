@@ -24,19 +24,22 @@ public class AuthController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final com.restaurant.backend.service.EmailService emailService;
+    private final com.restaurant.backend.service.SmsService smsService;
 
     public AuthController(AuthenticationManager authenticationManager,
             UserDetailsService userDetailsService,
             JwtUtil jwtUtil,
             UserRepository userRepository,
             PasswordEncoder passwordEncoder,
-            com.restaurant.backend.service.EmailService emailService) {
+            com.restaurant.backend.service.EmailService emailService,
+            com.restaurant.backend.service.SmsService smsService) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
+        this.smsService = smsService;
     }
 
     @PostMapping("/login")
@@ -59,7 +62,8 @@ public class AuthController {
 
         final String token = jwtUtil.generateToken(userDetails.getUsername(), user.getRole());
 
-        return ResponseEntity.ok(new AuthResponse(token, user.getUsername(), user.getRole(), user.getId()));
+        return ResponseEntity.ok(new AuthResponse(token, user.getUsername(), user.getRole(),
+                String.valueOf(user.getId()), user.getEmail(), user.getName(), user.getMobileNumber()));
     }
 
     @PostMapping("/register")
@@ -70,12 +74,17 @@ public class AuthController {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().body("Email already registered");
         }
+        if (request.getMobileNumber() != null
+                && userRepository.findByMobileNumber(request.getMobileNumber()).isPresent()) {
+            return ResponseEntity.badRequest().body("Mobile number already registered");
+        }
 
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setName(request.getName());
         user.setEmail(request.getEmail());
+        user.setMobileNumber(request.getMobileNumber());
         user.setVerified(false);
 
         // Default role if not provided
@@ -140,15 +149,21 @@ public class AuthController {
 
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(@RequestBody java.util.Map<String, String> request) {
-        String email = request.get("email");
-        if (email == null) {
-            return ResponseEntity.badRequest().body("Email is required");
+        String identifier = request.get("email"); // Frontend might send 'email' key even for mobile
+        if (identifier == null) {
+            return ResponseEntity.badRequest().body("Email or Mobile Number is required");
         }
 
-        User user = userRepository.findByEmail(email).orElse(null);
+        User user;
+        if (identifier.contains("@")) {
+            user = userRepository.findByEmail(identifier).orElse(null);
+        } else {
+            user = userRepository.findByMobileNumber(identifier).orElse(null);
+        }
+
         if (user == null) {
             // For security, don't reveal if user exists
-            return ResponseEntity.ok("If an account exists with that email, an OTP has been sent.");
+            return ResponseEntity.ok("If an account exists with that identifier, an OTP has been sent.");
         }
 
         // Generate 6-digit OTP
@@ -157,16 +172,20 @@ public class AuthController {
         user.setOtpExpiry(java.time.LocalDateTime.now().plusMinutes(5));
         userRepository.save(user);
 
-        System.out.println("DEBUG: OTP for " + email + ": " + otp);
+        System.out.println("DEBUG: OTP for " + user.getUsername() + ": " + otp);
 
         try {
-            String htmlContent = generateOtpEmailTemplate(otp, "reset your password");
-            emailService.sendHtmlMessage(email, "Password Reset Verification", htmlContent);
+            if (identifier.contains("@")) {
+                String htmlContent = generateOtpEmailTemplate(otp, "reset your password");
+                emailService.sendHtmlMessage(user.getEmail(), "Password Reset Verification", htmlContent);
+            } else {
+                smsService.sendSms(user.getMobileNumber(), "Your Love, Rosie Password Reset OTP is: " + otp);
+            }
         } catch (Exception e) {
-            System.err.println("Failed to send email: " + e.getMessage());
+            System.err.println("Failed to send notification: " + e.getMessage());
         }
 
-        return ResponseEntity.ok("If an account exists with that email, an OTP has been sent.");
+        return ResponseEntity.ok("If an account exists, an OTP has been sent.");
     }
 
     @PostMapping("/verify-otp")
@@ -175,10 +194,16 @@ public class AuthController {
         String otp = request.get("otp");
 
         if (email == null || otp == null) {
-            return ResponseEntity.badRequest().body("Email and OTP are required");
+            return ResponseEntity.badRequest().body("Identifier (Email/Mobile) and OTP are required");
         }
 
-        User user = userRepository.findByEmail(email).orElse(null);
+        User user;
+        if (email.contains("@")) {
+            user = userRepository.findByEmail(email).orElse(null);
+        } else {
+            user = userRepository.findByMobileNumber(email).orElse(null);
+        }
+
         if (user == null || user.getOtp() == null || !user.getOtp().equals(otp)
                 || user.getOtpExpiry().isBefore(java.time.LocalDateTime.now())) {
             return ResponseEntity.badRequest().body("Invalid or expired OTP");
@@ -194,10 +219,15 @@ public class AuthController {
         String newPassword = request.get("newPassword");
 
         if (email == null || otp == null || newPassword == null) {
-            return ResponseEntity.badRequest().body("Email, OTP, and new password are required");
+            return ResponseEntity.badRequest().body("Identifier, OTP, and new password are required");
         }
 
-        User user = userRepository.findByEmail(email).orElse(null);
+        User user;
+        if (email.contains("@")) {
+            user = userRepository.findByEmail(email).orElse(null);
+        } else {
+            user = userRepository.findByMobileNumber(email).orElse(null);
+        }
         if (user == null || user.getOtp() == null || !user.getOtp().equals(otp)
                 || user.getOtpExpiry().isBefore(java.time.LocalDateTime.now())) {
             return ResponseEntity.badRequest().body("Invalid or expired OTP");
@@ -240,10 +270,12 @@ public class AuthController {
                 .getAuthentication().getName();
         String newName = request.get("name");
         String newEmail = request.get("email");
+        String newMobile = request.get("mobileNumber");
 
         User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
 
         boolean emailChanged = false;
+        boolean mobileChanged = false;
 
         if (newName != null && !newName.isBlank()) {
             user.setName(newName);
@@ -274,21 +306,73 @@ public class AuthController {
             }
         }
 
+        // Check Mobile Change
+        if (newMobile != null && !newMobile.isBlank() && !newMobile.equals(user.getMobileNumber())) {
+            userRepository.findByMobileNumber(newMobile).ifPresent(existingUser -> {
+                if (!existingUser.getId().equals(user.getId())) {
+                    throw new IllegalArgumentException("Mobile number already in use");
+                }
+            });
+
+            String otp = String.format("%06d", new java.util.Random().nextInt(999999));
+            user.setNewMobileNumber(newMobile);
+            user.setNewMobileNumberOtp(otp);
+            user.setNewMobileNumberOtpExpiry(java.time.LocalDateTime.now().plusMinutes(5));
+            mobileChanged = true;
+
+            System.out.println("DEBUG: Mobile Change OTP for " + newMobile + ": " + otp);
+            smsService.sendSms(newMobile, "Your Love, Rosie Mobile Change OTP is: " + otp);
+        }
+
         userRepository.save(user);
 
         java.util.Map<String, Object> response = new java.util.HashMap<>();
         response.put("username", user.getUsername());
         response.put("name", user.getName() != null ? user.getName() : "");
         response.put("email", user.getEmail());
+        response.put("mobileNumber", user.getMobileNumber());
         response.put("role", user.getRole());
         response.put("id", user.getId());
 
         if (emailChanged) {
             response.put("status", "OTP_SENT");
             response.put("message", "OTP sent to new email. Please verify.");
+        } else if (mobileChanged) {
+            response.put("status", "OTP_SENT_MOBILE");
+            response.put("message", "OTP sent to new mobile. Please verify.");
         }
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/verify-mobile-change")
+    public ResponseEntity<?> verifyMobileChange(@RequestBody java.util.Map<String, String> request) {
+        String username = org.springframework.security.core.context.SecurityContextHolder.getContext()
+                .getAuthentication().getName();
+        String otp = request.get("otp");
+
+        if (otp == null) {
+            return ResponseEntity.badRequest().body("OTP is required");
+        }
+
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.getNewMobileNumber() == null || user.getNewMobileNumberOtp() == null
+                || !user.getNewMobileNumberOtp().equals(otp)
+                || user.getNewMobileNumberOtpExpiry().isBefore(java.time.LocalDateTime.now())) {
+            return ResponseEntity.badRequest().body("Invalid or expired OTP");
+        }
+
+        user.setMobileNumber(user.getNewMobileNumber());
+        user.setNewMobileNumber(null);
+        user.setNewMobileNumberOtp(null);
+        user.setNewMobileNumberOtpExpiry(null);
+        userRepository.save(user);
+
+        return ResponseEntity.ok(java.util.Map.of(
+                "success", true,
+                "message", "Mobile number updated successfully",
+                "mobileNumber", user.getMobileNumber()));
     }
 
     @PostMapping("/verify-email-change")

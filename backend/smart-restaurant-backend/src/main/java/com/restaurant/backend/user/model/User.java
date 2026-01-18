@@ -40,4 +40,11 @@ public class User {
 
     private java.time.LocalDateTime newEmailOtpExpiry;
     private boolean isVerified = false;
+
+    @Column(unique = true)
+    private String mobileNumber;
+
+    private String newMobileNumber;
+    private String newMobileNumberOtp;
+    private java.time.LocalDateTime newMobileNumberOtpExpiry;
 }

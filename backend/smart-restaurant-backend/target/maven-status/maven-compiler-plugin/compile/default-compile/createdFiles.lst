@@ -99,3 +99,4 @@ com\restaurant\backend\reservation\dto\EventBookingResponse.class
 com\restaurant\backend\menu\exception\ResourceNotFoundException.class
 com\restaurant\backend\reservation\repository\EventHallRepository.class
 com\restaurant\backend\order\dto\OrderItemResponse.class
+com\restaurant\backend\service\SmsService.class

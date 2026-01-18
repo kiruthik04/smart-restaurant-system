@@ -76,6 +76,18 @@ const SignupPage = () => {
                         />
                     </div>
                     <div className="form-group">
+                        <label className="form-label">Mobile Number</label>
+                        <input
+                            type="tel"
+                            name="mobileNumber"
+                            value={formData.mobileNumber || ''}
+                            onChange={handleChange}
+                            className="form-input"
+                            placeholder="1234567890"
+                            required
+                        />
+                    </div>
+                    <div className="form-group">
                         <label className="form-label">Password</label>
                         <input
                             type="password"

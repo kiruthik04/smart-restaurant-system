@@ -8,5 +8,6 @@ public class RegisterRequest {
     private String password;
     private String name;
     private String email;
+    private String mobileNumber;
     private String role; // Optional, default to CUSTOMER if null
 }

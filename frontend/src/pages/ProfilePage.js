@@ -10,7 +10,8 @@ const ProfilePage = () => {
 
     const [formData, setFormData] = useState({
         name: '',
-        email: ''
+        email: '',
+        mobileNumber: ''
     });
 
     // Password change state
@@ -24,7 +25,9 @@ const ProfilePage = () => {
     const [verification, setVerification] = useState({
         showOtpInput: false,
         otp: '',
-        newEmail: ''
+        newEmail: '',
+        newMobile: '',
+        type: '' // 'EMAIL' or 'MOBILE'
     });
 
     const [message, setMessage] = useState({ type: '', text: '' });
@@ -34,7 +37,8 @@ const ProfilePage = () => {
         if (user) {
             setFormData({
                 name: user.name || '',
-                email: user.email || ''
+                email: user.email || '',
+                mobileNumber: user.mobileNumber || ''
             });
         }
     }, [user]);
@@ -69,7 +73,24 @@ const ProfilePage = () => {
                     username: response.data.username,
                     role: response.data.role,
                     id: response.data.id,
-                    email: user.email // Keep old email until verified
+                    email: user.email, // Keep old email until verified
+                    mobileNumber: user.mobileNumber
+                });
+            } else if (response.data.status === 'OTP_SENT_MOBILE') {
+                setVerification({
+                    showOtpInput: true,
+                    otp: '',
+                    newMobile: formData.mobileNumber,
+                    type: 'MOBILE'
+                });
+                setMessage({ type: 'success', text: response.data.message });
+                updateUser({
+                    name: response.data.name,
+                    username: response.data.username,
+                    role: response.data.role,
+                    id: response.data.id,
+                    email: user.email,
+                    mobileNumber: user.mobileNumber // Keep old mobile until verified
                 });
             } else {
                 updateUser(response.data);
@@ -82,17 +103,26 @@ const ProfilePage = () => {
         }
     };
 
-    const handleVerifyEmail = async () => {
+    const handleVerifyContact = async () => {
         setLoading(true);
         setMessage({ type: '', text: '' });
         try {
-            const response = await api.post('/api/auth/verify-email-change', {
+            const endpoint = verification.type === 'MOBILE'
+                ? '/api/auth/verify-mobile-change'
+                : '/api/auth/verify-email-change';
+
+            const response = await api.post(endpoint, {
                 otp: verification.otp
             });
+
             if (response.data.success) {
-                updateUser({ ...user, email: response.data.email });
-                setVerification({ showOtpInput: false, otp: '', newEmail: '' });
-                setMessage({ type: 'success', text: 'Email verified and updated successfully!' });
+                if (verification.type === 'MOBILE') {
+                    updateUser({ ...user, mobileNumber: response.data.mobileNumber });
+                } else {
+                    updateUser({ ...user, email: response.data.email });
+                }
+                setVerification({ showOtpInput: false, otp: '', newEmail: '', newMobile: '', type: '' });
+                setMessage({ type: 'success', text: `${verification.type === 'MOBILE' ? 'Mobile' : 'Email'} verified and updated successfully!` });
             }
         } catch (error) {
             setMessage({ type: 'error', text: error.response?.data || 'Invalid OTP' });
@@ -175,8 +205,19 @@ const ProfilePage = () => {
                                     name="email"
                                     value={formData.email}
                                     onChange={handleDataChange}
-                                    className="modal-input"
                                     placeholder="your@email.com"
+                                    disabled={verification.showOtpInput}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label>Mobile Number</label>
+                                <input
+                                    type="tel"
+                                    name="mobileNumber"
+                                    value={formData.mobileNumber || ''}
+                                    onChange={handleDataChange}
+                                    className="modal-input"
+                                    placeholder="1234567890"
                                     disabled={verification.showOtpInput}
                                 />
                             </div>
@@ -187,7 +228,9 @@ const ProfilePage = () => {
                                 </button>
                             ) : (
                                 <div className="otp-verification-section">
-                                    <p className="otp-info">Enter the 6-digit OTP sent to {verification.newEmail}</p>
+                                    <p className="otp-info">
+                                        Enter the 6-digit OTP sent to {verification.type === 'MOBILE' ? verification.newMobile : verification.newEmail}
+                                    </p>
                                     <input
                                         type="text"
                                         className="modal-input otp-input"
@@ -196,10 +239,10 @@ const ProfilePage = () => {
                                         onChange={(e) => setVerification({ ...verification, otp: e.target.value })}
                                     />
                                     <div className="otp-actions">
-                                        <button type="button" className="save-btn" onClick={handleVerifyEmail} disabled={loading}>
-                                            Verify & Update Email
+                                        <button type="button" className="save-btn" onClick={handleVerifyContact} disabled={loading}>
+                                            Verify & Update
                                         </button>
-                                        <button type="button" className="back-btn" onClick={() => setVerification({ showOtpInput: false, otp: '', newEmail: '' })}>
+                                        <button type="button" className="back-btn" onClick={() => setVerification({ showOtpInput: false, otp: '', newEmail: '', newMobile: '', type: '' })}>
                                             Cancel
                                         </button>
                                     </div>

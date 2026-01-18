@@ -81,13 +81,13 @@ const ForgotPasswordPage = () => {
     const renderStep1 = () => (
         <form onSubmit={handleSendOtp}>
             <div className="form-group">
-                <label className="form-label">Email Address</label>
+                <label className="form-label">Email Address or Mobile Number</label>
                 <input
-                    type="email"
+                    type="text"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="form-input"
-                    placeholder="your@email.com"
+                    placeholder="Email or Mobile"
                     required
                 />
             </div>
