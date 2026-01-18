@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
-import api from '../api/axios';
 import { FaSun, FaMoon, FaDesktop } from 'react-icons/fa';
 import './ProfileModal.css';
 
@@ -10,14 +9,6 @@ function ProfileModal({ isOpen, onClose }) {
     const { user, logout } = useAuth();
     const { theme, setTheme } = useTheme();
     const navigate = useNavigate();
-    const [showChangePassword, setShowChangePassword] = useState(false);
-    const [passwords, setPasswords] = useState({
-        oldPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-    });
-    const [message, setMessage] = useState({ type: '', text: '' });
-    const [loading, setLoading] = useState(false);
 
     if (!isOpen || !user) return null;
 
@@ -25,49 +16,6 @@ function ProfileModal({ isOpen, onClose }) {
         logout();
         onClose();
         navigate('/');
-    };
-
-    const handleChange = (e) => {
-        setPasswords({
-            ...passwords,
-            [e.target.name]: e.target.value
-        });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setMessage({ type: '', text: '' });
-
-        if (passwords.newPassword !== passwords.confirmPassword) {
-            setMessage({ type: 'error', text: 'New passwords do not match' });
-            return;
-        }
-
-        if (passwords.newPassword.length < 6) {
-            setMessage({ type: 'error', text: 'Password must be at least 6 characters' });
-            return;
-        }
-
-        setLoading(true);
-        try {
-            await api.post('/api/auth/change-password', {
-                oldPassword: passwords.oldPassword,
-                newPassword: passwords.newPassword
-            });
-            setMessage({ type: 'success', text: 'Password changed successfully!' });
-            setPasswords({ oldPassword: '', newPassword: '', confirmPassword: '' });
-            setTimeout(() => {
-                setShowChangePassword(false);
-                setMessage({ type: '', text: '' });
-            }, 2000);
-        } catch (error) {
-            setMessage({
-                type: 'error',
-                text: error.response?.data || 'Failed to change password'
-            });
-        } finally {
-            setLoading(false);
-        }
     };
 
     return (
@@ -82,11 +30,7 @@ function ProfileModal({ isOpen, onClose }) {
                 <span className="profile-role">{user.role}</span>
             </div>
 
-            {message.text && (
-                <div className={message.type === 'error' ? 'error-message' : 'success-message'}>
-                    {message.text}
-                </div>
-            )}
+
 
             {user.role !== 'CUSTOMER' && (
                 <div className="theme-switcher">
@@ -114,25 +58,23 @@ function ProfileModal({ isOpen, onClose }) {
                 </div>
             )}
 
-            {!showChangePassword ? (
-                <div className="profile-actions">
-                    <button
-                        className="btn-change-password"
-                        onClick={() => {
-                            onClose();
-                            navigate('/profile');
-                        }}
-                    >
-                        Edit Profile
-                    </button>
-                    <button
-                        className="btn-logout"
-                        onClick={handleLogout}
-                    >
-                        Logout
-                    </button>
-                </div>
-            ) : null}
+            <div className="profile-actions">
+                <button
+                    className="btn-change-password"
+                    onClick={() => {
+                        onClose();
+                        navigate('/profile');
+                    }}
+                >
+                    Edit Profile
+                </button>
+                <button
+                    className="btn-logout"
+                    onClick={handleLogout}
+                >
+                    Logout
+                </button>
+            </div>
         </div>
     );
 }
