@@ -12,20 +12,20 @@ function CartPage() {
     const { user } = useAuth();
     const navigate = useNavigate();
 
-    // We can pull tableNumber from localStorage, similar to OrderPage
-    const [tableNumber, setTableNumber] = useState(localStorage.getItem("tableNumber") || "");
+    // We pull tableCode from localStorage
+    const [tableCode, setTableCode] = useState(localStorage.getItem("tableCode") || "");
+    const [tableNumberDisplay, setTableNumberDisplay] = useState(localStorage.getItem("tableNumber") || "");
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
 
     const handlePlaceOrder = () => {
-        if (!tableNumber) {
-            setMessage("Please enter a table number.");
+        if (!tableCode) {
+            setMessage("No Table Code found. Please scan QR code on Order Page.");
             return;
         }
 
         // Redirect to Login if user is not authenticated
         if (!user) {
-            // Optional: You could pass state logic here to redirect back after login
             navigate("/login", { state: { from: "/cart" } });
             return;
         }
@@ -36,7 +36,7 @@ function CartPage() {
         const orderSessionId = getOrderSessionId();
 
         const payload = {
-            tableNumber: Number(tableNumber),
+            tableCode: tableCode, // Send code instead of number
             orderSessionId: orderSessionId,
             userId: user ? user.id : null,
             items: cart.map(i => ({
@@ -49,10 +49,10 @@ function CartPage() {
             .then(() => {
                 setMessage("Order placed successfully! Redirecting...");
                 clearCart();
-                // Save tableNumber preference just in case
-                localStorage.setItem("tableNumber", tableNumber);
+                // Persist codes just in case
+                localStorage.setItem("tableCode", tableCode);
+                localStorage.setItem("tableNumber", tableNumberDisplay); // if available
 
-                // Redirect to Order Page (or status page) after short delay
                 setTimeout(() => {
                     navigate("/order");
                 }, 1500);
@@ -78,8 +78,24 @@ function CartPage() {
 
     return (
         <div className="cart-page">
-            <h2>Your Cart</h2>
-            <p className="cart-subtitle">Review your selected items</p>
+            <div className="cart-header-row">
+                <div>
+                    <h2>Your Cart</h2>
+                    <p className="cart-subtitle">Review your selected items</p>
+                </div>
+                {cart.length > 0 && (
+                    <button
+                        className="clear-cart-btn"
+                        onClick={() => {
+                            if (window.confirm("Are you sure you want to remove all items from your cart?")) {
+                                clearCart();
+                            }
+                        }}
+                    >
+                        Clear Cart
+                    </button>
+                )}
+            </div>
 
             {message && <div className={`toast-message ${message.includes("success") ? "success" : "error"}`} style={{ position: 'static', marginBottom: '1rem' }}>{message}</div>}
 
@@ -124,24 +140,18 @@ function CartPage() {
                 </div>
 
                 <div className="table-input-section">
-                    <label>Table Number</label>
-                    <input
-                        type="number"
-                        className="table-input"
-                        placeholder="Enter your table number (e.g. 5)"
-                        value={tableNumber}
-                        onChange={(e) => {
-                            setTableNumber(e.target.value);
-                            localStorage.setItem("tableNumber", e.target.value);
-                        }}
-                    />
+                    <label>Ordering for Table</label>
+                    <div className="table-display-box">
+                        {tableNumberDisplay ? `#${tableNumberDisplay}` : (tableCode ? `Code: ${tableCode}` : "Unknown")}
+                        {!tableCode && <span className="error-text"> (Scan QR on Order Page)</span>}
+                    </div>
                 </div>
 
                 <div className="checkout-actions">
                     <button
                         className="place-order-btn"
                         onClick={handlePlaceOrder}
-                        disabled={loading || cart.length === 0 || !tableNumber}
+                        disabled={loading || cart.length === 0 || !tableCode}
                     >
                         {loading ? "Placing Order..." : "Confirm & Place Order"}
                     </button>

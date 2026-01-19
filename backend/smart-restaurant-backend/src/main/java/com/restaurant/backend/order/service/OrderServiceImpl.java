@@ -41,9 +41,14 @@ public class OrderServiceImpl implements OrderService {
                 request.setItems(new ArrayList<>());
             }
 
-            // 1️⃣ Validate table (Direct Call)
-            // This throws exception if not found, which handles validity check
-            DiningTable table = diningTableService.getEntityByTableNumber(request.getTableNumber());
+            // 1️⃣ Validate table (Secure Lookup or Legacy)
+            DiningTable table;
+            if (request.getTableCode() != null && !request.getTableCode().isBlank()) {
+                table = diningTableService.getEntityByTableCode(request.getTableCode());
+            } else {
+                // Fallback for transition (or internal calls), but frontend should send code
+                table = diningTableService.getEntityByTableNumber(request.getTableNumber());
+            }
 
             String incomingSession = request.getOrderSessionId();
             String currentOwner = table.getCurrentSessionId();

@@ -270,3 +270,309 @@
         font-size: 14px;
     }
 }
+
+/* ------------------ QR Styles ------------------ */
+
+.table-code-preview {
+    font-family: 'JetBrains Mono', monospace;
+    background: #f1f5f9;
+    padding: 4px 8px;
+    border-radius: 6px;
+    color: #475569;
+    font-size: 0.9em;
+    font-weight: 600;
+    border: 1px solid #e2e8f0;
+}
+
+/* QR Button - Indigo */
+.btn-qr {
+    background: rgba(99, 102, 241, 0.1);
+    color: #4f46e5;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    margin-right: 8px;
+}
+
+.btn-qr:hover {
+    background: #4f46e5;
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
+}
+
+/* Modal Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Modal Content */
+.qr-modal {
+    background: white;
+    padding: 40px;
+    border-radius: 24px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    animation: popIn 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.qr-modal h3 {
+    margin-top: 0;
+    color: #1e293b;
+    font-size: 24px;
+}
+
+.qr-modal p {
+    color: #64748b;
+    margin-bottom: 24px;
+}
+
+.qr-container {
+    background: white;
+    padding: 20px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 16px;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.qr-code-text {
+    font-size: 1.1em;
+    color: #334155;
+    background: #f8fafc;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+}
+
+.qr-code-text strong {
+    color: #0f172a;
+    font-family: monospace;
+    font-size: 1.2em;
+    letter-spacing: 1px;
+}
+
+.close-btn {
+    background: #0f172a;
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    /* Smooth rounded corners */
+    font-weight: 600;
+    font-size: 16px;
+    /* Legible font size */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.close-btn:hover {
+    background: #334155;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* -------------------------------------------------------------
+   Printable QR Card Template (Hidden but Rendered for Download) 
+   Dimensions: 6in x 4in = approx 600px x 400px ratio
+------------------------------------------------------------- */
+.qr-card-template {
+    position: absolute;
+    left: -9999px;
+    /* Hide from view */
+    top: 0;
+    width: 600px;
+    height: 400px;
+    background: linear-gradient(135deg, #FFF8F0 0%, #FFFFFF 100%);
+    /* Warm bg */
+    border: 8px solid #FF6B00;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+    color: #2D3436;
+    overflow: hidden;
+}
+
+.card-header {
+    background: #FF6B00;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    border-bottom-left-radius: 50% 20px;
+    border-bottom-right-radius: 50% 20px;
+}
+
+.card-header h1 {
+    font-family: 'Pacifico', cursive;
+    /* Or similar script font */
+    font-size: 2.5rem;
+    margin: 0;
+    line-height: 1.2;
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.1);
+}
+
+.card-header p {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    opacity: 0.9;
+}
+
+.card-body {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 0 40px;
+    gap: 30px;
+}
+
+.card-qr-section {
+    background: white;
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(255, 107, 0, 0.1);
+}
+
+.card-info-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.info-label {
+    font-size: 1rem;
+    color: #FF6B00;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.info-number {
+    font-size: 5rem;
+    font-weight: 800;
+    line-height: 1;
+    color: #2D3436;
+    margin-bottom: 20px;
+}
+
+.info-code-label {
+    font-size: 0.8rem;
+    color: #636e72;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+}
+
+.info-code {
+    font-size: 2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    color: #2D3436;
+    background: #f1f2f6;
+    padding: 5px 12px;
+    border-radius: 8px;
+    border: 1px dashed #b2bec3;
+}
+
+.card-footer {
+    text-align: center;
+    padding: 12px;
+    background: #2D3436;
+    color: white;
+    margin-top: auto;
+}
+
+.card-footer p {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+/* Modal Buttons Container */
+.modal-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.download-btn {
+    background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.download-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 184, 148, 0.3);
+}
+
+@media (max-width: 480px) {
+    .modal-actions {
+        flex-direction: column;
+    }
+
+    .download-btn,
+    .close-btn {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+}

@@ -35,7 +35,18 @@ const LoginPage = () => {
             <div className="login-card">
                 <h2 className="login-title"><span className="gradient-text">Hello Again!</span> 👋</h2>
 
-                {error && <div className="error-message">{error}</div>}
+                {error && (
+                    <div className="error-message">
+                        {error}
+                        {(error.toLowerCase().includes("verify") || error.toLowerCase().includes("verified")) && (
+                            <div style={{ marginTop: '5px' }}>
+                                <Link to="/verify-account" style={{ color: '#fff', textDecoration: 'underline' }}>
+                                    Verify Account
+                                </Link>
+                            </div>
+                        )}
+                    </div>
+                )}
 
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">

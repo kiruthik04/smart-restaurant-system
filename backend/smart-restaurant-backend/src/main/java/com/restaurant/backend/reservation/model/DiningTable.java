@@ -19,6 +19,10 @@ public class DiningTable {
     @Column(nullable = false)
     private boolean active = true;
 
+    // Unique 8-char alphanumeric code for secure ordering
+    @Column(name = "table_code", unique = true)
+    private String tableCode;
+
     @Column(name = "current_session_id")
     private String currentSessionId;
 
@@ -68,5 +72,13 @@ public class DiningTable {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getTableCode() {
+        return tableCode;
+    }
+
+    public void setTableCode(String tableCode) {
+        this.tableCode = tableCode;
     }
 }

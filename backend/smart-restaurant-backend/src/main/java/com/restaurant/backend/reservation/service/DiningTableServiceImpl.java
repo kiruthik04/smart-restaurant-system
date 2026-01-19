@@ -20,6 +20,16 @@ public class DiningTableServiceImpl implements DiningTableService {
         this.repository = repository;
     }
 
+    private String generateTableCode() {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        StringBuilder sb = new StringBuilder();
+        java.security.SecureRandom random = new java.security.SecureRandom();
+        for (int i = 0; i < 8; i++) {
+            sb.append(chars.charAt(random.nextInt(chars.length())));
+        }
+        return sb.toString();
+    }
+
     @Override
     public DiningTableResponse createTable(DiningTableRequest request) {
 
@@ -30,6 +40,9 @@ public class DiningTableServiceImpl implements DiningTableService {
         DiningTable table = new DiningTable(
                 request.getTableNumber(),
                 request.getCapacity());
+
+        // Generate random 8-char alphanumeric code
+        table.setTableCode(generateTableCode());
 
         DiningTable saved = repository.save(table);
 
@@ -58,6 +71,13 @@ public class DiningTableServiceImpl implements DiningTableService {
         return repository
                 .findByTableNumber(tableNumber)
                 .orElseThrow(() -> new ResourceNotFoundException("Table not found"));
+    }
+
+    @Override
+    public DiningTable getEntityByTableCode(String tableCode) {
+        return repository
+                .findByTableCode(tableCode)
+                .orElseThrow(() -> new ResourceNotFoundException("Invalid Table Code"));
     }
 
     @Override
@@ -116,13 +136,21 @@ public class DiningTableServiceImpl implements DiningTableService {
     public List<AdminTableResponse> getAllTablesForAdmin() {
         return repository.findAll()
                 .stream()
-                .map(table -> new AdminTableResponse(
-                        table.getId(),
-                        table.getTableNumber(),
-                        table.getCapacity(),
-                        table.getCurrentSessionId() != null,
-                        table.getCurrentSessionId(),
-                        table.isEnabled()))
+                .map(table -> {
+                    // Backfill code if missing or empty
+                    if (table.getTableCode() == null || table.getTableCode().trim().isEmpty()) {
+                        table.setTableCode(generateTableCode());
+                        repository.save(table);
+                    }
+                    return new AdminTableResponse(
+                            table.getId(),
+                            table.getTableNumber(),
+                            table.getCapacity(),
+                            table.getCurrentSessionId() != null,
+                            table.getCurrentSessionId(),
+                            table.isEnabled(),
+                            table.getTableCode()); // Add to response
+                })
                 .toList();
     }
 

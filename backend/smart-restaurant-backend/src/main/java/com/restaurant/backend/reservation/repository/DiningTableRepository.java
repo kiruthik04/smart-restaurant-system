@@ -18,4 +18,5 @@ public interface DiningTableRepository
 
     Optional<DiningTable> findByCurrentSessionId(String currentSessionId);
 
+    Optional<DiningTable> findByTableCode(String tableCode);
 }

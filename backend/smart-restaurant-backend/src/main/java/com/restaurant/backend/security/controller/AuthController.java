@@ -56,8 +56,10 @@ public class AuthController {
         // Fetch role from DB to include in response
         User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
 
-        if (!user.isVerified()) {
-            return ResponseEntity.status(403).body("Account not verified. Please verify your email.");
+        // Check verification only for CUSTOMER role
+        if ("CUSTOMER".equalsIgnoreCase(user.getRole()) && !user.isVerified()) {
+            return ResponseEntity.status(403)
+                    .body(java.util.Map.of("message", "Account not verified. Please verify your email."));
         }
 
         final String token = jwtUtil.generateToken(userDetails.getUsername(), user.getRole());
@@ -94,7 +96,20 @@ public class AuthController {
         }
         user.setRole(role);
 
-        // Generate OTP
+        // Auto-verify if not a CUSTOMER
+        if (!"CUSTOMER".equalsIgnoreCase(user.getRole())) {
+            user.setVerified(true);
+            user.setOtp(null);
+            user.setOtpExpiry(null);
+            userRepository.save(user);
+
+            return ResponseEntity.ok(java.util.Map.of(
+                    "message", "Registration successful. User verified.",
+                    "status", "VERIFIED",
+                    "email", user.getEmail()));
+        }
+
+        // Generate OTP for CUSTOMER
         String otp = String.format("%06d", new java.util.Random().nextInt(999999));
         user.setOtp(otp);
         user.setOtpExpiry(java.time.LocalDateTime.now().plusMinutes(10));
@@ -289,20 +304,25 @@ public class AuthController {
                 }
             });
 
-            // Generate OTP for email change
-            String otp = String.format("%06d", new java.util.Random().nextInt(999999));
-            user.setNewEmail(newEmail);
-            user.setNewEmailOtp(otp);
-            user.setNewEmailOtpExpiry(java.time.LocalDateTime.now().plusMinutes(5));
-            emailChanged = true;
+            if ("CUSTOMER".equalsIgnoreCase(user.getRole())) {
+                // Generate OTP for email change for CUSTOMER
+                String otp = String.format("%06d", new java.util.Random().nextInt(999999));
+                user.setNewEmail(newEmail);
+                user.setNewEmailOtp(otp);
+                user.setNewEmailOtpExpiry(java.time.LocalDateTime.now().plusMinutes(5));
+                emailChanged = true;
 
-            System.out.println("DEBUG: Email Change OTP for " + newEmail + ": " + otp);
+                System.out.println("DEBUG: Email Change OTP for " + newEmail + ": " + otp);
 
-            try {
-                String htmlContent = generateOtpEmailTemplate(otp, "update your email address");
-                emailService.sendHtmlMessage(newEmail, "Email Change Verification", htmlContent);
-            } catch (Exception e) {
-                System.err.println("Failed to send email: " + e.getMessage());
+                try {
+                    String htmlContent = generateOtpEmailTemplate(otp, "update your email address");
+                    emailService.sendHtmlMessage(newEmail, "Email Change Verification", htmlContent);
+                } catch (Exception e) {
+                    System.err.println("Failed to send email: " + e.getMessage());
+                }
+            } else {
+                // Direct update for non-CUSTOMER
+                user.setEmail(newEmail);
             }
         }
 
@@ -314,14 +334,19 @@ public class AuthController {
                 }
             });
 
-            String otp = String.format("%06d", new java.util.Random().nextInt(999999));
-            user.setNewMobileNumber(newMobile);
-            user.setNewMobileNumberOtp(otp);
-            user.setNewMobileNumberOtpExpiry(java.time.LocalDateTime.now().plusMinutes(5));
-            mobileChanged = true;
+            if ("CUSTOMER".equalsIgnoreCase(user.getRole())) {
+                String otp = String.format("%06d", new java.util.Random().nextInt(999999));
+                user.setNewMobileNumber(newMobile);
+                user.setNewMobileNumberOtp(otp);
+                user.setNewMobileNumberOtpExpiry(java.time.LocalDateTime.now().plusMinutes(5));
+                mobileChanged = true;
 
-            System.out.println("DEBUG: Mobile Change OTP for " + newMobile + ": " + otp);
-            smsService.sendSms(newMobile, "Your Love, Rosie Mobile Change OTP is: " + otp);
+                System.out.println("DEBUG: Mobile Change OTP for " + newMobile + ": " + otp);
+                smsService.sendSms(newMobile, "Your Love, Rosie Mobile Change OTP is: " + otp);
+            } else {
+                // Direct update for non-CUSTOMER
+                user.setMobileNumber(newMobile);
+            }
         }
 
         userRepository.save(user);
@@ -405,6 +430,40 @@ public class AuthController {
                 "email", user.getEmail()));
     }
 
+    @PostMapping("/resend-verification")
+    public ResponseEntity<?> resendVerification(@RequestBody java.util.Map<String, String> request) {
+        String email = request.get("email");
+        if (email == null) {
+            return ResponseEntity.badRequest().body("Email is required");
+        }
+
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+
+        if (user.isVerified()) {
+            return ResponseEntity.badRequest().body("Account is already verified");
+        }
+
+        // Generate OTP
+        String otp = String.format("%06d", new java.util.Random().nextInt(999999));
+        user.setOtp(otp);
+        user.setOtpExpiry(java.time.LocalDateTime.now().plusMinutes(10));
+        userRepository.save(user);
+
+        // Send OTP Email
+        try {
+            String htmlContent = generateOtpEmailTemplate(otp, "verify your account");
+            emailService.sendHtmlMessage(request.get("email"), "Resend Verification OTP", htmlContent);
+        } catch (Exception e) {
+            System.err.println("Failed to send email: " + e.getMessage());
+            return ResponseEntity.internalServerError().body("Failed to send verification email");
+        }
+
+        return ResponseEntity.ok("OTP sent successfully to " + email);
+    }
+
     private String generateOtpEmailTemplate(String otp, String action) {
         return """
                 <!DOCTYPE html>
@@ -432,7 +491,7 @@ public class AuthController {
                             <div class="otp-box">
                                 <div class="otp">%s</div>
                             </div>
-                            <p>This code will expire in 5 minutes.</p>
+                            <p>This code will expire in 10 minutes.</p>
                             <p>If you did not request this, please ignore this email or contact support if you have concerns.</p>
                         </div>
                         <div class="footer">

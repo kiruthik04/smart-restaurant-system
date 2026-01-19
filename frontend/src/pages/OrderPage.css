@@ -1,4 +1,3 @@
-/* OrderPage.css - Bright Foodie Redesign */
 .order-page-redesign {
     max-width: 100%;
     margin: 0 auto;
@@ -8,6 +7,8 @@
     /* Match Home */
     min-height: 100vh;
     font-family: 'Outfit', 'Inter', sans-serif;
+    position: relative;
+    /* For absolute positioning of children */
 }
 
 .order-header {
@@ -25,14 +26,13 @@
     font-weight: 800;
     letter-spacing: -1.2px;
     color: var(--text-dark, #2D3436);
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    /* Removed flex to allow emoji to wrap naturally with text */
 }
 
 .gradient-text {
     background: linear-gradient(135deg, var(--primary-orange, #FF6B00) 0%, #FF9100 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -57,26 +57,75 @@
 }
 
 /* Updated Input Field - Soft & Friendly */
+.table-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .table-input-minimal {
-    width: 80px;
+    width: 110px;
     text-align: center;
-    padding: 12px;
+    padding: 10px;
     border: 2px solid #FFE0B2;
-    /* Light Orange Border */
-    border-radius: 50px;
-    font-size: 1.4rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
     font-weight: 800;
     outline: none;
     background: white;
     color: var(--text-dark, #2D3436);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     box-shadow: 0 4px 10px rgba(255, 107, 0, 0.05);
+    font-family: 'JetBrains Mono', monospace;
+    /* Monospace for codes */
+    text-transform: uppercase;
 }
 
 .table-input-minimal:focus {
     border-color: var(--primary-orange, #FF6B00);
     box-shadow: 0 0 0 4px rgba(255, 107, 0, 0.2);
-    transform: scale(1.05);
+    transform: scale(1.02);
+}
+
+/* ... existing styles ... */
+
+
+
+.scan-btn {
+    width: auto;
+    height: auto;
+    padding: 8px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    /* No background */
+    color: var(--primary-orange, #FF6B00);
+    /* Orange Icon */
+    font-size: 2rem;
+    /* Larger icon */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: none;
+    /* No shadow */
+}
+
+.scan-btn:hover {
+    background: rgba(255, 107, 0, 0.1);
+    transform: scale(1.1);
+    box-shadow: none;
+}
+
+.scan-btn:hover {
+    background: #e65100;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(255, 107, 0, 0.4);
+}
+
+.scan-btn:active {
+    transform: scale(0.95);
 }
 
 /* Floating Cart Bar - Vibrant Pill */
@@ -194,9 +243,11 @@
 }
 
 /* Active Table Status - Floating Top Right */
+/* Active Table Status - Floating Top Right */
 .active-table-status {
-    position: fixed;
-    top: 90px;
+    position: absolute;
+    top: 220px;
+    /* Pushed down to avoid overlap */
     right: 20px;
     bottom: auto;
     left: auto;
@@ -218,21 +269,63 @@
     width: auto;
 }
 
+.active-table-status.scrolled {
+    position: fixed;
+    top: 90px;
+    z-index: 1000;
+    animation: none;
+    transition: top 0.3s ease;
+}
+
 @media (max-width: 768px) {
+    .order-header {
+        flex-direction: row;
+        align-items: center;
+        /* better alignment */
+        justify-content: space-between;
+        gap: 0.5rem;
+    }
+
+    .table-info {
+        width: auto;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-end;
+    }
+
+    .table-input-minimal,
+    .table-info label {
+        display: none;
+        /* Hide text input AND label on mobile */
+    }
+
     .active-table-status {
-        top: 215px;
-        /* Below the header text on mobile */
-        right: 15px;
-        /* Slightly tighter margin */
-        padding: 6px 14px;
-        /* Compact padding */
-        transition: top 0.3s ease;
-        /* Smooth transition */
+        position: absolute;
+        top: 150px;
+        /* Adjusted up since header is shorter */
+        /* Positioned below table input */
+        bottom: auto;
+        right: 1.5rem;
+        left: auto;
+        transform: none;
+        width: auto;
+        min-width: unset;
+        justify-content: center;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        padding: 6px 16px;
+        z-index: 10;
     }
 
     .active-table-status.scrolled {
+        position: fixed;
         top: 80px;
-        /* Snaps to top below navbar when scrolled */
+        /* Stick to top under header */
+        right: 1.5rem;
+        z-index: 1000;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        animation: none;
+        /* Prevent jumpy re-animation */
+        transition: top 0.3s ease;
     }
 }
 
@@ -265,4 +358,51 @@
 .finish-btn-small:hover {
     background: #e65100;
     transform: scale(1.05);
+}
+
+/* ------------------ Scanner Modal ------------------ */
+
+.qr-scanner-modal {
+    background: white;
+    padding: 24px;
+    border-radius: 20px;
+    text-align: center;
+    width: 90%;
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.scanner-container {
+    width: 100%;
+    height: 300px;
+    /* Fixed height for scanner view */
+    background: #000;
+    margin-top: 16px;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.scanner-container video {
+    object-fit: cover;
+}
+
+.qr-scanner-modal h3 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.qr-scanner-modal .close-btn {
+    margin-top: 20px;
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.qr-scanner-modal .close-btn:hover {
+    background: #e2e8f0;
 }

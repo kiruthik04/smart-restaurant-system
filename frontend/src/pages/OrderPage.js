@@ -1,40 +1,47 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useRef } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import CategorySection from "../components/CategorySection";
 import LoadingSpinner from "../components/LoadingSpinner";
-// import Cart from "../components/Cart"; // Keeping Cart import commented out if needed later
-// User said "remove the components", but removing Cart completely breaks the app functionality usually.
-// I will keep Cart state but maybe hide the visual component or make it a floating/bottom sheet.
-// Actually, for a "redesign", usually you want a floating cart button. 
-// Let's implement a simple floating cart button that opens a modal or stays fixed at bottom.
-// For now, I will stick to what I built: CategorySection passes `addToCart`.
-// I will add a floating "View Cart" button if items > 0.
 import { getAvailableMenuItems } from "../api/menuApi";
-
-import { getOrderSessionId } from "../utils/session";
+import { getOrderSessionId, clearOrderSession } from "../utils/session";
 import { releaseTable } from "../api/tableApi";
-import { clearOrderSession } from "../utils/session";
 import api from "../api/axios";
 import BillModal from "../components/BillModal";
 import "./OrderPage.css";
-
+import { Scanner } from '@yudiel/react-qr-scanner';
+import { FaCamera } from "react-icons/fa";
 
 function OrderPage() {
+    const [searchParams] = useSearchParams();
     const { user } = useAuth();
     const { addToCart, totalItems, totalPrice } = useCart();
     const [menu, setMenu] = useState([]);
-    // Local cart state removed
-    const [tableNumber, setTableNumber] = useState(localStorage.getItem("tableNumber") || "");
+
+    // We now track tableIdentifier (could be Code or Number, but backend prefers Code)
+    // We try to keep it synced with localStorage "tableCode"
+    const [tableCode, setTableCode] = useState(localStorage.getItem("tableCode") || "");
+    const [tableNumberDisplay, setTableNumberDisplay] = useState(localStorage.getItem("tableNumber") || "");
+
     const [message, setMessage] = useState("");
     const orderSessionId = getOrderSessionId();
     const [tableActive, setTableActive] = useState(false);
     const [releasing, setReleasing] = useState(false);
     const [billData, setBillData] = useState(null);
     const [showBill, setShowBill] = useState(false);
-    // showCartModal state removed
-    const [loading, setLoading] = useState(true); // Loading state
+    const [loading, setLoading] = useState(true);
+    const [showScanner, setShowScanner] = useState(false);
+
+    useEffect(() => {
+        const codeFromUrl = searchParams.get("code");
+        if (codeFromUrl) {
+            setTableCode(codeFromUrl);
+            localStorage.setItem("tableCode", codeFromUrl);
+            setShowScanner(false);
+            setMessage("Table Code detected from URL!");
+        }
+    }, [searchParams]);
 
     useEffect(() => {
         setLoading(true);
@@ -47,25 +54,25 @@ function OrderPage() {
                 setMessage("Failed to load menu");
             })
             .finally(() => {
-                // Simulate a slight delay for smooth animation if fetch is too fast
                 setTimeout(() => setLoading(false), 800);
             });
     }, []);
 
     useEffect(() => {
-        if (tableNumber) {
-            localStorage.setItem("tableNumber", tableNumber);
-        } else {
-            localStorage.removeItem("tableNumber");
+        if (tableCode) {
+            localStorage.setItem("tableCode", tableCode);
         }
-    }, [tableNumber]);
+        if (tableNumberDisplay) {
+            localStorage.setItem("tableNumber", tableNumberDisplay);
+        }
+    }, [tableCode, tableNumberDisplay]);
 
     const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
             const offset = window.scrollY;
-            if (offset > 150) { // Threshold to trigger sticky behavior
+            if (offset > 100) {
                 setScrolled(true);
             } else {
                 setScrolled(false);
@@ -88,14 +95,25 @@ function OrderPage() {
             if (url) {
                 try {
                     const res = await api.get(url);
-                    if (res.data) {
+                    let activeOrder = null;
+
+                    if (Array.isArray(res.data) && res.data.length > 0) {
+                        activeOrder = res.data[0];
+                    } else if (res.data && typeof res.data === 'object') {
+                        activeOrder = res.data;
+                    }
+
+                    if (activeOrder && activeOrder.tableNumber && activeOrder.tableNumber > 0) {
                         setTableActive(true);
-                        if (res.data.tableNumber) {
-                            setTableNumber(res.data.tableNumber);
-                        }
+                        setTableNumberDisplay(activeOrder.tableNumber);
+                        // If we have an active order, we should probably set the code effectively too if the backend returned it
+                        // But backend response might not have code in the lightweight response. 
+                        // For now we trust tableNumber for display status.
+                    } else {
+                        setTableActive(false);
                     }
                 } catch (err) {
-                    // Ignore
+                    setTableActive(false);
                 }
             }
         };
@@ -109,27 +127,30 @@ function OrderPage() {
         setTimeout(() => setMessage(""), 2000);
     };
 
-    // updateQuantity removed (handled in CartPage)
-
     const navigate = useNavigate();
 
-
-    // placeOrder removed (moved to CartPage)
-
     const handleFinishClick = async () => {
-        if (!tableNumber) {
-            setMessage("Table number is required");
+        // We release by Table ID or Number. Backend expects ID usually for releaseTable(id).
+        // Check releaseTable api implementation. 
+        // Typically it takes tableId or tableNumber. 
+        // Our existing implementation passed Number(tableNumber).
+        // Let's assume we still use the display number for release if we have it.
+        // If we only have code, we might need to fetch table info first.
+
+        if (!tableNumberDisplay) {
+            setMessage("Active table number not found.");
             return;
         }
 
         try {
-            const res = await api.get(`/api/billing/by-number/${tableNumber}`);
+            // We use the number for bill fetching (legacy support)
+            const res = await api.get(`/api/billing/by-number/${tableNumberDisplay}`);
             setBillData(res.data);
             setShowBill(true);
         } catch (err) {
             console.error("Billing fetch error", err);
             const errorMsg = typeof err.response?.data === 'string' ? err.response.data : "Unknown error";
-            if (window.confirm(`Could not load bill summary (Server said: ${errorMsg}). Release table anyway?`)) {
+            if (window.confirm(`Could not load bill summary. Release table anyway?`)) {
                 finishOrder();
             }
         }
@@ -140,12 +161,18 @@ function OrderPage() {
             setReleasing(true);
             setShowBill(false);
 
-            await releaseTable(Number(tableNumber));
+            // Legacy release by number for now
+            // Ideally backend adds releaseByCode or we find ID
+            // For now assuming existing API works with number
+            const numberToRelease = Number(tableNumberDisplay);
+            await releaseTable(numberToRelease);
+
             clearOrderSession();
             localStorage.removeItem("tableNumber");
+            localStorage.removeItem("tableCode");
 
-            // setCart([]); // Global cart is separate now, handled by user
-            setTableNumber("");
+            setTableCode("");
+            setTableNumberDisplay("");
             setTableActive(false);
             setBillData(null);
             setMessage("Table released successfully. Bill Paid.");
@@ -157,9 +184,17 @@ function OrderPage() {
         }
     };
 
-
-
-
+    const handleScan = (result) => {
+        if (result) {
+            // Assume result is the raw text of the code e.g., "A1B2C3D4"
+            // Or a JSON: {"code": "...", "number": 1}
+            // For simplicity, let's assume it scans the raw text code.
+            const text = result[0]?.rawValue || result;
+            setTableCode(text);
+            setShowScanner(false);
+            setMessage("Table Code Scanned: " + text);
+        }
+    };
 
     return (
         <div className="order-page-redesign">
@@ -169,16 +204,49 @@ function OrderPage() {
                     <p className="subtitle">What are you craving today?</p>
                 </div>
                 <div className="table-info">
-                    <label>Table #</label>
-                    <input
-                        type="number"
-                        placeholder="0"
-                        value={tableNumber}
-                        onChange={e => setTableNumber(e.target.value)}
-                        className="table-input-minimal"
-                    />
+                    <label>Table Code / #</label>
+                    <div className="table-input-wrapper">
+                        <input
+                            type="text"
+                            placeholder="Code"
+                            value={tableCode}
+                            onChange={e => setTableCode(e.target.value)}
+                            className="table-input-minimal"
+                            maxLength={8}
+                        />
+
+
+                        <button
+                            className="scan-btn"
+                            onClick={() => setShowScanner(true)}
+                            aria-label="Scan QR Code"
+                        >
+                            <FaCamera />
+                        </button>
+                    </div>
                 </div>
             </header>
+
+            {/* QR Scanner Modal */}
+            {showScanner && (
+                <div className="modal-overlay" onClick={() => setShowScanner(false)}>
+                    <div className="modal-content qr-scanner-modal" onClick={e => e.stopPropagation()}>
+                        <h3>Scan Table QR</h3>
+                        <div className="scanner-container">
+                            <Scanner
+                                onScan={handleScan}
+                                onError={(error) => console.log(error)}
+                                components={{ audio: false, finder: false }}
+                                styles={{ container: { width: '100%' } }}
+                            />
+                        </div>
+                        <p style={{ marginTop: '1rem' }}>Point your camera at the QR code on your table.</p>
+                        <button className="close-btn" onClick={() => setShowScanner(false)}>
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {loading ? (
                 <div className="section-loading" style={{ minHeight: '300px', display: 'flex', alignItems: 'center' }}>
@@ -190,7 +258,7 @@ function OrderPage() {
                 </>
             )}
 
-            {/* Floating Cart Bar - Redirects to Cart Page */}
+            {/* Floating Cart Bar */}
             {totalItems > 0 && (
                 <div className="floating-cart-bar" onClick={() => navigate("/cart")}>
                     <div className="cart-info">
@@ -201,18 +269,15 @@ function OrderPage() {
                 </div>
             )}
 
-            {/* Cart Modal removed */}
-
-
             {message && (
-                <div className={`toast-message ${message.toLowerCase().includes("success") || message.includes("cart") ? "success" : "error"}`}>
+                <div className={`toast-message ${message.toLowerCase().includes("success") || message.includes("cart") || message.includes("Scanned") ? "success" : "error"}`}>
                     {message}
                 </div>
             )}
 
             {tableActive && (
                 <div className={`active-table-status ${scrolled ? 'scrolled' : ''}`}>
-                    <span>Table {tableNumber} Active</span>
+                    <span>Table {tableNumberDisplay} Active</span>
                     <button onClick={handleFinishClick} disabled={releasing} className="finish-btn-small">
                         {releasing ? "..." : "Pay Bill"}
                     </button>
@@ -231,3 +296,5 @@ function OrderPage() {
 }
 
 export default OrderPage;
+
+

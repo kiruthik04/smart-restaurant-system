@@ -5,6 +5,7 @@ import java.util.List;
 public class OrderRequest {
 
     private int tableNumber;
+    private String tableCode;
     private List<OrderItemRequest> items;
     private Long userId;
     private String orderSessionId;
@@ -15,6 +16,14 @@ public class OrderRequest {
 
     public void setTableNumber(int tableNumber) {
         this.tableNumber = tableNumber;
+    }
+
+    public String getTableCode() {
+        return tableCode;
+    }
+
+    public void setTableCode(String tableCode) {
+        this.tableCode = tableCode;
     }
 
     public List<OrderItemRequest> getItems() {

@@ -7,7 +7,13 @@ import {
     enableTable
 } from "../api/adminTableApi";
 import "./AdminTablePage.css";
+import html2canvas from 'html2canvas';
+
 import LoadingSpinner from "../components/LoadingSpinner";
+import { QRCodeCanvas } from "qrcode.react";
+
+// Update QRCodeCanvas value to full URL
+const DEPLOYED_URL = "https://smartrestro.vercel.app";
 
 function AdminTablePage() {
 
@@ -16,6 +22,16 @@ function AdminTablePage() {
     const [message, setMessage] = useState("");
     const [tableNumber, setTableNumber] = useState("");
     const [capacity, setCapacity] = useState("");
+
+    // QR Modal State
+    const [selectedQR, setSelectedQR] = useState(null); // { tableNumber, tableCode }
+
+    const handleShowQR = (table) => {
+        setSelectedQR({
+            tableNumber: table.tableNumber,
+            tableCode: table.tableCode
+        });
+    };
 
     const handleCreateTable = async () => {
         if (!tableNumber || !capacity) {
@@ -92,13 +108,96 @@ function AdminTablePage() {
         }
     };
 
-    if (loading && tables.length === 0) return <LoadingSpinner />;
+    const handleDownloadCard = async () => {
+        const element = document.getElementById('qr-card-template');
+        if (!element) return;
+
+        try {
+            const canvas = await html2canvas(element, {
+                scale: 2, // Higher resolution
+                useCORS: true,
+                backgroundColor: null
+            });
+
+            const image = canvas.toDataURL("image/png");
+            const link = document.createElement('a');
+            link.href = image;
+            link.download = `Table-${selectedQR.tableNumber}-QR.png`;
+            link.click();
+        } catch (err) {
+            console.error("Download failed", err);
+            setMessage("Failed to download card");
+        }
+    };
 
     return (
         <div className="admin-table-page">
-            <h2>Admin – Table Management</h2>
+            {/* ... header ... */}
 
-            {message && <p className="admin-message">{message}</p>}
+            {/* Hidden Printable Card Template */}
+            {selectedQR && (
+                <div id="qr-card-template" className="qr-card-template">
+                    <div className="card-header">
+                        <h1>Love, Rosie</h1>
+                        <p>PREMIUM CAFE</p>
+                    </div>
+
+                    <div className="card-body">
+                        <div className="card-qr-section">
+                            <QRCodeCanvas
+                                value={`${DEPLOYED_URL}/order?code=${selectedQR.tableCode}`}
+                                size={250}
+                                level={"H"}
+                                includeMargin={false}
+                                bgColor={"#ffffff"}
+                                fgColor={"#2D3436"}
+                            />
+                        </div>
+                        <div className="card-info-section">
+                            <span className="info-label">TABLE NO</span>
+                            <span className="info-number">{selectedQR.tableNumber}</span>
+                            <span className="info-code-label">ACCESS CODE</span>
+                            <span className="info-code">{selectedQR.tableCode}</span>
+                        </div>
+                    </div>
+
+                    <div className="card-footer">
+                        <p>Scan to Order & Pay</p>
+                    </div>
+                </div>
+            )}
+
+            {/* ... existing modal ... */}
+            {selectedQR && (
+                <div className="modal-overlay" onClick={() => setSelectedQR(null)}>
+                    <div className="modal-content qr-modal" onClick={e => e.stopPropagation()}>
+                        <h3>Table {selectedQR.tableNumber} QR Code</h3>
+                        <p>Scan this to order securely</p>
+
+                        <div className="qr-container">
+                            <QRCodeCanvas
+                                value={`${DEPLOYED_URL}/order?code=${selectedQR.tableCode}`}
+                                size={200}
+                                level={"H"}
+                                includeMargin={true}
+                            />
+                        </div>
+
+                        <p className="qr-code-text">Code: <strong>{selectedQR.tableCode}</strong></p>
+
+                        <div className="modal-actions">
+                            <button className="download-btn" onClick={handleDownloadCard}>
+                                Download Card
+                            </button>
+                            <button className="close-btn" onClick={() => setSelectedQR(null)}>
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ... rest of render ... */}
 
             <h3>Add New Table</h3>
 
@@ -127,6 +226,7 @@ function AdminTablePage() {
                     <thead>
                         <tr>
                             <th>Table</th>
+                            <th>Code</th>
                             <th>Capacity</th>
                             <th>Status</th>
                             <th>Enabled</th>
@@ -138,16 +238,17 @@ function AdminTablePage() {
                         {tables.map(table => (
                             <tr key={table.id}>
                                 <td>{table.tableNumber}</td>
+                                <td><code className="table-code-preview">{table.tableCode}</code></td>
                                 <td>{table.capacity}</td>
 
                                 <td>
                                     {!table.enabled && (
                                         <span className="status-disabled">DISABLED</span>
                                     )}
-                                    {table.enabled && table.inUse && (
+                                    {table.enabled && table.active && (
                                         <span className="status-inuse">IN USE</span>
                                     )}
-                                    {table.enabled && !table.inUse && (
+                                    {table.enabled && !table.active && (
                                         <span className="status-free">FREE</span>
                                     )}
                                 </td>
@@ -155,7 +256,14 @@ function AdminTablePage() {
                                 <td>{table.enabled ? "YES" : "NO"}</td>
 
                                 <td>
-                                    {table.inUse && (
+                                    <button
+                                        className="action-btn btn-qr"
+                                        onClick={() => handleShowQR(table)}
+                                    >
+                                        QR
+                                    </button>
+
+                                    {table.active && (
                                         <button
                                             className="action-btn btn-release"
                                             onClick={() => handleRelease(table.id)}
@@ -164,7 +272,7 @@ function AdminTablePage() {
                                         </button>
                                     )}
 
-                                    {table.enabled && !table.inUse && (
+                                    {table.enabled && !table.active && (
                                         <button
                                             className="action-btn btn-disable"
                                             onClick={() => handleDisable(table.id)}

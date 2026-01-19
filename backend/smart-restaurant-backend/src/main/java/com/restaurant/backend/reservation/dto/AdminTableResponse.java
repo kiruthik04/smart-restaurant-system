@@ -5,25 +5,23 @@ public class AdminTableResponse {
     private Long id;
     private int tableNumber;
     private int capacity;
-    private boolean inUse;
+    private boolean active;
     private String currentSessionId;
     private boolean enabled;
+    private String tableCode;
 
-    public AdminTableResponse(
-            Long id,
-            int tableNumber,
-            int capacity,
-            boolean inUse,
-            String currentSessionId,
-            boolean enabled) {
+    public AdminTableResponse(Long id, int tableNumber, int capacity, boolean active, String currentSessionId,
+            boolean enabled, String tableCode) {
         this.id = id;
         this.tableNumber = tableNumber;
         this.capacity = capacity;
-        this.inUse = inUse;
+        this.active = active;
         this.currentSessionId = currentSessionId;
         this.enabled = enabled;
+        this.tableCode = tableCode;
     }
 
+    // Getters
     public Long getId() {
         return id;
     }
@@ -36,8 +34,8 @@ public class AdminTableResponse {
         return capacity;
     }
 
-    public boolean isInUse() {
-        return inUse;
+    public boolean isActive() {
+        return active;
     }
 
     public String getCurrentSessionId() {
@@ -46,5 +44,9 @@ public class AdminTableResponse {
 
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public String getTableCode() {
+        return tableCode;
     }
 }
