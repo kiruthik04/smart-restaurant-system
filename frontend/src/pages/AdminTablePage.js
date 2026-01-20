@@ -9,7 +9,7 @@ import {
 import "./AdminTablePage.css";
 import html2canvas from 'html2canvas';
 
-import LoadingSpinner from "../components/LoadingSpinner";
+
 import { QRCodeCanvas } from "qrcode.react";
 
 // Update QRCodeCanvas value to full URL
@@ -18,8 +18,8 @@ const DEPLOYED_URL = "https://smartrestro.vercel.app";
 function AdminTablePage() {
 
     const [tables, setTables] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState("");
+    // const [loading, setLoading] = useState(false);
+    // const [message, setMessage] = useState("");
     const [tableNumber, setTableNumber] = useState("");
     const [capacity, setCapacity] = useState("");
 
