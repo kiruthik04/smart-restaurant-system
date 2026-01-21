@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
@@ -149,7 +149,7 @@ function OrderPage() {
             setShowBill(true);
         } catch (err) {
             console.error("Billing fetch error", err);
-            // const errorMsg = typeof err.response?.data === 'string' ? err.response.data : "Unknown error";
+            const errorMsg = typeof err.response?.data === 'string' ? err.response.data : "Unknown error";
             if (window.confirm(`Could not load bill summary. Release table anyway?`)) {
                 finishOrder();
             }

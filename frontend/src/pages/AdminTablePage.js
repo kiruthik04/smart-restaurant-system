@@ -132,8 +132,6 @@ function AdminTablePage() {
 
     return (
         <div className="admin-table-page">
-            {loading && <LoadingSpinner />}
-            {message && <div style={{ padding: '1rem', color: message.toLowerCase().includes('fail') ? 'red' : 'green' }}>{message}</div>}
             {/* ... header ... */}
 
             {/* Hidden Printable Card Template */}

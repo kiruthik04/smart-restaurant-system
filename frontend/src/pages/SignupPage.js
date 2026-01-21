@@ -3,6 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './SignupPage.css';
 
+import LoadingSpinner from '../components/LoadingSpinner';
+
 const SignupPage = () => {
     const [formData, setFormData] = useState({
         username: '',
@@ -12,6 +14,7 @@ const SignupPage = () => {
         role: 'CUSTOMER' // Force role to CUSTOMER
     });
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const { register } = useAuth();
     const navigate = useNavigate();
 
@@ -22,12 +25,14 @@ const SignupPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setIsLoading(true);
         const result = await register(formData);
         if (result.success) {
             alert("Registration successful! Please login.");
             navigate('/login');
         } else {
             setError(result.message);
+            setIsLoading(false);
         }
     };
 
@@ -38,71 +43,75 @@ const SignupPage = () => {
 
                 {error && <div className="error-message">{error}</div>}
 
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label className="form-label">Full Name</label>
-                        <input
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            className="form-input"
-                            placeholder="John Doe"
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label className="form-label">Username</label>
-                        <input
-                            type="text"
-                            name="username"
-                            value={formData.username}
-                            onChange={handleChange}
-                            className="form-input"
-                            placeholder="Choose a username"
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label className="form-label">Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            className="form-input"
-                            placeholder="your@email.com"
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label className="form-label">Mobile Number</label>
-                        <input
-                            type="tel"
-                            name="mobileNumber"
-                            value={formData.mobileNumber || ''}
-                            onChange={handleChange}
-                            className="form-input"
-                            placeholder="1234567890"
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label className="form-label">Password</label>
-                        <input
-                            type="password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                            className="form-input"
-                            placeholder="Create a password"
-                            required
-                        />
-                    </div>
-                    <button type="submit" className="signup-btn">
-                        Sign Up
-                    </button>
-                </form>
+                {isLoading ? (
+                    <LoadingSpinner />
+                ) : (
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-group">
+                            <label className="form-label">Full Name</label>
+                            <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                                className="form-input"
+                                placeholder="John Doe"
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Username</label>
+                            <input
+                                type="text"
+                                name="username"
+                                value={formData.username}
+                                onChange={handleChange}
+                                className="form-input"
+                                placeholder="Choose a username"
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                className="form-input"
+                                placeholder="your@email.com"
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Mobile Number</label>
+                            <input
+                                type="tel"
+                                name="mobileNumber"
+                                value={formData.mobileNumber || ''}
+                                onChange={handleChange}
+                                className="form-input"
+                                placeholder="1234567890"
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label">Password</label>
+                            <input
+                                type="password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                className="form-input"
+                                placeholder="Create a password"
+                                required
+                            />
+                        </div>
+                        <button type="submit" className="signup-btn">
+                            Sign Up
+                        </button>
+                    </form>
+                )}
                 <p className="signup-footer">
                     Already have an account?
                     <Link to="/login" className="signup-link">Login here</Link>

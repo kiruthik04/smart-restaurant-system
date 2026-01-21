@@ -3,10 +3,13 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import './LoginPage.css'; // Assuming you might want styles, or inline them
 
+import LoadingSpinner from '../components/LoadingSpinner';
+
 const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const { login } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
@@ -16,6 +19,7 @@ const LoginPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setIsLoading(true);
         const result = await login(username, password);
         if (result.success) {
             if (result.role === 'ADMIN') {
@@ -27,6 +31,7 @@ const LoginPage = () => {
             }
         } else {
             setError(result.message);
+            setIsLoading(false);
         }
     };
 
@@ -48,38 +53,42 @@ const LoginPage = () => {
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label className="form-label">Username</label>
-                        <input
-                            type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            className="form-input"
-                            placeholder="Enter your username"
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label className="form-label">Password</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="form-input"
-                            placeholder="••••••••"
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <div className="forgot-password-link-wrapper">
-                            <Link to="/forgot-password" className="forgot-password-link">Forgot Password?</Link>
+                {isLoading ? (
+                    <LoadingSpinner />
+                ) : (
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-group">
+                            <label className="form-label">Username</label>
+                            <input
+                                type="text"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                className="form-input"
+                                placeholder="Enter your username"
+                                required
+                            />
                         </div>
-                    </div>
-                    <button type="submit" className="login-btn">
-                        Sign In
-                    </button>
-                </form>
+                        <div className="form-group">
+                            <label className="form-label">Password</label>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="form-input"
+                                placeholder="••••••••"
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <div className="forgot-password-link-wrapper">
+                                <Link to="/forgot-password" className="forgot-password-link">Forgot Password?</Link>
+                            </div>
+                        </div>
+                        <button type="submit" className="login-btn">
+                            Sign In
+                        </button>
+                    </form>
+                )}
 
                 <p className="login-footer">
                     Don't have an account?

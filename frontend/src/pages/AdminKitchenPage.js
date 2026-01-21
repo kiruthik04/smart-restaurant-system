@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { getKitchenOrders } from "../api/kitchenOrderApi";
 import "./AdminKitchenPage.css";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -8,21 +8,27 @@ function AdminKitchenPage() {
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const fetchOrders = useCallback(() => {
-        // Only show full spinner on initial load or if explicitly requested
-        if (orders.length === 0) setLoading(true);
-
-        getKitchenOrders()
-            .then(res => setOrders(res.data))
-            .catch(() => setMessage("Failed to load kitchen orders"))
-            .finally(() => setLoading(false));
-    }, [orders]);
-
     useEffect(() => {
-        fetchOrders();
-        const interval = setInterval(fetchOrders, 10000); // Poll every 10s for real-time monitoring
+        const fetchOrders = (showLoading = false) => {
+            if (showLoading) setLoading(true);
+            getKitchenOrders()
+                .then(res => setOrders(res.data))
+                .catch(() => setMessage("Failed to load kitchen orders"))
+                .finally(() => {
+                    if (showLoading) setLoading(false);
+                });
+        };
+
+        // Initial load
+        fetchOrders(true);
+
+        // Poll every 10s
+        const interval = setInterval(() => {
+            fetchOrders(false);
+        }, 10000);
+
         return () => clearInterval(interval);
-    }, [fetchOrders]);
+    }, []);
 
     if (loading && orders.length === 0) return <LoadingSpinner />;
 

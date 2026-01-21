@@ -160,7 +160,7 @@ function HomePage() {
                         {/* 3-Segment Progress Bar */}
                         <div className="linear-progress-track">
                           {/* Segment 1: Received */}
-                          <div className={`progress-segment seg-received ${["RECEIVED", "PREPARING", "IN_PROGRESS", "READY"].includes(order.status) ? "active loading" : ""
+                          <div className={`progress-segment seg-received ${["CREATED", "RECEIVED", "PREPARING", "IN_PROGRESS", "READY"].includes(order.status) ? "active loading" : ""
                             }`} title="Received"></div>
 
                           {/* Segment 2: Preparing */}
