@@ -13,8 +13,8 @@ function CartPage() {
     const navigate = useNavigate();
 
     // We pull tableCode from localStorage
-    const [tableCode, setTableCode] = useState(localStorage.getItem("tableCode") || "");
-    const [tableNumberDisplay, setTableNumberDisplay] = useState(localStorage.getItem("tableNumber") || "");
+    const [tableCode] = useState(localStorage.getItem("tableCode") || "");
+    const [tableNumberDisplay] = useState(localStorage.getItem("tableNumber") || "");
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
 

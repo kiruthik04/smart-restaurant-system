@@ -9,7 +9,6 @@ import {
 import "./AdminTablePage.css";
 import html2canvas from 'html2canvas';
 
-import LoadingSpinner from "../components/LoadingSpinner";
 import { QRCodeCanvas } from "qrcode.react";
 
 // Update QRCodeCanvas value to full URL
@@ -18,8 +17,7 @@ const DEPLOYED_URL = "https://smartrestro.vercel.app";
 function AdminTablePage() {
 
     const [tables, setTables] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState("");
+    // Removed unused loading/message states to fix ESLint
     const [tableNumber, setTableNumber] = useState("");
     const [capacity, setCapacity] = useState("");
 
@@ -35,7 +33,7 @@ function AdminTablePage() {
 
     const handleCreateTable = async () => {
         if (!tableNumber || !capacity) {
-            setMessage("Table number and capacity are required");
+            alert("Table number and capacity are required");
             return;
         }
 
@@ -45,13 +43,13 @@ function AdminTablePage() {
                 capacity: Number(capacity)
             });
 
-            setMessage("Table added successfully");
+            alert("Table added successfully");
             setTableNumber("");
             setCapacity("");
             fetchTables(); // refresh list
 
         } catch (err) {
-            setMessage(err.response?.data?.message || "Failed to add table");
+            alert(err.response?.data?.message || "Failed to add table");
         }
     };
     const handleDisable = async (tableId) => {
@@ -62,29 +60,27 @@ function AdminTablePage() {
 
         try {
             await disableTable(tableId);
-            setMessage("Table disabled successfully");
+            alert("Table disabled successfully");
             fetchTables();
         } catch (err) {
-            setMessage(err.response?.data?.message || "Failed to disable table");
+            alert(err.response?.data?.message || "Failed to disable table");
         }
     };
 
     const handleEnable = async (tableId) => {
         try {
             await enableTable(tableId);
-            setMessage("Table enabled successfully");
+            alert("Table enabled successfully");
             fetchTables();
         } catch (err) {
-            setMessage(err.response?.data?.message || "Failed to enable table");
+            alert(err.response?.data?.message || "Failed to enable table");
         }
     };
 
     const fetchTables = () => {
-        setLoading(true);
         getAllTables()
             .then(res => setTables(res.data))
-            .catch(() => setMessage("Failed to load tables"))
-            .finally(() => setLoading(false));
+            .catch(() => console.error("Failed to load tables"));
     };
 
     useEffect(() => {
@@ -101,10 +97,10 @@ function AdminTablePage() {
 
         try {
             await forceReleaseTable(tableId);
-            setMessage("Table released successfully");
+            alert("Table released successfully");
             fetchTables(); // refresh state
         } catch (err) {
-            setMessage(err.response?.data?.message || "Failed to release table");
+            alert(err.response?.data?.message || "Failed to release table");
         }
     };
 
@@ -126,7 +122,7 @@ function AdminTablePage() {
             link.click();
         } catch (err) {
             console.error("Download failed", err);
-            setMessage("Failed to download card");
+            alert("Failed to download card");
         }
     };
 
