@@ -118,7 +118,10 @@ function AdminMenuPage() {
                                     src={`/api/menu/${item.id}/image`}
                                     alt={item.name}
                                     style={{ width: "50px", height: "50px", objectFit: "cover", borderRadius: "5px" }}
-                                    onError={(e) => e.target.style.display = 'none'}
+                                    onError={(e) => {
+                                        e.target.onerror = null; 
+                                        e.target.src = 'https://placehold.co/50x50?text=No+Img';
+                                    }}
                                 />
                             </td>
                             <td data-label="Name" style={{ fontWeight: 'bold' }}>{item.name}</td>
