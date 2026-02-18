@@ -142,7 +142,7 @@ function HomePage() {
             <>
               <div className="orders-grid">
                 {activeOrders.map((order) => {
-                  const isReady = order.status === 'READY';
+                  const isReady = true; // Allow payment at any stage
                   return (
                     <div key={order.orderId} className="modern-order-card">
                       <div className="card-header">

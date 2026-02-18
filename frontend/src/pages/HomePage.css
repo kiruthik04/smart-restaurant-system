@@ -162,7 +162,7 @@ body {
 }
 
 /* Card Body - Grid Layout for better structure */
-.card-body {
+.modern-order-card .card-body {
     padding: 1.8rem;
     display: grid;
     grid-template-columns: 1fr;
@@ -172,7 +172,7 @@ body {
     /* Push footer down */
 }
 
-.card-header {
+.modern-order-card .card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -290,7 +290,7 @@ body {
 }
 
 /* Footer - Dark & Visible */
-.card-footer {
+.modern-order-card .card-footer {
     background: var(--text-dark);
     /* Dark background */
     padding: 1rem 1.8rem;

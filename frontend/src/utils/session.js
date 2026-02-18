@@ -11,4 +11,6 @@ export const getOrderSessionId = () => {
 
 export const clearOrderSession = () => {
   localStorage.removeItem("orderSessionId");
+  localStorage.removeItem("tableCode");
+  localStorage.removeItem("tableNumber");
 };

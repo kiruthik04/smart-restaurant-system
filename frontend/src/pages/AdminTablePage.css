@@ -433,7 +433,7 @@
     overflow: hidden;
 }
 
-.card-header {
+.qr-card-template .card-header {
     background: #FF6B00;
     color: white;
     padding: 15px;
@@ -459,7 +459,7 @@
     opacity: 0.9;
 }
 
-.card-body {
+.qr-card-template .card-body {
     display: flex;
     flex: 1;
     align-items: center;
@@ -518,7 +518,7 @@
     border: 1px dashed #b2bec3;
 }
 
-.card-footer {
+.qr-card-template .card-footer {
     text-align: center;
     padding: 12px;
     background: #2D3436;

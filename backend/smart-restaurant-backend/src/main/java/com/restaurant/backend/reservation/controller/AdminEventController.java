@@ -36,6 +36,7 @@ public class AdminEventController {
     }
 
     // 🔹 CREATE HALL
+    @PostMapping("/halls")
     public com.restaurant.backend.reservation.model.EventHall createHall(
             @RequestBody com.restaurant.backend.reservation.model.EventHall hall) {
         return adminEventService.createEventHall(hall);

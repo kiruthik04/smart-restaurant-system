@@ -61,7 +61,9 @@ export const AuthProvider = ({ children }) => {
             await api.post('/api/auth/register', userData);
             return { success: true };
         } catch (error) {
-            return { success: false, message: error.response?.data || 'Registration failed' };
+            const errorMsg = error.response?.data?.message ||
+                (typeof error.response?.data === 'string' ? error.response.data : 'Registration failed');
+            return { success: false, message: errorMsg };
         }
     };
 
