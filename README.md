@@ -185,4 +185,4 @@ smart-restaurant-system/
 Contributions are welcome! Please fork the repository and submit a pull request for any enhancements.
 
 ---
-**Developed with ❤️ by the Smart Restaurant Team**
+**Developed with ❤️ by Kiruthik**
